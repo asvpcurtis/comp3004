@@ -1,0 +1,561 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="AccountDataModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="AccountDataModelStoreContainer">
+    <EntitySet Name="Accounts" EntityType="AccountDataModel.Store.Accounts" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Organizations" EntityType="AccountDataModel.Store.Organizations" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Competitors" EntityType="AccountDataModel.Store.Competitors" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Tournaments" EntityType="AccountDataModel.Store.Tournaments" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Rounds" EntityType="AccountDataModel.Store.Rounds" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Pairings" EntityType="AccountDataModel.Store.Pairings" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AccountOrganization" EntityType="AccountDataModel.Store.AccountOrganization" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="CompetitorTournament" EntityType="AccountDataModel.Store.CompetitorTournament" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_AccountOrganization_Account" Association="AccountDataModel.Store.FK_AccountOrganization_Account">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="AccountOrganization" EntitySet="AccountOrganization" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AccountOrganization_Organization" Association="AccountDataModel.Store.FK_AccountOrganization_Organization">
+      <End Role="Organization" EntitySet="Organizations" />
+      <End Role="AccountOrganization" EntitySet="AccountOrganization" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CompetitorTournament_Competitor" Association="AccountDataModel.Store.FK_CompetitorTournament_Competitor">
+      <End Role="Competitor" EntitySet="Competitors" />
+      <End Role="CompetitorTournament" EntitySet="CompetitorTournament" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CompetitorTournament_Tournament" Association="AccountDataModel.Store.FK_CompetitorTournament_Tournament">
+      <End Role="Tournament" EntitySet="Tournaments" />
+      <End Role="CompetitorTournament" EntitySet="CompetitorTournament" />
+    </AssociationSet>
+    <AssociationSet Name="TournamentRound" Association="AccountDataModel.Store.TournamentRound">
+      <End Role="Tournament" EntitySet="Tournaments" />
+      <End Role="Round" EntitySet="Rounds" />
+    </AssociationSet>
+    <AssociationSet Name="RoundPairing" Association="AccountDataModel.Store.RoundPairing">
+      <End Role="Round" EntitySet="Rounds" />
+      <End Role="Pairing" EntitySet="Pairings" />
+    </AssociationSet>
+    <AssociationSet Name="OrganizationTournament" Association="AccountDataModel.Store.OrganizationTournament">
+      <End Role="Organization" EntitySet="Organizations" />
+      <End Role="Tournament" EntitySet="Tournaments" />
+    </AssociationSet>
+    <AssociationSet Name="OrganizationCompetitor" Association="AccountDataModel.Store.OrganizationCompetitor">
+      <End Role="Organization" EntitySet="Organizations" />
+      <End Role="Competitor" EntitySet="Competitors" />
+    </AssociationSet>
+    <AssociationSet Name="PairingCompetitor" Association="AccountDataModel.Store.PairingCompetitor">
+      <End Role="Pairing" EntitySet="Pairings" />
+      <End Role="Competitor" EntitySet="Competitors" />
+    </AssociationSet>
+    <AssociationSet Name="PairingCompetitor2" Association="AccountDataModel.Store.PairingCompetitor2">
+      <End Role="Pairing" EntitySet="Pairings" />
+      <End Role="Competitor" EntitySet="Competitors" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Accounts">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="FirstName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="LastName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Organizations">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Competitors">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="LastName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Rating" Type="int" Nullable="false" />
+    <Property Name="OrganizationId" Type="int" Nullable="false" />
+    <Property Name="Gender" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Tournaments">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrganizationId" Type="int" Nullable="false" />
+    <Property Name="StartDate" Type="datetime" Nullable="false" />
+    <Property Name="Format" Type="int" Nullable="false" />
+    <Property Name="OnGoing" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Rounds">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TournamentId" Type="int" Nullable="false" />
+    <Property Name="RoundNumber" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Pairings">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoundId" Type="int" Nullable="false" />
+    <Property Name="Result" Type="int" Nullable="false" />
+    <Property Name="CompetitorId1" Type="int" Nullable="false" />
+    <Property Name="CompetitorId2" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AccountOrganization">
+    <Key>
+      <PropertyRef Name="Accounts_Id" />
+      <PropertyRef Name="Organizations_Id" />
+    </Key>
+    <Property Name="Accounts_Id" Type="int" Nullable="false" />
+    <Property Name="Organizations_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CompetitorTournament">
+    <Key>
+      <PropertyRef Name="Competitors_Id" />
+      <PropertyRef Name="Tournaments_Id" />
+    </Key>
+    <Property Name="Competitors_Id" Type="int" Nullable="false" />
+    <Property Name="Tournaments_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="TournamentRound">
+    <End Role="Tournament" Type="AccountDataModel.Store.Tournaments" Multiplicity="1" />
+    <End Role="Round" Type="AccountDataModel.Store.Rounds" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tournament">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Round">
+        <PropertyRef Name="TournamentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RoundPairing">
+    <End Role="Round" Type="AccountDataModel.Store.Rounds" Multiplicity="1" />
+    <End Role="Pairing" Type="AccountDataModel.Store.Pairings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Round">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pairing">
+        <PropertyRef Name="RoundId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OrganizationTournament">
+    <End Role="Organization" Type="AccountDataModel.Store.Organizations" Multiplicity="1" />
+    <End Role="Tournament" Type="AccountDataModel.Store.Tournaments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Organization">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Tournament">
+        <PropertyRef Name="OrganizationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OrganizationCompetitor">
+    <End Role="Organization" Type="AccountDataModel.Store.Organizations" Multiplicity="1" />
+    <End Role="Competitor" Type="AccountDataModel.Store.Competitors" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Organization">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Competitor">
+        <PropertyRef Name="OrganizationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PairingCompetitor">
+    <End Role="Pairing" Type="AccountDataModel.Store.Pairings" Multiplicity="*" />
+    <End Role="Competitor" Type="AccountDataModel.Store.Competitors" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Competitor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pairing">
+        <PropertyRef Name="CompetitorId1" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PairingCompetitor2">
+    <End Role="Pairing" Type="AccountDataModel.Store.Pairings" Multiplicity="*" />
+    <End Role="Competitor" Type="AccountDataModel.Store.Competitors" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Competitor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pairing">
+        <PropertyRef Name="CompetitorId2" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountOrganization_Account">
+    <End Role="Account" Type="AccountDataModel.Store.Accounts" Multiplicity="1" />
+    <End Role="AccountOrganization" Type="AccountDataModel.Store.AccountOrganization" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AccountOrganization">
+        <PropertyRef Name="Accounts_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountOrganization_Organization">
+    <End Role="AccountOrganization" Type="AccountDataModel.Store.AccountOrganization" Multiplicity="*" />
+    <End Role="Organization" Type="AccountDataModel.Store.Organizations" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Organization">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AccountOrganization">
+        <PropertyRef Name="Organizations_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CompetitorTournament_Competitor">
+    <End Role="Competitor" Type="AccountDataModel.Store.Competitors" Multiplicity="1" />
+    <End Role="CompetitorTournament" Type="AccountDataModel.Store.CompetitorTournament" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Competitor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CompetitorTournament">
+        <PropertyRef Name="Competitors_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CompetitorTournament_Tournament">
+    <End Role="CompetitorTournament" Type="AccountDataModel.Store.CompetitorTournament" Multiplicity="*" />
+    <End Role="Tournament" Type="AccountDataModel.Store.Tournaments" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Tournament">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CompetitorTournament">
+        <PropertyRef Name="Tournaments_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="AccountDataModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="AccountDataModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="AccountDataModel.Account" />
+          <EntitySet Name="Organizations" EntityType="AccountDataModel.Organization" />
+          <EntitySet Name="Competitors" EntityType="AccountDataModel.Competitor" />
+          <AssociationSet Name="AccountOrganization" Association="AccountDataModel.AccountOrganization">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Organization" EntitySet="Organizations" />
+          </AssociationSet>
+          <EntitySet Name="Tournaments" EntityType="AccountDataModel.Tournament" />
+          <AssociationSet Name="CompetitorTournament" Association="AccountDataModel.CompetitorTournament">
+            <End Role="Competitor" EntitySet="Competitors" />
+            <End Role="Tournament" EntitySet="Tournaments" />
+          </AssociationSet>
+          <EntitySet Name="Rounds" EntityType="AccountDataModel.Round" />
+          <AssociationSet Name="TournamentRound" Association="AccountDataModel.TournamentRound">
+            <End Role="Tournament" EntitySet="Tournaments" />
+            <End Role="Round" EntitySet="Rounds" />
+          </AssociationSet>
+          <EntitySet Name="Pairings" EntityType="AccountDataModel.Pairing" />
+          <AssociationSet Name="RoundPairing" Association="AccountDataModel.RoundPairing">
+            <End Role="Round" EntitySet="Rounds" />
+            <End Role="Pairing" EntitySet="Pairings" />
+          </AssociationSet>
+          <AssociationSet Name="OrganizationTournament" Association="AccountDataModel.OrganizationTournament">
+            <End Role="Organization" EntitySet="Organizations" />
+            <End Role="Tournament" EntitySet="Tournaments" />
+          </AssociationSet>
+          <AssociationSet Name="OrganizationCompetitor" Association="AccountDataModel.OrganizationCompetitor">
+            <End Role="Organization" EntitySet="Organizations" />
+            <End Role="Competitor" EntitySet="Competitors" />
+          </AssociationSet>
+          <AssociationSet Name="PairingCompetitor" Association="AccountDataModel.PairingCompetitor">
+            <End Role="Pairing" EntitySet="Pairings" />
+            <End Role="Competitor" EntitySet="Competitors" />
+          </AssociationSet>
+          <AssociationSet Name="PairingCompetitor2" Association="AccountDataModel.PairingCompetitor2">
+            <End Role="Pairing" EntitySet="Pairings" />
+            <End Role="Competitor" EntitySet="Competitors" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" />
+          <NavigationProperty Name="Organizations" Relationship="AccountDataModel.AccountOrganization" FromRole="Account" ToRole="Organization" />
+        </EntityType>
+        <EntityType Name="Organization">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" />
+          <NavigationProperty Name="Accounts" Relationship="AccountDataModel.AccountOrganization" FromRole="Organization" ToRole="Account" />
+          <NavigationProperty Name="Tournaments" Relationship="AccountDataModel.OrganizationTournament" FromRole="Organization" ToRole="Tournament" />
+          <NavigationProperty Name="Competitors" Relationship="AccountDataModel.OrganizationCompetitor" FromRole="Organization" ToRole="Competitor" />
+        </EntityType>
+        <EntityType Name="Competitor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="Rating" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Tournaments" Relationship="AccountDataModel.CompetitorTournament" FromRole="Competitor" ToRole="Tournament" />
+          <NavigationProperty Name="Organization" Relationship="AccountDataModel.OrganizationCompetitor" FromRole="Competitor" ToRole="Organization" />
+          <Property Name="OrganizationId" Type="Int32" Nullable="false" />
+          <Property Name="Gender" Type="String" Nullable="false" />
+          <NavigationProperty Name="Pairings1" Relationship="AccountDataModel.PairingCompetitor" FromRole="Competitor" ToRole="Pairing" />
+          <NavigationProperty Name="Pairings2" Relationship="AccountDataModel.PairingCompetitor2" FromRole="Competitor" ToRole="Pairing" />
+        </EntityType>
+        <Association Name="AccountOrganization">
+          <End Type="AccountDataModel.Account" Role="Account" Multiplicity="*" />
+          <End Type="AccountDataModel.Organization" Role="Organization" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Tournament">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Competitors" Relationship="AccountDataModel.CompetitorTournament" FromRole="Tournament" ToRole="Competitor" />
+          <NavigationProperty Name="Rounds" Relationship="AccountDataModel.TournamentRound" FromRole="Tournament" ToRole="Round" />
+          <NavigationProperty Name="Organization" Relationship="AccountDataModel.OrganizationTournament" FromRole="Tournament" ToRole="Organization" />
+          <Property Name="OrganizationId" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" />
+          <Property Name="Format" Type="AccountDataModel.TournamentType" Nullable="false" />
+          <Property Name="OnGoing" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="CompetitorTournament">
+          <End Type="AccountDataModel.Competitor" Role="Competitor" Multiplicity="*" />
+          <End Type="AccountDataModel.Tournament" Role="Tournament" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Round">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Tournament" Relationship="AccountDataModel.TournamentRound" FromRole="Round" ToRole="Tournament" />
+          <Property Name="TournamentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Pairings" Relationship="AccountDataModel.RoundPairing" FromRole="Round" ToRole="Pairing" />
+          <Property Name="RoundNumber" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="TournamentRound">
+          <End Type="AccountDataModel.Tournament" Role="Tournament" Multiplicity="1" />
+          <End Type="AccountDataModel.Round" Role="Round" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tournament">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Round">
+              <PropertyRef Name="TournamentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Pairing">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Round" Relationship="AccountDataModel.RoundPairing" FromRole="Pairing" ToRole="Round" />
+          <Property Name="RoundId" Type="Int32" Nullable="false" />
+          <Property Name="Result" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Competitor1" Relationship="AccountDataModel.PairingCompetitor" FromRole="Pairing" ToRole="Competitor" />
+          <Property Name="CompetitorId1" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Competitor2" Relationship="AccountDataModel.PairingCompetitor2" FromRole="Pairing" ToRole="Competitor" />
+          <Property Name="CompetitorId2" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="RoundPairing">
+          <End Type="AccountDataModel.Round" Role="Round" Multiplicity="1" />
+          <End Type="AccountDataModel.Pairing" Role="Pairing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Round">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Pairing">
+              <PropertyRef Name="RoundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OrganizationTournament">
+          <End Type="AccountDataModel.Organization" Role="Organization" Multiplicity="1" />
+          <End Type="AccountDataModel.Tournament" Role="Tournament" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organization">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Tournament">
+              <PropertyRef Name="OrganizationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OrganizationCompetitor">
+          <End Type="AccountDataModel.Organization" Role="Organization" Multiplicity="1" />
+          <End Type="AccountDataModel.Competitor" Role="Competitor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organization">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Competitor">
+              <PropertyRef Name="OrganizationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EnumType Name="TournamentType">
+          <Member Name="SingleElimination" />
+          <Member Name="DoubleElimination" />
+          <Member Name="RoundRobin" />
+          <Member Name="Swiss" />
+        </EnumType>
+        <Association Name="PairingCompetitor">
+          <End Type="AccountDataModel.Pairing" Role="Pairing" Multiplicity="*" />
+          <End Type="AccountDataModel.Competitor" Role="Competitor" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Competitor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Pairing">
+              <PropertyRef Name="CompetitorId1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PairingCompetitor2">
+          <End Type="AccountDataModel.Pairing" Role="Pairing" Multiplicity="*" />
+          <End Type="AccountDataModel.Competitor" Role="Competitor" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Competitor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Pairing">
+              <PropertyRef Name="CompetitorId2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="AccountDataModelStoreContainer" CdmEntityContainer="AccountDataModelContainer">
+    <EntitySetMapping Name="Accounts">
+      <EntityTypeMapping TypeName="IsTypeOf(AccountDataModel.Account)">
+        <MappingFragment StoreEntitySet="Accounts">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Organizations">
+      <EntityTypeMapping TypeName="IsTypeOf(AccountDataModel.Organization)">
+        <MappingFragment StoreEntitySet="Organizations">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Competitors">
+      <EntityTypeMapping TypeName="IsTypeOf(AccountDataModel.Competitor)">
+        <MappingFragment StoreEntitySet="Competitors">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Rating" ColumnName="Rating" />
+          <ScalarProperty Name="OrganizationId" ColumnName="OrganizationId" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tournaments">
+      <EntityTypeMapping TypeName="IsTypeOf(AccountDataModel.Tournament)">
+        <MappingFragment StoreEntitySet="Tournaments">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="OrganizationId" ColumnName="OrganizationId" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="Format" ColumnName="Format" />
+          <ScalarProperty Name="OnGoing" ColumnName="OnGoing" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rounds">
+      <EntityTypeMapping TypeName="IsTypeOf(AccountDataModel.Round)">
+        <MappingFragment StoreEntitySet="Rounds">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TournamentId" ColumnName="TournamentId" />
+          <ScalarProperty Name="RoundNumber" ColumnName="RoundNumber" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Pairings">
+      <EntityTypeMapping TypeName="IsTypeOf(AccountDataModel.Pairing)">
+        <MappingFragment StoreEntitySet="Pairings">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="RoundId" ColumnName="RoundId" />
+          <ScalarProperty Name="Result" ColumnName="Result" />
+          <ScalarProperty Name="CompetitorId1" ColumnName="CompetitorId1" />
+          <ScalarProperty Name="CompetitorId2" ColumnName="CompetitorId2" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="AccountOrganization" TypeName="AccountDataModel.AccountOrganization" StoreEntitySet="AccountOrganization">
+      <EndProperty Name="Account">
+        <ScalarProperty Name="Id" ColumnName="Accounts_Id" />
+      </EndProperty>
+      <EndProperty Name="Organization">
+        <ScalarProperty Name="Id" ColumnName="Organizations_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="CompetitorTournament" TypeName="AccountDataModel.CompetitorTournament" StoreEntitySet="CompetitorTournament">
+      <EndProperty Name="Competitor">
+        <ScalarProperty Name="Id" ColumnName="Competitors_Id" />
+      </EndProperty>
+      <EndProperty Name="Tournament">
+        <ScalarProperty Name="Id" ColumnName="Tournaments_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
