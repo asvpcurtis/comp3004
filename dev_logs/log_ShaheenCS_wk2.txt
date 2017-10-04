@@ -1,0 +1,16 @@
+MONDAY, OCTOBER 2ND, 2017
+
+DEV LOG 2
+
+-Met with team members to discuss application architecture (~2 hours)
+	-Discussed front-end and back-end components
+	-Discussed algorithm to calculate ranks (ELO)
+	-Decided back-end is API using C#
+	-Front-end using Java
+	-Sketched and discussed UML diagrams to represent system
+	-Created mocks of application UI
+
+-Installed required softwares to produce application (~4 hours)
+	-Installed and familiarized self with Source Tree
+	-Learning how to use BitBucket 
+	-Installed and learned how to use Android Studios & create basic programs
