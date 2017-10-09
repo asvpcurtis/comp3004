@@ -1,0 +1,10 @@
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterDataAccess\bin\Debug\TournamentMasterDataAccess.dll.config
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterDataAccess\bin\Debug\TournamentMasterDataAccess.dll
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterDataAccess\bin\Debug\TournamentMasterDataAccess.pdb
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterDataAccess\bin\Debug\EntityFramework.dll
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterDataAccess\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterDataAccess\bin\Debug\EntityFramework.xml
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterDataAccess\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterDataAccess\obj\Debug\TournamentMasterDataAccess.csprojResolveAssemblyReference.cache
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterDataAccess\obj\Debug\TournamentMasterDataAccess.dll
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterDataAccess\obj\Debug\TournamentMasterDataAccess.pdb

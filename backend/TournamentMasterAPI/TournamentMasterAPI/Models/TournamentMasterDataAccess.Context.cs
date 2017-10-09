@@ -7,16 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TournamentMasterDataAccess
+namespace TournamentMasterAPI.Models
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class AccountDataModelContainer : DbContext
+    public partial class TournamentMasterDataAccessContainer : DbContext
     {
-        public AccountDataModelContainer()
-            : base("name=AccountDataModelContainer")
+        public TournamentMasterDataAccessContainer()
+            : base("name=TournamentMasterDataAccessContainer")
         {
         }
     
@@ -26,10 +26,10 @@ namespace TournamentMasterDataAccess
         }
     
         public virtual DbSet<Account> Accounts { get; set; }
-        public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<Competitor> Competitors { get; set; }
-        public virtual DbSet<Tournament> Tournaments { get; set; }
-        public virtual DbSet<Round> Rounds { get; set; }
+        public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<Pairing> Pairings { get; set; }
+        public virtual DbSet<Round> Rounds { get; set; }
+        public virtual DbSet<Tournament> Tournaments { get; set; }
     }
 }

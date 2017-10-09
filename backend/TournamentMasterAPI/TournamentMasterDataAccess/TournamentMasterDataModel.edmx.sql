@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 10/08/2017 13:30:22
+-- Date Created: 10/08/2017 13:36:26
 -- Generated from EDMX file: C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterDataAccess\TournamentMasterDataModel.edmx
 -- --------------------------------------------------
 
