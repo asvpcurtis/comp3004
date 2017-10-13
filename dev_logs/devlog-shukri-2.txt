@@ -1,0 +1,20 @@
++Dev Log - Shukri Shubair 100982304
+
++Week of 9/24 to 9/30
+
++
+
++Team Planning Meeting (2 hours)
+
++-discussed app and database functionalities
+
++-planned component design and UI interactions
+
++
+
++Personal Work (5 hours)
+
++-Began work on proof-of-concept app
+
++-Setup Bitbucket repo
+
