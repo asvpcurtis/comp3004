@@ -34,7 +34,7 @@ public class Competitor {
     }
 
     // Initialize a Competitor
-    public Competitor initCompetitor(String f, String l, String e, int r, int i, int o, char g) {
+    public Competitor(String f, String l, String e, int r, int i, int o, char g) {
         firstName = f;
         lastName = l;
         eMail = e;
@@ -42,8 +42,6 @@ public class Competitor {
         id = i;
         orgID = o;
         gender = g;
-
-        return this;
     }
 
     // Set a rating to a new value
