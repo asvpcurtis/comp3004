@@ -5,7 +5,7 @@ package com.comp3004.goodbyeworld.tournamentmaster.data;
  */
 
 public class Round {
-    private int[] pairings;
+    private Pairing[] pairings;
     private int tournID;
     private int roundNumber;
     private int id;

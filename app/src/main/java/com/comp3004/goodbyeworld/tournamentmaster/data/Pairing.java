@@ -29,14 +29,12 @@ public class Pairing {
     }
 
     // Initialize a Pairing
-    public Pairing initCompetitor(int i, int one, int two, int round, int res) {
+    public Pairing(int i, int one, int two, int round, int res) {
         id = i;
         competitorOneID = one;
         competitorTwoID = two;
         roundID = round;
         result = res;
-
-        return this;
     }
 
     // Update result, confirming winner is one of the competitors

@@ -1,0 +1,11 @@
+Dev Log - Michael Souter 100679087
+Week of 10/1 to 10/7
+
+Team Meetings (3 hours)
+-Met with Michelle to work out kinks and consistency in setting up software
+
+Personal Work (4 hours)
+-Began base design and coding of some Java classes we will be using
+-Setup Android Studio project in the git to behave with other folders and files
+-Reading and studying backend API to integrate later with App's classes
+
