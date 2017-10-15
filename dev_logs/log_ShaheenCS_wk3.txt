@@ -1,0 +1,14 @@
+MONDAY, OCTOBER 9TH, 2017
+
+DEV LOG 3
+
+-Attempted to connect application to Firebase (cloud backend)
+-Working on creating a user registration 
+-User email/password registration created
+-Stores registered users on firebase online cloud database
+-users can now be created and stored into online database
+
+-- PROBLEMS --
+
+-infinite loading circle when application is launched
+-users do not register to the database

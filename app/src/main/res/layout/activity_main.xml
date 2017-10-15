@@ -1,35 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context="com.comp3004.goodbyeworld.tournamentmaster.view.MainActivity">
 
-    <TextView
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Please enter account information." />
+        android:layout_centerHorizontal="true" />
 
     <EditText
-        android:id="@+id/editText"
-        android:layout_width="wrap_content"
+        android:layout_margin="15dp"
+        android:hint="Enter your email"
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Username" />
+        android:inputType="textEmailAddress" />
 
     <EditText
-        android:id="@+id/editText2"
-        android:layout_width="wrap_content"
+        android:layout_margin="15dp"
+        android:hint="Enter your password"
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
+        android:layout_margin="15dp"
+        android:id="@+id/buttonRegister"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login" />
+        android:text="Register User" />
+
+    <TextView
+        android:textAlignment="center"
+        android:text="Already Registered? Sign in here"
+        android:id="@+id/textViewSignin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
