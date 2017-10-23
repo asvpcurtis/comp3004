@@ -8,4 +8,10 @@
     </EnvironmentVariables>
     <LaunchUrl>api/values</LaunchUrl>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ActiveDebugProfile>TournamentMasterAPI</ActiveDebugProfile>
+  </PropertyGroup>
 </Project>

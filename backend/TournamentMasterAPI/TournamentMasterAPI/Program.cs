@@ -10,18 +10,10 @@ using Microsoft.Extensions.Logging;
 
 namespace TournamentMasterAPI
 {
-    public class shitException : Exception
-    {
-        public shitException() : base("shit!")
-        {
-
-        }
-    }
     public class Program
     {
         public static void Main(string[] args)
         {
-            //throw new shitException();
             BuildWebHost(args).Run();
         }
 
