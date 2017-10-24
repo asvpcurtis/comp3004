@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace TournamentMasterAPI.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {

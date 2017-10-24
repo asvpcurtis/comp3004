@@ -13,5 +13,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <ActiveDebugProfile>TournamentMasterAPI</ActiveDebugProfile>
+    <Controller_SelectedScaffolderID>ApiControllerWithContextScaffolder</Controller_SelectedScaffolderID>
+    <Controller_SelectedScaffolderCategoryPath>root/Controller</Controller_SelectedScaffolderCategoryPath>
+    <WebStackScaffolding_ControllerDialogWidth>600</WebStackScaffolding_ControllerDialogWidth>
   </PropertyGroup>
 </Project>

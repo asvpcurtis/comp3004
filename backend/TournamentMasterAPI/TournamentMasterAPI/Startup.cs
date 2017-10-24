@@ -40,11 +40,12 @@ namespace TournamentMasterAPI
                     .AddJwtBearer(options =>
                     {
                         // Audience = AWS Cognito App Client ID
-                        options.Audience = "lfj0sjp1ec0khsbrpm7jdc1s7";
+                        options.Audience = Configuration["Authentication:Audience"];
                         // Authority is issuer
-                        options.Authority = @"https://cognito-idp.us-east-2.amazonaws.com/us-east-2_79EXSEFbV";
+                        options.Authority = Configuration["Authentication:Issuer"];
                         options.RequireHttpsMetadata = false;
                         options.SaveToken = true;
+                        
                     });
             services.AddMvc();
         }
@@ -57,7 +58,11 @@ namespace TournamentMasterAPI
                 app.UseDeveloperExceptionPage();
             }
             app.UseAuthentication();
-            app.UseMvc();
+            app.UseMvc(routes => 
+            {
+                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
         }
+        
     }
 }
