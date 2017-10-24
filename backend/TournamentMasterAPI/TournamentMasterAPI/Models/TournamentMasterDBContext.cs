@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 namespace TournamentMasterAPI.Models
 {
@@ -15,14 +16,7 @@ namespace TournamentMasterAPI.Models
         public virtual DbSet<Rounds> Rounds { get; set; }
         public virtual DbSet<Tournaments> Tournaments { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer(@"Server=comp3004.crviuftuknwc.ca-central-1.rds.amazonaws.com;Database=TournamentMasterDB;User Id=asvpcurtis;Password=Trapezoid9*;Encrypt=True;TrustServerCertificate=True;");
-            }
-        }
+        public TournamentMasterDBContext(DbContextOptions<TournamentMasterDBContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

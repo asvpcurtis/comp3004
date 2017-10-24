@@ -14,6 +14,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using Newtonsoft.Json;
+using TournamentMasterAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace TournamentMasterAPI
 {
@@ -29,6 +31,11 @@ namespace TournamentMasterAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Entity Framework
+            services.AddDbContext<TournamentMasterDBContext>(options => {
+                options.UseSqlServer(Configuration.GetConnectionString("TournamentMasterDatabase"));
+            });
+
             // JWT
             services.AddAuthorization(options =>
             {
