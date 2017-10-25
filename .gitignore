@@ -7,3 +7,11 @@
 /build
 /captures
 .externalNativeBuild
+backend/TournamentMasterAPI/.vs/TournamentMasterAPI/v15/Server/sqlite3/db.lock
+backend/TournamentMasterAPI/.vs/TournamentMasterAPI/v15/Server/sqlite3/storage.ide
+backend/TournamentMasterAPI/.vs/TournamentMasterAPI/v15/Server/sqlite3/storage.ide-shm
+backend/TournamentMasterAPI/.vs/TournamentMasterAPI/v15/Server/sqlite3/storage.ide-wal
+.vs/
+project.lock.json
+project.fragment.lock.json
+artifacts/
