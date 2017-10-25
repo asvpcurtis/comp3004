@@ -16,6 +16,7 @@ using System.Net;
 using Newtonsoft.Json;
 using TournamentMasterAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace TournamentMasterAPI
 {
@@ -36,7 +37,7 @@ namespace TournamentMasterAPI
                 options.UseSqlServer(Configuration.GetConnectionString("TournamentMasterDatabase"));
             });
 
-            // JWT
+            // JSON Web Token
             services.AddAuthorization(options =>
             {
                 options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
@@ -52,7 +53,6 @@ namespace TournamentMasterAPI
                         options.Authority = Configuration["Authentication:Issuer"];
                         options.RequireHttpsMetadata = false;
                         options.SaveToken = true;
-                        
                     });
             services.AddMvc();
         }

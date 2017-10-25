@@ -6,62 +6,61 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TournamentMasterAPI.Models;
-using System.Security.Claims;
 
 namespace TournamentMasterAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Competitors")]
-    public class CompetitorsController : Controller
+    [Route("api/Organizations")]
+    public class OrganizationsController : Controller
     {
         private readonly TournamentMasterDBContext _context;
 
-        public CompetitorsController(TournamentMasterDBContext context)
+        public OrganizationsController(TournamentMasterDBContext context)
         {
             _context = context;
         }
 
-        // GET: api/Competitors
+        // GET: api/Organizations
         [HttpGet]
-        public IEnumerable<Competitors> GetCompetitors()
+        public IEnumerable<Organizations> GetOrganizations()
         {
-            return _context.Competitors;
+            return _context.Organizations;
         }
 
-        // GET: api/Competitors/5
+        // GET: api/Organizations/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCompetitors([FromRoute] int id)
+        public async Task<IActionResult> GetOrganizations([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var competitors = await _context.Competitors.SingleOrDefaultAsync(m => m.Id == id);
+            var organizations = await _context.Organizations.SingleOrDefaultAsync(m => m.Id == id);
 
-            if (competitors == null)
+            if (organizations == null)
             {
                 return NotFound();
             }
 
-            return Ok(competitors);
+            return Ok(organizations);
         }
 
-        // PUT: api/Competitors/5
+        // PUT: api/Organizations/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompetitors([FromRoute] int id, [FromBody] Competitors competitors)
+        public async Task<IActionResult> PutOrganizations([FromRoute] int id, [FromBody] Organizations organizations)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != competitors.Id)
+            if (id != organizations.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(competitors).State = EntityState.Modified;
+            _context.Entry(organizations).State = EntityState.Modified;
 
             try
             {
@@ -69,7 +68,7 @@ namespace TournamentMasterAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CompetitorsExists(id))
+                if (!OrganizationsExists(id))
                 {
                     return NotFound();
                 }
@@ -82,45 +81,45 @@ namespace TournamentMasterAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Competitors
+        // POST: api/Organizations
         [HttpPost]
-        public async Task<IActionResult> PostCompetitors([FromBody] Competitors competitors)
+        public async Task<IActionResult> PostOrganizations([FromBody] Organizations organizations)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Competitors.Add(competitors);
+            _context.Organizations.Add(organizations);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCompetitors", new { id = competitors.Id }, competitors);
+            return CreatedAtAction("GetOrganizations", new { id = organizations.Id }, organizations);
         }
 
-        // DELETE: api/Competitors/5
+        // DELETE: api/Organizations/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCompetitors([FromRoute] int id)
+        public async Task<IActionResult> DeleteOrganizations([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var competitors = await _context.Competitors.SingleOrDefaultAsync(m => m.Id == id);
-            if (competitors == null)
+            var organizations = await _context.Organizations.SingleOrDefaultAsync(m => m.Id == id);
+            if (organizations == null)
             {
                 return NotFound();
             }
 
-            _context.Competitors.Remove(competitors);
+            _context.Organizations.Remove(organizations);
             await _context.SaveChangesAsync();
 
-            return Ok(competitors);
+            return Ok(organizations);
         }
 
-        private bool CompetitorsExists(int id)
+        private bool OrganizationsExists(int id)
         {
-            return _context.Competitors.Any(e => e.Id == id);
+            return _context.Organizations.Any(e => e.Id == id);
         }
     }
 }
