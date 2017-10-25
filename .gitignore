@@ -6,4 +6,3 @@ backend/TournamentMasterAPI/.vs/TournamentMasterAPI/v15/Server/sqlite3/storage.i
 project.lock.json
 project.fragment.lock.json
 artifacts/
-**/Properties/launchSettings.json
