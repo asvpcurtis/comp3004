@@ -1,0 +1,3 @@
+ - Provisioned AWS Cognito 
+ - Got together with Mike to assist with getting a test app working with AWS Cognito to request a JWT Token
+ - Researched ways to authenticate JWT Token in Backend 

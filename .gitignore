@@ -1,3 +1,12 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.externalNativeBuild
 backend/TournamentMasterAPI/.vs/TournamentMasterAPI/v15/Server/sqlite3/db.lock
 backend/TournamentMasterAPI/.vs/TournamentMasterAPI/v15/Server/sqlite3/storage.ide
 backend/TournamentMasterAPI/.vs/TournamentMasterAPI/v15/Server/sqlite3/storage.ide-shm
@@ -6,3 +15,4 @@ backend/TournamentMasterAPI/.vs/TournamentMasterAPI/v15/Server/sqlite3/storage.i
 project.lock.json
 project.fragment.lock.json
 artifacts/
+frontend/build/generated/mockable-android-26.jar

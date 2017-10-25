@@ -9,3 +9,14 @@
 /Users/user/Projects/TournamentMasterAPI/TournamentMasterAPI/obj/Debug/netcoreapp2.0/TournamentMasterAPI.AssemblyInfo.cs
 /Users/user/Projects/TournamentMasterAPI/TournamentMasterAPI/obj/Debug/netcoreapp2.0/TournamentMasterAPI.dll
 /Users/user/Projects/TournamentMasterAPI/TournamentMasterAPI/obj/Debug/netcoreapp2.0/TournamentMasterAPI.pdb
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\bin\Debug\netcoreapp2.0\TournamentMasterAPI.deps.json
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\bin\Debug\netcoreapp2.0\TournamentMasterAPI.runtimeconfig.json
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\bin\Debug\netcoreapp2.0\TournamentMasterAPI.runtimeconfig.dev.json
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\bin\Debug\netcoreapp2.0\TournamentMasterAPI.dll
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\bin\Debug\netcoreapp2.0\TournamentMasterAPI.pdb
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\obj\Debug\netcoreapp2.0\TournamentMasterAPI.csprojResolveAssemblyReference.cache
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\obj\Debug\netcoreapp2.0\TournamentMasterAPI.csproj.CoreCompileInputs.cache
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\obj\Debug\netcoreapp2.0\TournamentMasterAPI.AssemblyInfoInputs.cache
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\obj\Debug\netcoreapp2.0\TournamentMasterAPI.AssemblyInfo.cs
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\obj\Debug\netcoreapp2.0\TournamentMasterAPI.dll
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\obj\Debug\netcoreapp2.0\TournamentMasterAPI.pdb

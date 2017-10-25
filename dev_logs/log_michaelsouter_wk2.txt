@@ -1,0 +1,13 @@
+Dev Log - Michael Souter 100679087
+Week of 9/24 to 9/30
+
+Team Planning Meeting (2 hours)
+-Division of App and Database functionalities
+-Planning component design and interactions
+-Sketching and basic UML and mock UI designs
+
+Personal Work (5 hours)
+-Personal Setup of required software and SDK's
+-Connecting to Bitbucket and familiarizing with the system
+-Create some scratch apps in Android Studio to learn Android App Dev
+

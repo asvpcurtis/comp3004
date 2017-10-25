@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="aws-android-sdk-cognitoidentityprovider-2.6.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-cognitoidentityprovider/2.6.0/6b50a3534c1315f216e39c38368024da219a5800/aws-android-sdk-cognitoidentityprovider-2.6.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-cognitoidentityprovider/2.6.0/8603aa6152577cba4ed504b1cda9d417be03daad/aws-android-sdk-cognitoidentityprovider-2.6.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
