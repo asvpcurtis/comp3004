@@ -3,6 +3,7 @@
     package="com.comp3004.goodbyeworld.tournamentmaster">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,13 +20,17 @@
         <activity
             android:name=".view.OrgActivity"
             android:label="@string/title_activity_org"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.EditOrgActivity"
             android:label="@string/title_activity_add_org"
-            android:parentActivityName="com.comp3004.goodbyeworld.tournamentmaster.view.OrgActivity">
-        </activity>
+            android:parentActivityName=".view.OrgActivity" />
+        <activity
+            android:name=".view.WelcomeActivity"
+            android:label="@string/title_activity_welcome"
+            android:parentActivityName=".view.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".view.RegisterActivity"></activity>
     </application>
 
 </manifest>
