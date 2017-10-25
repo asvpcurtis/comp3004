@@ -1,11 +1,12 @@
 *.iml
 .gradle
+.rawproto
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
-/build
-/captures
+/frontend/build
+/frontend/captures
 .externalNativeBuild
 backend/TournamentMasterAPI/.vs/TournamentMasterAPI/v15/Server/sqlite3/db.lock
 backend/TournamentMasterAPI/.vs/TournamentMasterAPI/v15/Server/sqlite3/storage.ide
