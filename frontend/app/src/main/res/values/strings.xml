@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">Tournament Master</string>
-    <string name="title_activity_org">Manage Organizations</string>
-    <string name="title_activity_add_org">Add Organization</string>
-    <string name="org_name">Organization Name</string>
-</resources>
