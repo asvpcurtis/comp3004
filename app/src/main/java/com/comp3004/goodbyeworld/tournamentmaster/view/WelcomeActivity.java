@@ -6,13 +6,19 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.AuthenticationContinuation;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.ChallengeContinuation;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.MultiFactorAuthenticationContinuation;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 
 import com.comp3004.goodbyeworld.tournamentmaster.data.AppHelper;
@@ -39,6 +45,7 @@ public class WelcomeActivity extends AppCompatActivity {
         username = AppHelper.getCurrUser();
         user = AppHelper.getPool().getUser(username);
         AppHelper.getPool().getUser(username).getDetailsInBackground(detailsHandler);
+        AppHelper.getPool().getUser(username).getSessionInBackground(authenticationHandler);
         TextView welcomeText = findViewById(R.id.textView2);
         welcomeText.setText("Welcome " + username);
 
@@ -54,6 +61,35 @@ public class WelcomeActivity extends AppCompatActivity {
         @Override
         public void onFailure(Exception exception) {
             //
+        }
+    };
+
+    AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
+        @Override
+        public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
+            TextView token = findViewById(R.id.textViewIdToken);
+            token.setText(userSession.getIdToken().getJWTToken().toString());
+            Log.i("ID TOKEN", userSession.getIdToken().getJWTToken().toString());
+        }
+
+        @Override
+        public void getAuthenticationDetails(AuthenticationContinuation authenticationContinuation, String userId) {
+
+        }
+
+        @Override
+        public void getMFACode(MultiFactorAuthenticationContinuation continuation) {
+
+        }
+
+        @Override
+        public void authenticationChallenge(ChallengeContinuation continuation) {
+
+        }
+
+        @Override
+        public void onFailure(Exception exception) {
+
         }
     };
 
