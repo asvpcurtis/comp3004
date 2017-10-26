@@ -93,10 +93,6 @@ import com.comp3004.goodbyeworld.tournamentmaster.data.AppHelper;
 public class MainActivity extends AppCompatActivity {
     private final String TAG="MainActivity";
 
-    private NavigationView nDrawer;
-    private DrawerLayout mDrawer;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private Toolbar toolbar;
     private AlertDialog userDialog;
     private ProgressDialog waitDialog;
 
@@ -119,8 +115,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-
 
         // Initialize application
         AppHelper.init(getApplicationContext());
@@ -422,11 +416,9 @@ public class MainActivity extends AppCompatActivity {
             closeWaitDialog();
             TextView label = (TextView) findViewById(R.id.textViewUserIdMessage);
             label.setText("Sign-in failed");
-            //inPassword.setBackground(getDrawable(R.drawable.text_border_error));
 
             label = (TextView) findViewById(R.id.textViewUserIdMessage);
             label.setText("Sign-in failed");
-            //inUsername.setBackground(getDrawable(R.drawable.text_border_error));
 
             showDialogMessage("Sign-in failed", AppHelper.formatException(e));
         }

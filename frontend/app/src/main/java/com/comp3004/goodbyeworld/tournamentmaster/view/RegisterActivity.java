@@ -54,10 +54,6 @@ public class RegisterActivity extends AppCompatActivity {
         input = findViewById(R.id.editTextEMail);
         cognitoUserAttributes.addAttribute("email", input.getText().toString());
 
-        // add phone number
-        //input = findViewById(R.id.editTextPhoneNumber);
-        //cognitoUserAttributes.addAttribute("phone_number", input.getText().toString());
-
         AppHelper.getPool().signUpInBackground(username, password, cognitoUserAttributes, null, signUpHandler);
 
     }
