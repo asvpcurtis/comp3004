@@ -103,7 +103,7 @@ public class WelcomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, dataviewdemo.class);
         Bundle bundle = new Bundle();
         bundle.putString("type", "USER");
-        bundle.putString("id", "0123456789");
+        bundle.putString("id", "00001");
         intent.putExtras(bundle);
         startActivity(intent);
     }

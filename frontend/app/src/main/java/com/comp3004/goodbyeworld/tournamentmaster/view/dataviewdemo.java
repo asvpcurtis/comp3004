@@ -37,7 +37,7 @@ public class dataviewdemo extends AppCompatActivity {
             if (contextBundle.containsKey("type") && contextBundle.containsKey("id")) {
                 viewType = contextBundle.getString("type");
                 viewID = contextBundle.getString("id");
-                infoArray = DataHandler.getData(viewType, viewID);
+                infoArray = DataHandler.getData(this, viewType, viewID);
                 setView(viewType);
             } else {
                 setView("ERR");

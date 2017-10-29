@@ -1,5 +1,13 @@
 package com.comp3004.goodbyeworld.tournamentmaster.data;
 
+import android.content.Context;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -19,53 +27,117 @@ public class DataHandler {
      *
      * The type and ID of data requested are used to select which API call to make
      */
-    public static ArrayList getData(String type, String iD) {
-        //call backend and create data set
-        ArrayList info = new ArrayList();
 
-        if (type.equals("ORG")) {
-            // Organization
-            info.add(new TMDataSet("Organization", type, iD));
-            // returns tournaments the organization hosts
-            info.add(new TMDataSet("My Tournament 1", "TOURN", "0123456789"));
-            info.add(new TMDataSet("My Tournament 2", "TOURN", "0123456789"));
-        } else if (type.equals("TOURN")) {
-            // Tournament
-            info.add(new TMDataSet("Tournament", type, iD));
-            // returns rounds in the tournament
-            info.add(new TMDataSet("Round 1", "ROUND", "0123456789"));
-            info.add(new TMDataSet("Round 2", "ROUND", "0123456789"));
-        } else if (type.equals("USER")) {
-            // User
-            info.add(new TMDataSet("User", type, iD));
-            // returns organization the user belongs to
-            info.add(new TMDataSet("Organization", "ORG", "0123456789"));
-        } else if (type.equals("ROUND")) {
-            // Round
-            info.add(new TMDataSet("Round", type, iD));
-            // returns pairings in that round
-            info.add(new TMDataSet("Pairing 1", "PAIR", "0123456789"));
-            info.add(new TMDataSet("Pairing 2", "PAIR", "0123456789"));
-            info.add(new TMDataSet("Pairing 3", "PAIR", "0123456789"));
-            info.add(new TMDataSet("Pairing 4", "PAIR", "0123456789"));
-        } else if (type.equals("PAIR")) {
-            // Pairing
-            info.add(new TMDataSet("Pairing", type, iD));
-            // returns competitors in that pairing
-            info.add(new TMDataSet("Competitor 1", "COMPETITOR", "0123456789"));
-            info.add(new TMDataSet("Competitor 2", "COMPETITOR", "0123456789"));
-        } else if (type.equals("COMPETITOR")) {
-            // Competitor
-            info.add(new TMDataSet("Competitor", type, iD));
-            // returns non-linking competitor information
-            info.add(new TMDataSet("Firstname Lastname", "OTHER", "NONE"));
-            info.add(new TMDataSet("username@email.com", "OTHER", "NONE"));
-        } else {
-            // Test Data
-            info.add(new TMDataSet("Test Data", type, iD));
+    public static ArrayList getData(Context c, String type, String iD) {
+        ArrayList info = new ArrayList();
+        String s = null;
+
+        try {
+            InputStream in = c.getAssets().open("testdata.JSON");
+            int size = in.available();
+            byte[] buffer = new byte[size];
+            in.read(buffer);
+            in.close();
+            s = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
         }
 
-        //return
+        try {
+            JSONObject obj = new JSONObject(s);
+
+            // User a special condition since test user data is not an array
+            if (type.equals("USER")) {
+                JSONObject data = obj.getJSONObject(type);
+                info.add(new TMDataSet(data.getString("name"), type, iD));
+                JSONArray list = data.getJSONArray("orgs");
+                for (int i=0; i<list.length(); i++)  {
+                    JSONObject x = list.getJSONObject(i);
+                    info.add(new TMDataSet(x.getString("name"), "ORG", x.getString("id")));
+                }
+            } else {
+                JSONArray arr = obj.getJSONArray(type);
+                if (type.equals("ORG")) {
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject data = arr.getJSONObject(i);
+                        if (data.getString("id").equals(iD)) {
+                            // Organization
+                            info.add(new TMDataSet(data.getString("name"), type, iD));
+                            // returns tournaments the organization hosts
+                            JSONArray subList = data.getJSONArray("tourn");
+                            for (int j = 0; j < subList.length(); j++) {
+                                JSONObject subData = subList.getJSONObject(j);
+                                info.add(new TMDataSet(subData.getString("name"), "TOURN", subData.getString("id")));
+                            }
+                        }
+                    }
+                } else if (type.equals("TOURN")) {
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject data = arr.getJSONObject(i);
+                        if (data.getString("id").equals(iD)) {
+                            // Tournament
+                            info.add(new TMDataSet(data.getString("name"), type, iD));
+                            // returns rounds in the tournament
+                            JSONArray subList = data.getJSONArray("rounds");
+                            for (int j = 0; j < subList.length(); j++) {
+                                JSONObject subData = subList.getJSONObject(j);
+                                info.add(new TMDataSet(subData.getString("name"), "ROUND", subData.getString("id")));
+                            }
+                        }
+                    }
+                } else if (type.equals("ROUND")) {
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject data = arr.getJSONObject(i);
+                        if (data.getString("id").equals(iD)) {
+                            // Round
+                            info.add(new TMDataSet(data.getString("name"), type, iD));
+                            // returns pairings in the round
+                            JSONArray subList = data.getJSONArray("pairs");
+                            for (int j = 0; j < subList.length(); j++) {
+                                JSONObject subData = subList.getJSONObject(j);
+                                info.add(new TMDataSet(subData.getString("name"), "PAIR", subData.getString("id")));
+                            }
+                        }
+                    }
+                } else if (type.equals("PAIR")) {
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject data = arr.getJSONObject(i);
+                        if (data.getString("id").equals(iD)) {
+                            // Pairing
+                            info.add(new TMDataSet(data.getString("name"), type, iD));
+                            // returns competitors in the pairing
+                            JSONArray subList = data.getJSONArray("competitors");
+                            for (int j = 0; j < subList.length(); j++) {
+                                JSONObject subData = subList.getJSONObject(j);
+                                info.add(new TMDataSet(subData.getString("name"), "COMPETITOR", subData.getString("id")));
+                            }
+                        }
+                    }
+                } else if (type.equals("COMPETITOR")) {
+                    // Competitor
+                    info.add(new TMDataSet("Competitor", type, iD));
+                    // returns non-linking competitor information
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject data = arr.getJSONObject(i);
+                        if (data.getString("id").equals(iD)) {
+                            info.add(new TMDataSet(data.getString("first") + " " + data.getString("last"), "NONE", "NONE"));
+                            info.add(new TMDataSet(data.getString("email"), "NONE", "NONE"));
+                        }
+                    }
+                } else {
+                    // Test Data
+                    info.add(new TMDataSet("Test Data", type, iD));
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
         return info;
+
     }
 }
