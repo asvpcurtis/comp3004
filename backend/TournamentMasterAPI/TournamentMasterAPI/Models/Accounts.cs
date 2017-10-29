@@ -11,7 +11,7 @@ namespace TournamentMasterAPI.Models
         }
 
         public int Id { get; set; }
-        public string Email { get; set; }
+        public Guid AwsCognitoId { get; set; }
 
         public ICollection<AccountOrganization> AccountOrganization { get; set; }
     }

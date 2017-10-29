@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TournamentMasterAPI.Models;
+using System.Security.Claims;
 
 namespace TournamentMasterAPI.Controllers
 {
@@ -18,6 +19,13 @@ namespace TournamentMasterAPI.Controllers
         public OrganizationsController(TournamentMasterDBContext context)
         {
             _context = context;
+        }
+
+        private Accounts UserAccount()
+        {
+            string sub = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            // var acc = from a in _context.Accounts select a.Email == sub;
+            return null;
         }
 
         // GET: api/Organizations
