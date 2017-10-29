@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.comp3004.goodbyeworld.tournamentmaster.view.dataviewdemo"
+    tools:layout_editor_absoluteY="81dp"
+    android:layout_marginLeft="8dp"
+    app:layout_constraintLeft_toLeftOf="@+id/linearLayout">
+
+    <LinearLayout
+        android:id="@+id/layoutContent"
+        android:layout_width="360dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:text="Title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            tools:layout_editor_absoluteX="17dp"
+            tools:layout_editor_absoluteY="16dp" />
+
+        <TextView
+            android:id="@+id/textViewSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:text="Subtitle"
+            android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+            tools:layout_editor_absoluteX="17dp"
+            tools:layout_editor_absoluteY="61dp" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

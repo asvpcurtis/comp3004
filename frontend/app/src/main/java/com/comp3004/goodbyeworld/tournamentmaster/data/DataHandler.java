@@ -19,13 +19,16 @@ public class DataHandler {
      *
      * The type and ID of data requested are used to select which API call to make
      */
-    public ArrayList getData(String type, String iD) {
+    public static ArrayList getData(String type, String iD) {
         //call backend and create data set
         ArrayList info = new ArrayList();
 
         if (type.equals("ORG")) {
             // Organization
-            info.add(new TMDataSet("Test Data", type, iD));
+            info.add(new TMDataSet("Organization", type, iD));
+            // returns tournaments the organization hosts
+            info.add(new TMDataSet("My Tournament 1", "TOURN", "0123456789"));
+            info.add(new TMDataSet("My Tournament 2", "TOURN", "0123456789"));
         } else if (type.equals("TOURN")) {
             // Tournament
             info.add(new TMDataSet("Tournament", type, iD));
@@ -35,6 +38,8 @@ public class DataHandler {
         } else if (type.equals("USER")) {
             // User
             info.add(new TMDataSet("User", type, iD));
+            // returns organization the user belongs to
+            info.add(new TMDataSet("Organization", "ORG", "0123456789"));
         } else if (type.equals("ROUND")) {
             // Round
             info.add(new TMDataSet("Round", type, iD));

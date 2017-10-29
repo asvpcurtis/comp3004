@@ -1,5 +1,6 @@
 package com.comp3004.goodbyeworld.tournamentmaster.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -96,6 +97,15 @@ public class WelcomeActivity extends AppCompatActivity {
     public void signOut (View view) {
         user.signOut();
         NavUtils.navigateUpFromSameTask(this);
+    }
+
+    public void continueActivity (View view) {
+        Intent intent = new Intent(this, dataviewdemo.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("type", "USER");
+        bundle.putString("id", "0123456789");
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
 

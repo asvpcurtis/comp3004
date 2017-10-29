@@ -33,7 +33,7 @@
         <activity
             android:name=".view.RegisterActivity"
             android:parentActivityName=".view.MainActivity" />
-
+        <activity android:name=".view.dataviewdemo"></activity>
     </application>
 
 </manifest>
