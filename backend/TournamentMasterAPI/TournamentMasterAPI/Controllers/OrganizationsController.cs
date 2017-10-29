@@ -21,36 +21,67 @@ namespace TournamentMasterAPI.Controllers
             _context = context;
         }
 
-        private Accounts UserAccount()
+        /// <summary>
+        /// Get the user account from the database from the authenticated token.
+        /// Creating an entry if one doesn't already exist.
+        /// </summary>
+        /// <returns>The account associated with the logged in user</returns>
+        private Accounts GetUserAccount()
         {
+            // the sub claim from the JWT is the identifier from aws
             string sub = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            // var acc = from a in _context.Accounts select a.Email == sub;
-            return null;
+            Guid tokenId = new Guid(sub);
+
+            // if account doesn't already exist create one!
+            if (!_context.Accounts.Any(e => e.AwsCognitoId == tokenId))
+            {
+                Accounts acc = new Accounts
+                {
+                    AwsCognitoId = tokenId
+                };
+                _context.Accounts.Add(acc);
+                _context.SaveChanges();
+            }
+
+            return _context.Accounts.FirstOrDefault(acc => acc.AwsCognitoId == tokenId);
         }
+            
 
         // GET: api/Organizations
         [HttpGet]
         public IEnumerable<Organizations> GetOrganizations()
         {
-            return _context.Organizations;
+            Accounts userAccount = GetUserAccount();
+            var userOrganizations = _context.AccountOrganization.Where(
+                e => e.AccountsId == userAccount.Id);
+            return _context.Organizations.Where(
+                e => userOrganizations.Any(
+                    o => o.OrganizationsId == e.Id));
         }
 
         // GET: api/Organizations/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrganizations([FromRoute] int id)
         {
+            // check if user has permission for this organization
+            Accounts userAccount = GetUserAccount();
+            if (_context.AccountOrganization.Any(e => e.OrganizationsId == id 
+                && e.AccountsId == userAccount.Id))
+            {
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
             var organizations = await _context.Organizations.SingleOrDefaultAsync(m => m.Id == id);
 
             if (organizations == null)
             {
                 return NotFound();
             }
-
+            
             return Ok(organizations);
         }
 
@@ -58,6 +89,14 @@ namespace TournamentMasterAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutOrganizations([FromRoute] int id, [FromBody] Organizations organizations)
         {
+            // check if user has permission for this organization
+            Accounts userAccount = GetUserAccount();
+            if (_context.AccountOrganization.Any(e => e.OrganizationsId == id
+                && e.AccountsId == userAccount.Id))
+            {
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -93,6 +132,7 @@ namespace TournamentMasterAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> PostOrganizations([FromBody] Organizations organizations)
         {
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -108,6 +148,14 @@ namespace TournamentMasterAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrganizations([FromRoute] int id)
         {
+            // check if user has permission for this organization
+            Accounts userAccount = GetUserAccount();
+            if (_context.AccountOrganization.Any(e => e.OrganizationsId == id
+                && e.AccountsId == userAccount.Id))
+            {
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

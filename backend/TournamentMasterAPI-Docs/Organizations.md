@@ -14,7 +14,7 @@
 
 #### Response
 
-```
+``` json
 [
     {
         "id": 1,
@@ -40,7 +40,7 @@
 
 #### Response
 
-```
+``` json
 {
     "id": 1,
     "name": "testorg",
@@ -61,7 +61,7 @@
 |`Authorization`|`Bearer <JWT token>`|
 |`Content-Type`|`application/json`|
 
-```
+``` json
 {
     "name": "testorg"
 }
@@ -69,7 +69,7 @@
 
 #### Response
 
-```
+``` json
 {
     "id": 1,
     "name": "testorg",
@@ -90,7 +90,7 @@
 |`Authorization`|`Bearer <JWT token>`|
 |`Content-Type`|`application/json`|
 
-```
+``` json
 {
     "id": 1,
     "name": "newtestorg"
@@ -99,7 +99,7 @@
 
 #### Response
 
-```
+``` json
 {
     "id": 1,
     "name": "newtestorg",
@@ -121,7 +121,7 @@
 
 #### Response
 
-```
+``` json
 {
     "id": 1,
     "name": "testorg",

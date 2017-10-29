@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace TournamentMasterAPI.Models
@@ -14,7 +15,9 @@ namespace TournamentMasterAPI.Models
         public int TournamentId { get; set; }
         public int RoundNumber { get; set; }
 
+        [JsonIgnore]
         public Tournaments Tournament { get; set; }
+        [JsonIgnore]
         public ICollection<Pairings> Pairings { get; set; }
     }
 }

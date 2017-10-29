@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 namespace TournamentMasterAPI.Models
 {
@@ -42,13 +41,6 @@ namespace TournamentMasterAPI.Models
                     .HasForeignKey(d => d.OrganizationsId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AccountOrganization_Organization");
-            });
-
-            modelBuilder.Entity<Accounts>(entity =>
-            {
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Competitors>(entity =>

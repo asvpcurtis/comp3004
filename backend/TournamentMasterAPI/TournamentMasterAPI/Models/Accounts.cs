@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace TournamentMasterAPI.Models
@@ -13,6 +14,7 @@ namespace TournamentMasterAPI.Models
         public int Id { get; set; }
         public Guid AwsCognitoId { get; set; }
 
+        [JsonIgnore]
         public ICollection<AccountOrganization> AccountOrganization { get; set; }
     }
 }
