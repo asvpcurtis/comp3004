@@ -110,4 +110,13 @@ public class dataviewdemo extends AppCompatActivity {
             ((TextView)findViewById(R.id.textViewTitle)).setText("Data type unknown");
         }
     }
+
+    public void editClick(View view) {
+        Intent intent = new Intent(this, editviewdemo.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("type", viewType);
+        bundle.putString("id", viewID);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
 }
