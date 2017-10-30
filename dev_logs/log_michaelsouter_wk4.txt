@@ -1,0 +1,11 @@
+Dev Log - Michael Souter 100679087
+Week of 10/8 to 10/14
+
+Team Meetings (2 hours)
+-Met with Curtis to work on AWS Cognito Authentication
+
+Personal Work (6 hours)
+-Read Cognito documentation to understand how it works
+-Modified and repurposed Cognito code to function with our app
+-Enable views to expose JWT token for testing purposes
+

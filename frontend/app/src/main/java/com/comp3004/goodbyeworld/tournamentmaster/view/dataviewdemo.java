@@ -117,6 +117,17 @@ public class dataviewdemo extends AppCompatActivity {
         bundle.putString("type", viewType);
         bundle.putString("id", viewID);
         intent.putExtras(bundle);
-        startActivity(intent);
+        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode,data);
+        if (resultCode == RESULT_OK) {
+            contentLayout.removeAllViewsInLayout();
+            setResult(RESULT_OK);
+            init();
+        }
     }
 }

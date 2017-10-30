@@ -28,7 +28,7 @@ public class OnClickWithTypes implements View.OnClickListener {
         bundle.putString("type", type);
         bundle.putString("id", id);
         intent.putExtras(bundle);
-        parent.startActivity(intent);
+        parent.startActivityForResult(intent, 1);
     }
 
 }

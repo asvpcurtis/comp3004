@@ -24,6 +24,7 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetail
 
 import com.comp3004.goodbyeworld.tournamentmaster.data.AppHelper;
 import com.comp3004.goodbyeworld.tournamentmaster.R;
+import com.comp3004.goodbyeworld.tournamentmaster.data.DataHandler;
 
 public class WelcomeActivity extends AppCompatActivity {
     // Cognito user objects
@@ -95,12 +96,13 @@ public class WelcomeActivity extends AppCompatActivity {
     };
 
     public void signOut (View view) {
+        DataHandler.clearLocal(this);
         user.signOut();
         NavUtils.navigateUpFromSameTask(this);
     }
 
     public void continueActivity (View view) {
-        Intent intent = new Intent(this, dataviewdemo.class);
+        Intent intent = new Intent(this, UserView.class);
         Bundle bundle = new Bundle();
         bundle.putString("type", "USER");
         bundle.putString("id", "00001");

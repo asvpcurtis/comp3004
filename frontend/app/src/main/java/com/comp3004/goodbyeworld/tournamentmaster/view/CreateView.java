@@ -3,8 +3,6 @@ package com.comp3004.goodbyeworld.tournamentmaster.view;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -13,12 +11,11 @@ import android.widget.Toast;
 
 import com.comp3004.goodbyeworld.tournamentmaster.R;
 import com.comp3004.goodbyeworld.tournamentmaster.data.DataHandler;
-import com.comp3004.goodbyeworld.tournamentmaster.data.TMDataSet;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class editviewdemo extends AppCompatActivity {
+public class CreateView extends AppCompatActivity {
+
     private String viewType;
     private String viewID;
     private LinkedHashMap<String, String> infoArray;
@@ -27,7 +24,7 @@ public class editviewdemo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editviewdemo);
+        setContentView(R.layout.activity_create_view);
         init();
     }
 
@@ -40,7 +37,7 @@ public class editviewdemo extends AppCompatActivity {
             if (contextBundle.containsKey("type") && contextBundle.containsKey("id")) {
                 viewType = contextBundle.getString("type");
                 viewID = contextBundle.getString("id");
-                infoArray = DataHandler.getEdit(this, viewType, viewID);
+                infoArray = new LinkedHashMap<String, String>();
                 setView(viewType);
             } else {
                 setView("ERR");
@@ -50,12 +47,14 @@ public class editviewdemo extends AppCompatActivity {
         }
     }
     private void setView(String v) {
-        ((TextView)findViewById(R.id.textViewTitle)).setText(viewType + " Edit Options");
-        for (String key : infoArray.keySet()) {
+        if (viewType.equals("USER")) {
+            // Title
+            ((TextView)findViewById(R.id.textViewTitle)).setText("Create Organization");
+            // Fields
             EditText editText = new EditText(this);
             editText.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
-            editText.setText(infoArray.get(key));
-            editText.setHint(key);
+            editText.setText("");
+            editText.setHint("name");
             contentLayout.addView(editText);
         }
     }
@@ -67,18 +66,18 @@ public class editviewdemo extends AppCompatActivity {
                 infoArray.put(((EditText)editBox).getHint().toString(), ((EditText)editBox).getText().toString());
             }
         }
-        boolean results = DataHandler.setEdit(this, viewType, viewID, infoArray);
+        boolean results = DataHandler.setCreate(this, viewType, viewID, infoArray);
         if (results) {
-            Toast.makeText(getApplicationContext(), viewType + " updated!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Organization created!", Toast.LENGTH_SHORT).show();
             setResult(RESULT_OK, null);
             finish();
         } else {
-            Toast.makeText(getApplicationContext(), viewType + " update failed!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Creation failed!", Toast.LENGTH_LONG).show();
         }
     }
 
     public void cancelEdit(View v) {
-        Toast.makeText(getApplicationContext(), viewType + " update canceled!", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Organization creation canceled!", Toast.LENGTH_LONG).show();
         setResult(RESULT_CANCELED, null);
         finish();
     }

@@ -38,40 +38,13 @@ public class DataHandler {
         String s = null;
 
         //Setup Test Data
-        File f = c.getFileStreamPath("testdata.JSON");
-        if (!f.exists()) {
-            try {
-                InputStream in = c.getAssets().open("testdata.JSON");
-                OutputStream out = new FileOutputStream(f);
-                int size = in.available();
-                byte[] buffer = new byte[size];
-                in.read(buffer);
-                out.write(buffer);
-                s = new String(buffer, "UTF-8");
-                in.close();
-                out.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                return null;
-            }
-        } else {
-            try {
-                InputStream in = new FileInputStream(f);
-                int size = in.available();
-                byte[] buffer = new byte[size];
-                in.read(buffer);
-                in.close();
-                s = new String(buffer, "UTF-8");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                return null;
-            }
-        }
+        s = setupTest(c, s);
 
         try {
             JSONObject obj = new JSONObject(s);
 
             // User a special condition since test user data is not an array
+            // User gives the users information and associated organizations
             if (type.equals("USER")) {
                 JSONObject data = obj.getJSONObject(type);
                 info.add(new TMDataSet(data.getString("name"), type, iD));
@@ -81,8 +54,13 @@ public class DataHandler {
                     info.add(new TMDataSet(((TMDataSet)((getData(c,"ORG",x.getString("id"))).get(0))).getData(), "ORG", x.getString("id")));
                 }
             } else {
+                // get methods for the rest of the data types
                 JSONArray arr = obj.getJSONArray(type);
+
+
                 if (type.equals("ORG")) {
+                    // Organization returns itself and associated data
+                    // currently just tournaments
                     for (int i = 0; i < arr.length(); i++) {
                         JSONObject data = arr.getJSONObject(i);
                         if (data.getString("id").equals(iD)) {
@@ -97,6 +75,7 @@ public class DataHandler {
                         }
                     }
                 } else if (type.equals("TOURN")) {
+                    // Tournament returns itself and its rounds
                     for (int i = 0; i < arr.length(); i++) {
                         JSONObject data = arr.getJSONObject(i);
                         if (data.getString("id").equals(iD)) {
@@ -111,6 +90,7 @@ public class DataHandler {
                         }
                     }
                 } else if (type.equals("ROUND")) {
+                    // Round returns itself and its pairings
                     for (int i = 0; i < arr.length(); i++) {
                         JSONObject data = arr.getJSONObject(i);
                         if (data.getString("id").equals(iD)) {
@@ -125,6 +105,7 @@ public class DataHandler {
                         }
                     }
                 } else if (type.equals("PAIR")) {
+                    // Pair returns iteself and its competitors
                     for (int i = 0; i < arr.length(); i++) {
                         JSONObject data = arr.getJSONObject(i);
                         if (data.getString("id").equals(iD)) {
@@ -351,4 +332,103 @@ public class DataHandler {
 
         return true;
     }
+
+    public static boolean setCreate(Context c, String type, String iD, LinkedHashMap<String, String> newData) {
+        //only works because we have one user in test data
+        ArrayList createTest = getData(c, type, iD);
+        String newID = Integer.toString((Integer.parseInt(((TMDataSet)createTest.get(createTest.size() - 1)).getID()) + 1));
+
+        String s = null;
+
+        try {
+            File f = c.getFileStreamPath("testdata.JSON");
+            InputStream in = new FileInputStream(f);
+            int size = in.available();
+            byte[] buffer = new byte[size];
+            in.read(buffer);
+            in.close();
+            s = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+
+        try {
+            JSONObject obj = new JSONObject(s);
+            JSONObject data = obj.getJSONObject(type);
+            JSONArray arr = data.getJSONArray("orgs");
+            JSONObject newobj = new JSONObject();
+            newobj.put("id", newID);
+            arr.put(newobj);
+            data.put("orgs", arr);
+            arr = obj.getJSONArray("ORG");
+            data = new JSONObject();
+            data.put("name", newData.get("name"));
+            data.put("id", newID);
+            arr.put(data);
+            obj.put("ORG",arr);
+
+            s = obj.toString();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        try {
+            File f = c.getFileStreamPath("testdata.JSON");
+            FileOutputStream out = new FileOutputStream(f);
+            byte[] buffer = s.getBytes();
+            out.write(buffer);
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    private static String setupTest(Context c, String s){
+        File f = c.getFileStreamPath("testdata.JSON");
+        if (!f.exists()) {
+            try {
+                InputStream in = c.getAssets().open("testdata.JSON");
+                OutputStream out = new FileOutputStream(f);
+                int size = in.available();
+                byte[] buffer = new byte[size];
+                in.read(buffer);
+                out.write(buffer);
+                s = new String(buffer, "UTF-8");
+                in.close();
+                out.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                return null;
+            }
+        } else {
+            try {
+                InputStream in = new FileInputStream(f);
+                int size = in.available();
+                byte[] buffer = new byte[size];
+                in.read(buffer);
+                in.close();
+                s = new String(buffer, "UTF-8");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                return null;
+            }
+        }
+
+        return s;
+    }
+
+    public static void clearLocal(Context c) {
+        File f = c.getFileStreamPath("testdata.JSON");
+        if (f.exists()) {
+            f.delete();
+        }
+    }
+
+
 }
