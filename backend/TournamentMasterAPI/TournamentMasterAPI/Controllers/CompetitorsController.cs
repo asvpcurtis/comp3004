@@ -15,23 +15,31 @@ namespace TournamentMasterAPI.Controllers
     public class CompetitorsController : Controller
     {
         private readonly TournamentMasterDBContext _context;
-
+        private Accounts userAccount;
         public CompetitorsController(TournamentMasterDBContext context)
         {
             _context = context;
         }
 
         // GET: api/Competitors
+        [Route("api/Organization/{oid:int}/Competitors")]
         [HttpGet]
-        public IEnumerable<Competitors> GetCompetitors()
+        public IEnumerable<Competitors> GetOrganizationCompetitors([FromRoute] int oid)
         {
-            return _context.Competitors;
+            Accounts userAccount = Shared.GetUserAccount(User, _context);
+            return Shared.UserCompetitors(userAccount, _context).Where(c => c.OrganizationId == oid);
         }
 
         // GET: api/Competitors/5
-        [HttpGet("{id}")]
+        [HttpGet("{cid}")]
         public async Task<IActionResult> GetCompetitors([FromRoute] int id)
         {
+            Accounts userAccount = Shared.GetUserAccount(User, _context);
+            if (!Shared.UserCompetitors(userAccount, _context).Any(c => c.Id == id))
+            {
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -51,6 +59,11 @@ namespace TournamentMasterAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCompetitors([FromRoute] int id, [FromBody] Competitors competitors)
         {
+            Accounts userAccount = Shared.GetUserAccount(User, _context);
+            if (!Shared.UserCompetitors(userAccount, _context).Any(c => c.Id == id))
+            {
+                return Unauthorized();
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -82,16 +95,21 @@ namespace TournamentMasterAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Competitors
+        // POST: api/Organization/5/Competitors
+        [Route("api/Organization/{oid:int}/Competitors")]
         [HttpPost]
-        public async Task<IActionResult> PostCompetitors([FromBody] Competitors competitors)
+        public async Task<IActionResult> PostCompetitors([FromRoute] int oid, [FromBody] Competitors competitors)
         {
+            Accounts userAccount = Shared.GetUserAccount(User, _context);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            _context.Competitors.Add(competitors);
+            var organizations = Shared.UserOrganizations(userAccount, _context).SingleOrDefault(o => o.Id == oid);
+            if (organizations != null)
+            {
+                organizations.Competitors.Add(competitors);
+            }
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCompetitors", new { id = competitors.Id }, competitors);
@@ -101,6 +119,11 @@ namespace TournamentMasterAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCompetitors([FromRoute] int id)
         {
+            Accounts userAccount = Shared.GetUserAccount(User, _context);
+            if (!Shared.UserCompetitors(userAccount, _context).Any(c => c.Id == id))
+            {
+                return Unauthorized();
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
