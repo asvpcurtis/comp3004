@@ -18,10 +18,7 @@
 [
     {
         "id": 1,
-        "name": "testorg",
-        "accountOrganization": [],
-        "competitors": [],
-        "tournaments": []
+        "name": "testorg"
     }
 ]
 ```
@@ -43,10 +40,7 @@
 ``` json
 {
     "id": 1,
-    "name": "testorg",
-    "accountOrganization": [],
-    "competitors": [],
-    "tournaments": []
+    "name": "testorg"
 }
 ```
 ---
@@ -72,10 +66,7 @@
 ``` json
 {
     "id": 1,
-    "name": "testorg",
-    "accountOrganization": [],
-    "competitors": [],
-    "tournaments": []
+    "name": "testorg"
 }
 ```
 ---
@@ -103,9 +94,6 @@
 {
     "id": 1,
     "name": "newtestorg",
-    "accountOrganization": [],
-    "competitors": [],
-    "tournaments": []
 }
 ```
 ---
@@ -125,8 +113,5 @@
 {
     "id": 1,
     "name": "testorg",
-    "accountOrganization": [],
-    "competitors": [],
-    "tournaments": []
 }
 ```
