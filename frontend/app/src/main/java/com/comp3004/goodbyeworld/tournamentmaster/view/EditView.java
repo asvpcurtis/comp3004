@@ -3,8 +3,6 @@ package com.comp3004.goodbyeworld.tournamentmaster.view;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -13,12 +11,10 @@ import android.widget.Toast;
 
 import com.comp3004.goodbyeworld.tournamentmaster.R;
 import com.comp3004.goodbyeworld.tournamentmaster.data.DataHandler;
-import com.comp3004.goodbyeworld.tournamentmaster.data.TMDataSet;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class editviewdemo extends AppCompatActivity {
+public class EditView extends AppCompatActivity {
     private String viewType;
     private String viewID;
     private LinkedHashMap<String, String> infoArray;
@@ -27,7 +23,7 @@ public class editviewdemo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editviewdemo);
+        setContentView(R.layout.activity_edit_view);
         init();
     }
 

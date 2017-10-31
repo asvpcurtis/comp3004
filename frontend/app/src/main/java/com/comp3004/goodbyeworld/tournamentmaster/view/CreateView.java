@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.comp3004.goodbyeworld.tournamentmaster.R;
 import com.comp3004.goodbyeworld.tournamentmaster.data.DataHandler;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class CreateView extends AppCompatActivity {
@@ -56,6 +57,21 @@ public class CreateView extends AppCompatActivity {
             editText.setText("");
             editText.setHint("name");
             contentLayout.addView(editText);
+        } else if (viewType.equals("ORG")) {
+            // Title
+            ((TextView)findViewById(R.id.textViewTitle)).setText("Add New Competitor");
+            // Fields
+            ArrayList<String> fields = new ArrayList<String>();
+            fields.add("first");
+            fields.add("last");
+            fields.add("email");
+            for (String x: fields) {
+                EditText editText = new EditText(this);
+                editText.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
+                editText.setText("");
+                editText.setHint(x);
+                contentLayout.addView(editText);
+            }
         }
     }
 
@@ -66,18 +82,29 @@ public class CreateView extends AppCompatActivity {
                 infoArray.put(((EditText)editBox).getHint().toString(), ((EditText)editBox).getText().toString());
             }
         }
-        boolean results = DataHandler.setCreate(this, viewType, viewID, infoArray);
-        if (results) {
-            Toast.makeText(getApplicationContext(), "Organization created!", Toast.LENGTH_SHORT).show();
-            setResult(RESULT_OK, null);
-            finish();
-        } else {
-            Toast.makeText(getApplicationContext(), "Creation failed!", Toast.LENGTH_LONG).show();
+        if (viewType.equals("USER")) {
+            boolean results = DataHandler.setCreate(this, viewType, viewID, infoArray);
+            if (results) {
+                Toast.makeText(getApplicationContext(), "Organization created!", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK, null);
+                finish();
+            } else {
+                Toast.makeText(getApplicationContext(), "Creation failed!", Toast.LENGTH_LONG).show();
+            }
+        } else if (viewType.equals("ORG")) {
+            boolean results = DataHandler.addCompetitor(this, viewType, viewID, infoArray);
+            if (results) {
+                Toast.makeText(getApplicationContext(), "Competitor added!", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK, null);
+                finish();
+            } else {
+                Toast.makeText(getApplicationContext(), "Creation failed!", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
     public void cancelEdit(View v) {
-        Toast.makeText(getApplicationContext(), "Organization creation canceled!", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Creation canceled!", Toast.LENGTH_LONG).show();
         setResult(RESULT_CANCELED, null);
         finish();
     }

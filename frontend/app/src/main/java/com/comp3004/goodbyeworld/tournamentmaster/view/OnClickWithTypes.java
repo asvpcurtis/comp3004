@@ -23,7 +23,7 @@ public class OnClickWithTypes implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(parent, dataviewdemo.class);
+        Intent intent = new Intent(parent, UserView.class);
         Bundle bundle = new Bundle();
         bundle.putString("type", type);
         bundle.putString("id", id);

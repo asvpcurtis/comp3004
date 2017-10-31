@@ -8,11 +8,11 @@
     tools:context="com.comp3004.goodbyeworld.tournamentmaster.view.UserView">
 
     <GridLayout
+        android:id="@+id/gridLayoutUser"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp"
-        android:id="@+id/gridLayoutUser">
+        tools:layout_editor_absoluteY="8dp">
 
         <ImageView
             android:id="@+id/imageViewUserIcon"
@@ -31,11 +31,14 @@
 
 
             <TextView
-                android:id="@+id/textViewUser"
+                android:id="@+id/textViewTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="Username"
+                android:fontFamily="sans-serif"
+                android:text="Title"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@android:color/white"
+                android:textSize="30sp"
                 android:textStyle="bold"
                 tools:layout_editor_absoluteX="133dp"
                 tools:layout_editor_absoluteY="34dp" />
@@ -52,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:text="ID#"
+                android:textColor="@android:color/white"
                 android:textStyle="italic"
                 tools:layout_editor_absoluteX="133dp"
                 tools:layout_editor_absoluteY="84dp" />
@@ -60,22 +64,19 @@
 
     </GridLayout>
 
-    <TextView
-        android:id="@+id/textViewOrganization"
-        android:layout_width="0dp"
+    <Button
+        android:id="@+id/buttonCreate"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Organizations"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:background="@color/colorListTop"
+        android:layout_marginTop="40dp"
+        android:onClick="createClick"
+        android:text="Create Organization"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridLayoutUser" />
+        app:layout_constraintTop_toBottomOf="@+id/layoutContent" />
 
     <LinearLayout
         android:id="@+id/layoutContent"
@@ -83,25 +84,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewOrganization"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"></LinearLayout>
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:onClick="createClick"
-        android:text="Create Organization"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutContent" />
+        app:layout_constraintTop_toBottomOf="@+id/gridLayoutUser"></LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -25,8 +25,7 @@
         <activity
             android:name=".view.RegisterActivity"
             android:parentActivityName=".view.MainActivity" />
-        <activity android:name=".view.dataviewdemo" />
-        <activity android:name=".view.editviewdemo" />
+        <activity android:name=".view.EditView" />
         <activity android:name=".view.UserView" />
         <activity android:name=".view.CreateView"></activity>
     </application>

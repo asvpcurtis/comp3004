@@ -143,6 +143,40 @@ public class DataHandler {
         return info;
     }
 
+
+    // Temp method for retrieving an organizations competitors
+    public static ArrayList getCompetitors(Context c, String orgID) {
+        ArrayList info = new ArrayList();
+        ArrayList idList = new ArrayList();
+        String s = null;
+
+        //Setup Test Data
+        s = setupTest(c, s);
+
+        try {
+            JSONObject obj = new JSONObject(s);
+            JSONArray arr = obj.getJSONArray("ORG");
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject data = arr.getJSONObject(i);
+                if (data.getString("id").equals(orgID)) {
+                    JSONArray subList = data.getJSONArray("competitors");
+                    for (int j = 0; j < subList.length(); j++) {
+                        JSONObject subData = subList.getJSONObject(j);
+                        idList.add(subData.getString("id"));
+                    }
+                    for (int j = 0; j < idList.size(); j++) {
+                        info.add(new TMDataSet((((TMDataSet)(getData(c,"COMPETITOR", (String)idList.get(j))).get(1)).getData()), "COMPETITOR", (String)idList.get(j)));
+                    }
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return info;
+    }
+
     /**
      * getEdit returns a LinkedHashMap
      *
@@ -365,8 +399,79 @@ public class DataHandler {
             data = new JSONObject();
             data.put("name", newData.get("name"));
             data.put("id", newID);
+            data.put("competitors", new JSONArray());
             arr.put(data);
             obj.put("ORG",arr);
+
+            s = obj.toString();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        try {
+            File f = c.getFileStreamPath("testdata.JSON");
+            FileOutputStream out = new FileOutputStream(f);
+            byte[] buffer = s.getBytes();
+            out.write(buffer);
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean addCompetitor(Context c, String type, String iD, LinkedHashMap<String, String> newData) {
+        // creates new competitor in test data
+
+        String s = null;
+
+        try {
+            File f = c.getFileStreamPath("testdata.JSON");
+            InputStream in = new FileInputStream(f);
+            int size = in.available();
+            byte[] buffer = new byte[size];
+            in.read(buffer);
+            in.close();
+            s = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+
+        try {
+            JSONObject obj = new JSONObject(s);
+            JSONArray arr = obj.getJSONArray("COMPETITOR");
+            int newID = 0;
+            for (int i=0; i<arr.length(); i++) {
+                JSONObject compareTo = arr.getJSONObject(i);
+                if (Integer.parseInt(compareTo.getString("id")) > newID) {
+                    newID = Integer.parseInt(compareTo.getString("id"));
+                }
+            }
+            newID++;
+            JSONObject newobj = new JSONObject();
+            newobj.put("id", Integer.toString(newID));
+            newobj.put("first", newData.get("first"));
+            newobj.put("last", newData.get("last"));
+            newobj.put("email", newData.get("email"));
+            arr.put(newobj);
+            obj.put("COMPETITOR", arr);
+
+            arr = obj.getJSONArray("ORG");
+            for (int i=0; i<arr.length(); i++) {
+                JSONObject compareTo = arr.getJSONObject(i);
+                if (iD.equals(compareTo.getString("id"))) {
+                    JSONArray addTo = compareTo.getJSONArray("competitors");
+                    JSONObject toAdd = new JSONObject();
+                    toAdd.put("id", Integer.toString(newID));
+                    addTo.put(toAdd);
+                    compareTo.put("competitors", addTo);
+                }
+            }
 
             s = obj.toString();
 
