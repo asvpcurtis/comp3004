@@ -25,10 +25,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
-        //compile project(':smartloginlibrary')
     })
-    //compile 'codelight.studios:android-smart-login:1.2'
-    //compile 'com.google.firebase:firebase-auth:11.4.2'
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:26.1.0'
@@ -36,6 +33,7 @@ dependencies {
     compile 'com.android.support:support-vector-drawable:26.1.0'
     compile 'com.android.support:recyclerview-v7:26.1.0'
     compile 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.6.0'
+    compile 'com.android.volley:volley:1.0.0'
     testCompile 'junit:junit:4.12'
 }
 

@@ -9,159 +9,170 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
 import com.comp3004.goodbyeworld.tournamentmaster.R;
-import com.comp3004.goodbyeworld.tournamentmaster.data.DataHandler;
-import com.comp3004.goodbyeworld.tournamentmaster.data.TMDataSet;
+import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.DataHandler;
+import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.TMDataSet;
+import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.UpdateCallback;
 
 import java.util.ArrayList;
 
 public class UserView extends AppCompatActivity {
-    private String viewType;
-    private String viewID;
-    private ArrayList infoArray;
     private LinearLayout contentLayout;
+    private String viewType = null;
+    private String viewID = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_view);
-
         init();
     }
 
     private void init() {
         Intent contextInfo = getIntent();
         Bundle contextBundle = contextInfo.getExtras();
-        contentLayout = (LinearLayout) findViewById(R.id.layoutContent);
+        assert contextBundle != null;
+        viewType = contextBundle.getString("type");
+        viewID = contextBundle.getString("id");
+        contentLayout = findViewById(R.id.layoutContent);
 
-        if (contextBundle != null) {
-            if (contextBundle.containsKey("type") && contextBundle.containsKey("id")) {
-                viewType = contextBundle.getString("type");
-                viewID = contextBundle.getString("id");
-                infoArray = DataHandler.getData(this, viewType, viewID);
-                setView();
-            } else {
-                // error
+        DataHandler.getData(this, viewType, viewID, new UpdateCallback() {
+            @Override
+            public void updateData(ArrayList<TMDataSet> data){
+                populateView(data);
             }
-        } else {
-            // error
+        });
+    }
+
+    private void populateView(ArrayList<TMDataSet> data) {
+        // Kill the wheel!
+        findViewById(R.id.progressBarLoading).setVisibility(View.GONE);
+
+        // First Element of data is the main subject
+        ((TextView) findViewById(R.id.textViewTitle)).setText(data.get(0).getData());
+        ((TextView) findViewById(R.id.textViewID)).setText(data.get(0).getID());
+
+        // Get info layouts
+        LinearLayout orgLayout = findViewById(R.id.layoutOrganizations);
+        LinearLayout tournLayout = findViewById(R.id.layoutTournaments);
+        LinearLayout roundLayout = findViewById(R.id.layoutRounds);
+        LinearLayout pairLayout = findViewById(R.id.layoutPairings);
+        LinearLayout compLayout = findViewById(R.id.layoutCompetitors);
+        LinearLayout infoLayout = findViewById(R.id.layoutInformation);
+
+        // Set Button Visibility
+        switch (viewType) {
+            case "Account":
+                findViewById(R.id.buttonEdit).setEnabled(false);
+                findViewById(R.id.buttonEdit).setVisibility(View.INVISIBLE);
+                String orgLabel = "Create Organization";
+                ((Button) findViewById(R.id.buttonCreate)).setText(orgLabel);
+                findViewById(R.id.buttonCreate).setEnabled(true);
+                findViewById(R.id.buttonCreate).setVisibility(View.VISIBLE);
+                break;
+            case "Organization":
+                /**
+                String tournLabel = "Create Tournament";
+                String competitorLabel = "Add Competitor";
+                ((Button) findViewById(R.id.buttonCreate)).setText(tournLabel);
+                ((Button) findViewById(R.id.buttonCreateCompetitor)).setText(competitorLabel);
+                findViewById(R.id.buttonCreate).setEnabled(true);
+                findViewById(R.id.buttonCreate).setVisibility(View.VISIBLE);
+                findViewById(R.id.buttonCreateCompetitor).setEnabled(true);
+                findViewById(R.id.buttonCreateCompetitor).setVisibility(View.VISIBLE);
+                 */
+                break;
+            case "Tournament":
+
+                break;
+            case "Round":
+
+                break;
+            case "Pairing":
+
+                break;
+            case "Competitor":
+
+                break;
+        }
+
+        data.remove(0);
+
+        // Populate Information
+        for (TMDataSet i : data) {
+            switch (i.getDataType()) {
+                case "Organization":
+                    if (orgLayout.getChildCount() == 0) {
+                        orgLayout.addView(makeHeader("Organizations"));
+                    }
+                    orgLayout.addView(makeClickable(i.getData(), i.getDataType(), i.getID()));
+                    break;
+                case "Tournament":
+                    if (tournLayout.getChildCount() == 0) {
+                        tournLayout.addView(makeHeader("Tournaments"));
+                    }
+                    tournLayout.addView(makeClickable(i.getData(), i.getDataType(), i.getID()));
+                    break;
+                case "Round":
+                    if (roundLayout.getChildCount() == 0) {
+                        roundLayout.addView(makeHeader("Rounds"));
+                    }
+                    roundLayout.addView(makeClickable(i.getData(), i.getDataType(), i.getID()));
+                    break;
+                case "Pairing":
+                    if (pairLayout.getChildCount() == 0) {
+                        pairLayout.addView(makeHeader("Pairings"));
+                    }
+                    pairLayout.addView(makeClickable(i.getData(), i.getDataType(), i.getID()));
+                    break;
+                case "Competitor":
+                    if (compLayout.getChildCount() == 0) {
+                        compLayout.addView(makeHeader("Competitors"));
+                    }
+                    compLayout.addView(makeClickable(i.getData(), i.getDataType(), i.getID()));
+                    break;
+                default:
+                    if (infoLayout.getChildCount() == 0) {
+                        infoLayout.addView(makeHeader("Information"));
+                    }
+                    TextView toAdd = new TextView(this);
+                    toAdd.setText(i.getData());
+                    toAdd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                    infoLayout.addView(toAdd);
+                    break;
+            }
         }
     }
 
-    private void setView() {
-        if (viewType.equals("USER")) {
-            ((TextView) findViewById(R.id.textViewTitle)).setText(((TMDataSet) infoArray.get(0)).getData());
-            ((TextView) findViewById(R.id.textViewID)).setText(((TMDataSet) infoArray.get(0)).getID());
-            TextView header = new TextView(this);
-            header.setText("Organizations");
-            header.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            header.setGravity(Gravity.CENTER_HORIZONTAL);
-            header.setBackgroundResource(R.color.colorListTop);
-            header.setTextColor(Color.WHITE);
-            header.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
-            contentLayout.addView(header);
+    private TextView makeHeader(String text) {
+        TextView header = new TextView(this);
+        header.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        header.setGravity(Gravity.CENTER_HORIZONTAL);
+        header.setBackgroundResource(R.color.colorListTop);
+        header.setTextColor(Color.WHITE);
+        header.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+        header.setText(text);
+        return header;
+    }
 
-            for (int i = 1; i < infoArray.size(); i++) {
-                TextView clickText = new TextView(this);
-                clickText.setText(((TMDataSet) infoArray.get(i)).getData());
-                clickText.setTextColor(Color.WHITE);
-                clickText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                clickText.setOnClickListener(new OnClickWithTypes(this, ((TMDataSet) infoArray.get(i)).getDataType(), ((TMDataSet) infoArray.get(i)).getID()));
-                contentLayout.addView(clickText);
-            }
-        } else if (viewType.equals("COMPETITOR")) {
-            ((Button) findViewById(R.id.buttonCreate)).setEnabled(false);
-            ((Button) findViewById(R.id.buttonCreate)).setVisibility(View.INVISIBLE);
-            ((ImageView) findViewById(R.id.imageViewUserIcon)).setVisibility(View.INVISIBLE);
-
-            ((TextView) findViewById(R.id.textViewTitle)).setText(((TMDataSet) infoArray.get(1)).getData());
-            ((TextView) findViewById(R.id.textViewID)).setText(((TMDataSet) infoArray.get(0)).getID());
-            TextView clickText = new TextView(this);
-            clickText.setText(((TMDataSet) infoArray.get(2)).getData());
-            clickText.setTextColor(Color.WHITE);
-            clickText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-            contentLayout.addView(clickText);
-        } else if (viewType.equals("ORG")) {
-            ((Button)findViewById(R.id.buttonCreate)).setText("Add New Competitor");
-            ((ImageView)findViewById(R.id.imageViewUserIcon)).setVisibility(View.INVISIBLE);
-            ((TextView) findViewById(R.id.textViewTitle)).setText(((TMDataSet) infoArray.get(0)).getData());
-            ((TextView) findViewById(R.id.textViewID)).setText(((TMDataSet) infoArray.get(0)).getID());
-            TextView header = new TextView(this);
-            header.setText("Tournaments");
-            header.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            header.setGravity(Gravity.CENTER_HORIZONTAL);
-            header.setBackgroundResource(R.color.colorListTop);
-            header.setTextColor(Color.WHITE);
-            header.setTextSize(TypedValue.COMPLEX_UNIT_SP,24);
-            contentLayout.addView(header);
-
-            for (int i = 1; i < infoArray.size(); i++) {
-                TextView clickText = new TextView(this);
-                clickText.setText(((TMDataSet) infoArray.get(i)).getData());
-                clickText.setTextColor(Color.WHITE);
-                clickText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                clickText.setOnClickListener(new OnClickWithTypes(this, ((TMDataSet) infoArray.get(i)).getDataType(), ((TMDataSet) infoArray.get(i)).getID()));
-                contentLayout.addView(clickText);
-            }
-            TextView header2 = new TextView(this);
-            header2.setText("Competitors");
-            header2.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            header2.setGravity(Gravity.CENTER_HORIZONTAL);
-            header2.setBackgroundResource(R.color.colorListTop);
-            header2.setTextColor(Color.WHITE);
-            header2.setTextSize(TypedValue.COMPLEX_UNIT_SP,24);
-            contentLayout.addView(header2);
-
-            infoArray = DataHandler.getCompetitors(this, viewID);
-            for (int i = 0; i < infoArray.size(); i++) {
-                TextView clickText = new TextView(this);
-                clickText.setText(((TMDataSet) infoArray.get(i)).getData());
-                clickText.setTextColor(Color.WHITE);
-                clickText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                clickText.setOnClickListener(new OnClickWithTypes(this, ((TMDataSet) infoArray.get(i)).getDataType(), ((TMDataSet) infoArray.get(i)).getID()));
-                contentLayout.addView(clickText);
-            }
-        } else {
-            ((Button)findViewById(R.id.buttonCreate)).setEnabled(false);
-            ((Button)findViewById(R.id.buttonCreate)).setVisibility(View.INVISIBLE);
-            ((ImageView)findViewById(R.id.imageViewUserIcon)).setVisibility(View.INVISIBLE);
-            // setup view for others
-            ((TextView) findViewById(R.id.textViewTitle)).setText(((TMDataSet) infoArray.get(0)).getData());
-            ((TextView) findViewById(R.id.textViewID)).setText(((TMDataSet) infoArray.get(0)).getID());
-            TextView header = new TextView(this);
-            if (viewType.equals("TOURN")) {
-                header.setText("Rounds");
-            } else if (viewType.equals("ROUND")) {
-                header.setText("Pairings");
-            } else if (viewType.equals("PAIR")) {
-                header.setText("Competitors");
-            }
-            header.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            header.setGravity(Gravity.CENTER_HORIZONTAL);
-            header.setBackgroundResource(R.color.colorListTop);
-            header.setTextColor(Color.WHITE);
-            header.setTextSize(TypedValue.COMPLEX_UNIT_SP,24);
-            contentLayout.addView(header);
-
-            for (int i = 1; i < infoArray.size(); i++) {
-                TextView clickText = new TextView(this);
-                clickText.setText(((TMDataSet) infoArray.get(i)).getData());
-                clickText.setTextColor(Color.WHITE);
-                clickText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                clickText.setOnClickListener(new OnClickWithTypes(this, ((TMDataSet) infoArray.get(i)).getDataType(), ((TMDataSet) infoArray.get(i)).getID()));
-                contentLayout.addView(clickText);
-            }
-        }
+    private TextView makeClickable(String text, String type, String iD) {
+        TextView clickText = new TextView(this);
+        clickText.setText(text);
+        clickText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        clickText.setOnClickListener(new OnClickWithTypes(this, type, iD));
+        return clickText;
     }
 
     public void createClick(View view) {
         Intent intent = new Intent(this, CreateView.class);
         Bundle bundle = new Bundle();
-        bundle.putString("type", viewType);
+        if (viewType.equals("Account")) {
+            bundle.putString("type", "Organization");
+        }
         bundle.putString("id", viewID);
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
@@ -180,11 +191,19 @@ public class UserView extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            contentLayout.removeAllViewsInLayout();
+            for (int i=0; i<contentLayout.getChildCount(); i++) {
+                View layout = contentLayout.getChildAt(i);
+                if (layout instanceof LinearLayout) {
+                    ((LinearLayout) layout).removeAllViewsInLayout();
+                }
+            }
             setResult(RESULT_OK, null);
             init();
+        } else if (resultCode == RESULT_FIRST_USER) {
+            setResult(RESULT_OK, null);
+            finish();
         }
     }
 }

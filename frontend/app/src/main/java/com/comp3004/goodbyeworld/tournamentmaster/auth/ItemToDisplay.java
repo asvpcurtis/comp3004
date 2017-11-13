@@ -1,4 +1,4 @@
-package com.comp3004.goodbyeworld.tournamentmaster.data;
+package com.comp3004.goodbyeworld.tournamentmaster.auth;
 /*
  *  Copyright 2013-2016 Amazon.com,
  *  Inc. or its affiliates. All Rights Reserved.

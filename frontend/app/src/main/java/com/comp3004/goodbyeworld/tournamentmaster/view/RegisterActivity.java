@@ -15,7 +15,7 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDel
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHandler;
 import com.comp3004.goodbyeworld.tournamentmaster.R;
-import com.comp3004.goodbyeworld.tournamentmaster.data.AppHelper;
+import com.comp3004.goodbyeworld.tournamentmaster.auth.AppHelper;
 
 public class RegisterActivity extends AppCompatActivity {
 

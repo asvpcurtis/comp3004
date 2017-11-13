@@ -1,4 +1,4 @@
-package com.comp3004.goodbyeworld.tournamentmaster.data;
+package com.comp3004.goodbyeworld.tournamentmaster.dataaccess;
 
 /**
  * Created by Michael Souter on 2017-10-28.

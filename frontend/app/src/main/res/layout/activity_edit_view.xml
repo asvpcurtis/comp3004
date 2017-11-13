@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:id="@+id/layoutContent"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             tools:layout_editor_absoluteX="8dp"
@@ -57,6 +57,14 @@
                 android:text="Cancel"
                 tools:layout_editor_absoluteX="188dp"
                 tools:layout_editor_absoluteY="462dp" />
+
+            <Button
+                android:id="@+id/buttonDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="deleteButton"
+                android:text="Delete" />
         </LinearLayout>
     </LinearLayout>
 

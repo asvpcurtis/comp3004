@@ -53,7 +53,7 @@ import java.util.Locale;
 import com.comp3004.goodbyeworld.tournamentmaster.R;
 
 
-import com.comp3004.goodbyeworld.tournamentmaster.data.AppHelper;
+import com.comp3004.goodbyeworld.tournamentmaster.auth.AppHelper;
 
 public class MainActivity extends AppCompatActivity {
     private final String TAG="MainActivity";

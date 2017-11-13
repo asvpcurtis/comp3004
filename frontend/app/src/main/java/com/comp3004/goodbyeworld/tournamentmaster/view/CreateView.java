@@ -10,17 +10,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.comp3004.goodbyeworld.tournamentmaster.R;
-import com.comp3004.goodbyeworld.tournamentmaster.data.DataHandler;
+import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.DataHandler;
+import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.TMDataSet;
+import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.UpdateCallback;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 public class CreateView extends AppCompatActivity {
 
     private String viewType;
-    private String viewID;
-    private LinkedHashMap<String, String> infoArray;
     private LinearLayout contentLayout;
+    private TMDataSet baseData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,75 +32,44 @@ public class CreateView extends AppCompatActivity {
     private void init() {
         Intent contextInfo = getIntent();
         Bundle contextBundle = contextInfo.getExtras();
-        contentLayout = (LinearLayout)findViewById(R.id.layoutContent);
+        assert contextBundle != null;
+        viewType = contextBundle.getString("type");
+        contentLayout = findViewById(R.id.layoutContent);
 
-        if (contextBundle != null) {
-            if (contextBundle.containsKey("type") && contextBundle.containsKey("id")) {
-                viewType = contextBundle.getString("type");
-                viewID = contextBundle.getString("id");
-                infoArray = new LinkedHashMap<String, String>();
-                setView(viewType);
-            } else {
-                setView("ERR");
-            }
-        } else {
-            setView("ERR");
-        }
+        populateView(DataHandler.getCreate(viewType));
     }
-    private void setView(String v) {
-        if (viewType.equals("USER")) {
-            // Title
-            ((TextView)findViewById(R.id.textViewTitle)).setText("Create Organization");
-            // Fields
+
+    private void populateView(ArrayList<TMDataSet> data) {
+        baseData = data.get(0);
+        String title = "Create " + viewType;
+        ((TextView)findViewById(R.id.textViewTitle)).setText(title);
+        for (int i=1; i<data.size(); i++) {
             EditText editText = new EditText(this);
             editText.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
             editText.setText("");
-            editText.setHint("name");
+            editText.setHint(data.get(i).getDataType());
             contentLayout.addView(editText);
-        } else if (viewType.equals("ORG")) {
-            // Title
-            ((TextView)findViewById(R.id.textViewTitle)).setText("Add New Competitor");
-            // Fields
-            ArrayList<String> fields = new ArrayList<String>();
-            fields.add("first");
-            fields.add("last");
-            fields.add("email");
-            for (String x: fields) {
-                EditText editText = new EditText(this);
-                editText.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
-                editText.setText("");
-                editText.setHint(x);
-                contentLayout.addView(editText);
-            }
         }
     }
 
+
     public void saveEdit(View v) {
+        ArrayList<TMDataSet> newData = new ArrayList<>();
+        newData.add(baseData);
         for (int i=0; i<contentLayout.getChildCount(); i++) {
             View editBox = contentLayout.getChildAt(i);
             if (editBox instanceof EditText) {
-                infoArray.put(((EditText)editBox).getHint().toString(), ((EditText)editBox).getText().toString());
+                newData.add(new TMDataSet(((EditText)editBox).getText().toString(), ((EditText)editBox).getHint().toString(), null));
             }
         }
-        if (viewType.equals("USER")) {
-            boolean results = DataHandler.setCreate(this, viewType, viewID, infoArray);
-            if (results) {
-                Toast.makeText(getApplicationContext(), "Organization created!", Toast.LENGTH_SHORT).show();
+        DataHandler.setCreate(this, viewType, newData, new UpdateCallback() {
+            @Override
+            public void updateData(ArrayList<TMDataSet> data) {
+                Toast.makeText(getApplicationContext(), viewType + " created!", Toast.LENGTH_LONG).show();
                 setResult(RESULT_OK, null);
                 finish();
-            } else {
-                Toast.makeText(getApplicationContext(), "Creation failed!", Toast.LENGTH_LONG).show();
             }
-        } else if (viewType.equals("ORG")) {
-            boolean results = DataHandler.addCompetitor(this, viewType, viewID, infoArray);
-            if (results) {
-                Toast.makeText(getApplicationContext(), "Competitor added!", Toast.LENGTH_SHORT).show();
-                setResult(RESULT_OK, null);
-                finish();
-            } else {
-                Toast.makeText(getApplicationContext(), "Creation failed!", Toast.LENGTH_LONG).show();
-            }
-        }
+        });
     }
 
     public void cancelEdit(View v) {
