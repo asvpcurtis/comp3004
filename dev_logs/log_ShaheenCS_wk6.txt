@@ -1,0 +1,17 @@
+MONDAY, OCTOBER 30TH, 2017
+
+DEV LOG 6
+
+-App was put onto an Android phone to test for d2 presentation
+-App was tested both online and offline for crashing as well as database
+ access
+-Since there is some code that works locally, was tested to how app would
+ behave when tested offline
+-Online testing for database access, more specifically errors in retrieving and
+ storing data
+-Merged frontend and backend seemed to be working as expected on mobile device
+
+-- PROBLEMS --
+
+-UI needs some work
+-Not all app functions are yet to be fulfilled

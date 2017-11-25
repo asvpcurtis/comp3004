@@ -1,0 +1,12 @@
+MONDAY, NOVEMBER 13TH, 2017
+
+DEV LOG 8
+
+-Currently developing code to implement the menu
+-Doing research on the different tournament styles we wish to implement
+ to understand their logic
+-Working on design to display a more visually appealing version of the pairings 
+ for the tournament 
+-Met with Curtis, Mike and Shukri to discuss the overall system architecture in detail
+-Sketched detailed blueprint of system architecture for D3
+-Working on report for D3
