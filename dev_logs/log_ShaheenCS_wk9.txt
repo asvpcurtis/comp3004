@@ -1,0 +1,6 @@
+MONDAY, NOVEMBER 20TH, 2017
+
+DEV LOG 9
+
+-Sketched, designed and created some graphs of system architecture for D3 presentation
+-Worked on report for D3 presentation (~2 pages writing)
