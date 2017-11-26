@@ -1,6 +1,7 @@
 package com.comp3004.goodbyeworld.tournamentmaster.dataaccess;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.comp3004.goodbyeworld.tournamentmaster.auth.AppHelper;
 import com.comp3004.goodbyeworld.tournamentmaster.dataoperations.FieldTranslate;
@@ -51,6 +52,11 @@ public class DataHandler {
                     info.addAll(FieldTranslate.convert((JSONArray) result, "organizations"));
                     updateActivity(info);
                 }
+
+                @Override
+                public void onFailure(Object result) {
+                    updateActivity(null);
+                }
             });
         } else {
             String urlAdd = FieldTranslate.convertType(type, iD);
@@ -61,6 +67,10 @@ public class DataHandler {
                     info.addAll(FieldTranslate.convert((JSONObject) result, fieldType));
                     updateActivity(info);
                 }
+
+                @Override
+                public void onFailure(Object result)
+                {}
             });
         }
     }
@@ -84,6 +94,10 @@ public class DataHandler {
             public void onSuccess(Object result) {
                updateActivity(null);
            }
+
+            @Override
+            public void onFailure(Object result)
+            {}
         });
     }
 
@@ -102,6 +116,10 @@ public class DataHandler {
                 info.addAll(TMTemplates.editFields((JSONObject)result, fieldType));
                 updateActivity(info);
             }
+
+            @Override
+            public void onFailure(Object result)
+            {}
         });
     }
 
@@ -117,6 +135,10 @@ public class DataHandler {
             public void onSuccess(Object result) {
                 updateActivity(null);
             }
+
+            @Override
+            public void onFailure(Object result)
+            {}
         });
     }
 
@@ -128,6 +150,10 @@ public class DataHandler {
             public void onSuccess(Object result) {
                 updateActivity(null);
             }
+
+            @Override
+            public void onFailure(Object result)
+            {}
         });
     }
 }

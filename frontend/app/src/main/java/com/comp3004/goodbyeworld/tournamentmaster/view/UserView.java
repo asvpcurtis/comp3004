@@ -2,6 +2,7 @@ package com.comp3004.goodbyeworld.tournamentmaster.view;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.view.View.OnClickListener;
 
 
 import com.comp3004.goodbyeworld.tournamentmaster.R;
@@ -51,6 +53,20 @@ public class UserView extends AppCompatActivity {
     private void populateView(ArrayList<TMDataSet> data) {
         // Kill the wheel!
         findViewById(R.id.progressBarLoading).setVisibility(View.GONE);
+
+        // check if data is null -- i.e. an access error
+        if (data == null) {
+            View view = findViewById(android.R.id.content);
+            Snackbar snackbar = Snackbar.make(view, R.string.access_error, Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction(R.string.back, new OnClickListener() {
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            snackbar.show();
+
+            return;
+        }
 
         // First Element of data is the main subject
         ((TextView) findViewById(R.id.textViewTitle)).setText(data.get(0).getData());
