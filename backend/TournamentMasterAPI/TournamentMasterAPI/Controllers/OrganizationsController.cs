@@ -75,9 +75,12 @@ namespace TournamentMasterAPI.Controllers
             {
                 return BadRequest();
             }
-
-            _context.Entry(organizations).State = EntityState.Modified;
-
+            Organization entity = _context.Organizations.Find(organizations.Id);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            _context.Entry(entity).CurrentValues.SetValues(organizations);
             try
             {
                 await _context.SaveChangesAsync();
