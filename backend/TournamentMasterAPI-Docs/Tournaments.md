@@ -30,11 +30,13 @@
 ```
 
 ##### NOTE:
+
 `format` is just an integer enum
-1 = Elimination
-2 = DoubleElimination
-3 = RoundRobin
-4 = Swiss
+
+* 0 = Swiss
+* 1 = Elimination
+* 2 = DoubleElimination
+* 3 = RoundRobin
 
 ---
 
