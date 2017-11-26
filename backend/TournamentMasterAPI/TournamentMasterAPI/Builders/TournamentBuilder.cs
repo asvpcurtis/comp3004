@@ -100,11 +100,6 @@ namespace TournamentMasterAPI.Builders
                 .OrderByDescending(r => r.RoundNumber)
                 .FirstOrDefault();
 
-            using (System.IO.StreamWriter file = System.IO.File.AppendText(@"C:\Users\Curtis Barlow-Wilkes\Desktop\0log.txt"))
-            {
-                file.WriteLine($"lastRound={lastRound}");
-            }
-
             if (lastRound == null)
             {
                 // Get all Competitors ordered by seed
