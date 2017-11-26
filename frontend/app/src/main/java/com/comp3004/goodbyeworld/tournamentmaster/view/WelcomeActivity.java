@@ -1,8 +1,7 @@
 package com.comp3004.goodbyeworld.tournamentmaster.view;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,8 +20,9 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.Mult
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 
-import com.comp3004.goodbyeworld.tournamentmaster.data.AppHelper;
+import com.comp3004.goodbyeworld.tournamentmaster.auth.AppHelper;
 import com.comp3004.goodbyeworld.tournamentmaster.R;
+import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.DataHandler;
 
 public class WelcomeActivity extends AppCompatActivity {
     // Cognito user objects
@@ -68,8 +68,8 @@ public class WelcomeActivity extends AppCompatActivity {
         @Override
         public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
             TextView token = findViewById(R.id.textViewIdToken);
-            token.setText(userSession.getIdToken().getJWTToken().toString());
-            Log.i("ID TOKEN", userSession.getIdToken().getJWTToken().toString());
+            token.setText(userSession.getIdToken().getJWTToken());
+            Log.i("ID TOKEN", userSession.getIdToken().getJWTToken());
         }
 
         @Override
@@ -98,5 +98,12 @@ public class WelcomeActivity extends AppCompatActivity {
         NavUtils.navigateUpFromSameTask(this);
     }
 
-
+    public void continueActivity (View view) {
+        Intent intent = new Intent(this, UserView.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("type", "Account");
+        bundle.putString("id", "1");
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
 }

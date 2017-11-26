@@ -1,0 +1,9 @@
+MONDAY, OCTOBER 16TH, 2017
+
+DEV LOG 4
+
+-Familiarized myself with AWS Cognito and JWT tokens to understand how 
+ user registration and store/retrieve process will be handled
+-This week had 2 midterms and a 20-page paper, unfortunately not much 
+ was done except understanding the theory of why AWS Cognito was chosen
+ and learning how JWT tokens work and how they are handled

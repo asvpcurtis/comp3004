@@ -15,7 +15,7 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDel
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHandler;
 import com.comp3004.goodbyeworld.tournamentmaster.R;
-import com.comp3004.goodbyeworld.tournamentmaster.data.AppHelper;
+import com.comp3004.goodbyeworld.tournamentmaster.auth.AppHelper;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -53,10 +53,6 @@ public class RegisterActivity extends AppCompatActivity {
         // add email
         input = findViewById(R.id.editTextEMail);
         cognitoUserAttributes.addAttribute("email", input.getText().toString());
-
-        // add phone number
-        //input = findViewById(R.id.editTextPhoneNumber);
-        //cognitoUserAttributes.addAttribute("phone_number", input.getText().toString());
 
         AppHelper.getPool().signUpInBackground(username, password, cognitoUserAttributes, null, signUpHandler);
 

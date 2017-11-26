@@ -1,0 +1,10 @@
+Dev Log - Michael Souter 100679087
+Week of 10/15 to 10/21
+
+Team Meetings (- hours)
+
+
+Personal Work (5 hours)
+-Still attempting to work out some kinks with Cognito integration with app
+-Planning and design for "middleware" class that handles API and Data access
+

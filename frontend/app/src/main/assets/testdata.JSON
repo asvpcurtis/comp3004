@@ -1,0 +1,125 @@
+{
+	"USER": {
+		"name": "John Doe",
+		"id": "00001",
+		"orgs":
+			[
+				{ "id": "10001"},
+				{ "id": "10002"}
+			]
+		},
+	"ORG": [
+			{ "name": "COMP3004",
+			  "id": "10001",
+			  "tourn": [
+				{ "id": "20001"}
+				   ],
+				"competitors": [ {"id": "5005"}, {"id": "5006"}, {"id": "5007"}, {"id": "5008"}]
+			},
+			{ "name": "GoodbyeWorld",
+			  "id": "10002",
+			  "tourn": [
+				{ "id": "20002"}
+				   ],
+				"competitors": [ {"id": "5001"}, {"id": "5002"}, {"id": "5003"}, {"id": "5004"}]
+			}
+		],
+	"TOURN": [
+			{ "name": "Winter Invitational",
+			  "id": "20001",
+			  "rounds": [
+					{ "id": "301"},
+					{ "id": "302"}
+				    ]
+			},
+			{ "name": "Summer Classic",
+			  "id": "20002",
+			  "rounds": [
+					{ "id": "303"},
+					{ "id": "304"}
+				    ]
+			}
+		],
+	"ROUND": [
+			{ "id": "303",
+			  "name": "Prelims",
+			  "pairs": [
+					{ "id": "801"},
+					{ "id": "802"}
+				   ]
+			},
+			{ "id": "304",
+			  "name": "Round 1",
+			  "pairs": [
+					{ "id": "803"}
+				   ]
+			},
+			{ "id": "301",
+			  "name": "Prelims",
+			  "pairs": [
+					{ "id": "804"},
+					{ "id": "805"}
+				   ]
+			},
+			{ "id": "302",
+			  "name": "Round 1",
+			  "pairs": [
+					{ "id": "806"}
+				   ]
+			}
+		],
+	"PAIR": [
+			{ "id": "801", 
+			  "name": "Magnus vs. Garry",
+			  "competitors": [
+					{ "id": "5001"},
+					{ "id": "5002"}
+					 ]
+			},
+			{ "id": "802", 
+			  "name": "Fabiano vs. Levon",
+			  "competitors": [
+					{ "id": "5003"},
+					{ "id": "5004"}
+					 ]
+			},
+			{ "id": "803", 
+			  "name": "Magnus vs. Levon",
+			  "competitors": [
+					{ "id": "5001"},
+					{ "id": "5004"}
+					 ]
+			},
+			{ "id": "804", 
+			  "name": "Deep vs. Wesley",
+			  "competitors": [
+					{ "id": "5005"},
+					{ "id": "5006"}
+					 ]
+			},
+			{ "id": "805", 
+			  "name": "Bobby vs. Viswanathan",
+			  "competitors": [
+					{ "id": "5007"},
+					{ "id": "5008"}
+					 ]
+			},
+			{ "id": "806", 
+			  "name": "Deep vs. Bobby",
+			  "competitors": [
+					{ "id": "5005"},
+					{ "id": "5007"}
+					 ]
+			}
+		],
+	"COMPETITOR": [
+			{ "id": "5001", "first": "Magnus", "last": "Calsen", "email": "mag@nor.way" },
+			{ "id": "5002", "first": "Garry", "last": "Kasparov", "email": "garry@kasparov.ru" },
+			{ "id": "5003", "first": "Fabiano", "last": "Caruana", "email": "fabiano@ita.ly" },
+			{ "id": "5004", "first": "Levon", "last": "Aronian", "email": "levon@armeni.an" },
+			{ "id": "5005", "first": "Deep", "last": "Blue", "email": "totallynotarobot@ibm.com" },
+			{ "id": "5006", "first": "Wesley", "last": "So", "email": "wesley@amazon.ca" },
+			{ "id": "5007", "first": "Bobby", "last": "Fischer", "email": "where@ami.net" },
+			{ "id": "5008", "first": "Viswanathan", "last": "Anand", "email": "vis@thewhiz.edu" }
+		]
+}

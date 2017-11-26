@@ -18,14 +18,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.OrgActivity"
-            android:label="@string/title_activity_org"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".view.EditOrgActivity"
-            android:label="@string/title_activity_add_org"
-            android:parentActivityName=".view.OrgActivity" />
-        <activity
             android:name=".view.WelcomeActivity"
             android:label="@string/title_activity_welcome"
             android:parentActivityName=".view.MainActivity"
@@ -33,7 +25,9 @@
         <activity
             android:name=".view.RegisterActivity"
             android:parentActivityName=".view.MainActivity" />
-
+        <activity android:name=".view.EditView" />
+        <activity android:name=".view.UserView" />
+        <activity android:name=".view.CreateView"></activity>
     </application>
 
 </manifest>
