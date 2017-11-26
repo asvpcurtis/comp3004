@@ -1,0 +1,7 @@
+ - Researched Frameworks for developing backend
+   - Decided on using ASP.NET Web API Core 2.0 for The API framework
+   - Decided on using Entity Framework middleware (an O/RM) to speed up development
+ - Familiarized myself with AWS
+   - Provisioned AWS EC2 instance
+   - Provisioned RDS with SQL Server Express
+   

@@ -1,14 +1,16 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace TournamentMasterAPI.Models
 {
     public partial class AccountOrganization
     {
-        public int AccountsId { get; set; }
-        public int OrganizationsId { get; set; }
-
-        public Accounts Accounts { get; set; }
-        public Organizations Organizations { get; set; }
+        public int AccountId { get; set; }
+        public int OrganizationId { get; set; }
+        [JsonIgnore]
+        public Account Account { get; set; }
+        [JsonIgnore]
+        public Organization Organization { get; set; }
     }
 }

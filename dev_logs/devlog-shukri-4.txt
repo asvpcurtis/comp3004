@@ -1,0 +1,13 @@
++Dev Log - Shukri Shubair 100982304
+
++Week of 10/08 to 10/14
+
++
+
++Work(5 hours)
+
++continued development of proof-of-concept app by adding RecyclerView
+
++created project icon
+
++pushed initial app code to repo

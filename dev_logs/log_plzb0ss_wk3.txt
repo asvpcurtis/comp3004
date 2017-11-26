@@ -1,0 +1,4 @@
+ - Created SQL Server Database for TournamentMasterAPI
+ - Created model classes using EntityFramework to handle SQL logic
+ - Researched Ways to Implement Authentication and Authorization for API
+   - Decided on using AWS Cognito to provide JWT Tokens for our API

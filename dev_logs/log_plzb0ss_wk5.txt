@@ -1,0 +1,4 @@
+ - Got Authenication (JWT Token validation) working in the backend
+ - Got EntityFramework working
+ - Exposed REST endpoint /api/organizations to allow users to create an organization
+ - Updated Documentation for interacting with organization endpoint
