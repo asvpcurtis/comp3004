@@ -30,19 +30,26 @@ namespace TournamentMasterAPI.Controllers
         {
             return context.AccountOrganization
                 .Where(ao => ao.AccountId == userAccount.Id)
-                .Select(ao => ao.Organization);
+                .Select(ao => ao.Organization).ToList();
         }
 
         public static IEnumerable<Competitor> UserCompetitors(Account userAccount, TournamentMasterDBContext context)
         {
-            return UserOrganizations(userAccount, context)
-                .SelectMany(o => o.Competitors);
+
+            IEnumerable<Organization> organizations = UserOrganizations(userAccount, context);
+            IEnumerable<Competitor> competitors = context.Competitors
+                .Where(c => organizations
+                .Any(o => o.Id == c.OrganizationId));
+            return competitors.ToList();
         }
 
-        public static IEnumerable<Tournament> UserTournaments(Account userAccount, int tournamentId, TournamentMasterDBContext context)
+        public static IEnumerable<Tournament> UserTournaments(Account userAccount, TournamentMasterDBContext context)
         {
-            return UserOrganizations(userAccount, context)
-                .SelectMany(o => o.Tournaments);
+            IEnumerable<Organization> organizations = UserOrganizations(userAccount, context);
+            IEnumerable<Tournament> tournaments = context.Tournaments
+                .Where(t => organizations
+                .Any(o => o.Id == t.OrganizationId));
+            return tournaments.ToList();
         }
 
     }
