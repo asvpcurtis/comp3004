@@ -6,12 +6,12 @@ namespace TournamentMasterAPI.Models
 {
     public partial class CompetitorTournament
     {
-        public int CompetitorsId { get; set; }
-        public int TournamentsId { get; set; }
-
+        public int CompetitorId { get; set; }
+        public int TournamentId { get; set; }
+        public int Seed { get; set; }
         [JsonIgnore]
-        public Competitors Competitors { get; set; }
+        public Competitor Competitor { get; set; }
         [JsonIgnore]
-        public Tournaments Tournaments { get; set; }
+        public Tournament Tournament { get; set; }
     }
 }

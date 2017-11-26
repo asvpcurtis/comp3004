@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 namespace TournamentMasterAPI.Models
 {
-    public partial class Organizations
+    public partial class Organization
     {
-        public Organizations()
+        public Organization()
         {
             AccountOrganization = new HashSet<AccountOrganization>();
-            Competitors = new HashSet<Competitors>();
-            Tournaments = new HashSet<Tournaments>();
+            Competitors = new HashSet<Competitor>();
+            Tournaments = new HashSet<Tournament>();
         }
 
         public int Id { get; set; }
@@ -19,8 +19,8 @@ namespace TournamentMasterAPI.Models
         [JsonIgnore]
         public ICollection<AccountOrganization> AccountOrganization { get; set; }
         [JsonIgnore]
-        public ICollection<Competitors> Competitors { get; set; }
+        public ICollection<Competitor> Competitors { get; set; }
         [JsonIgnore]
-        public ICollection<Tournaments> Tournaments { get; set; }
+        public ICollection<Tournament> Tournaments { get; set; }
     }
 }

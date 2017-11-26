@@ -10,57 +10,57 @@ using TournamentMasterAPI.Models;
 namespace TournamentMasterAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Accounts")]
-    public class AccountsController : Controller
+    [Route("api/Pairings")]
+    public class PairingsController : Controller
     {
         private readonly TournamentMasterDBContext _context;
 
-        public AccountsController(TournamentMasterDBContext context)
+        public PairingsController(TournamentMasterDBContext context)
         {
             _context = context;
         }
 
-        // GET: api/Accounts
+        // GET: api/Pairings
         [HttpGet]
-        public IEnumerable<Accounts> GetAccounts()
+        public IEnumerable<Pairing> GetPairings()
         {
-            return _context.Accounts;
+            return _context.Pairings;
         }
 
-        // GET: api/Accounts/5
+        // GET: api/Pairings/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAccounts([FromRoute] int id)
+        public async Task<IActionResult> GetPairing([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var accounts = await _context.Accounts.SingleOrDefaultAsync(m => m.Id == id);
+            var pairing = await _context.Pairings.SingleOrDefaultAsync(m => m.Id == id);
 
-            if (accounts == null)
+            if (pairing == null)
             {
                 return NotFound();
             }
 
-            return Ok(accounts);
+            return Ok(pairing);
         }
 
-        // PUT: api/Accounts/5
+        // PUT: api/Pairings/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccounts([FromRoute] int id, [FromBody] Accounts accounts)
+        public async Task<IActionResult> PutPairing([FromRoute] int id, [FromBody] Pairing pairing)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != accounts.Id)
+            if (id != pairing.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(accounts).State = EntityState.Modified;
+            _context.Entry(pairing).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +68,7 @@ namespace TournamentMasterAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AccountsExists(id))
+                if (!PairingExists(id))
                 {
                     return NotFound();
                 }
@@ -81,45 +81,45 @@ namespace TournamentMasterAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Accounts
+        // POST: api/Pairings
         [HttpPost]
-        public async Task<IActionResult> PostAccounts([FromBody] Accounts accounts)
+        public async Task<IActionResult> PostPairing([FromBody] Pairing pairing)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Accounts.Add(accounts);
+            _context.Pairings.Add(pairing);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAccounts", new { id = accounts.Id }, accounts);
+            return CreatedAtAction("GetPairing", new { id = pairing.Id }, pairing);
         }
 
-        // DELETE: api/Accounts/5
+        // DELETE: api/Pairings/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAccounts([FromRoute] int id)
+        public async Task<IActionResult> DeletePairing([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var accounts = await _context.Accounts.SingleOrDefaultAsync(m => m.Id == id);
-            if (accounts == null)
+            var pairing = await _context.Pairings.SingleOrDefaultAsync(m => m.Id == id);
+            if (pairing == null)
             {
                 return NotFound();
             }
 
-            _context.Accounts.Remove(accounts);
+            _context.Pairings.Remove(pairing);
             await _context.SaveChangesAsync();
 
-            return Ok(accounts);
+            return Ok(pairing);
         }
 
-        private bool AccountsExists(int id)
+        private bool PairingExists(int id)
         {
-            return _context.Accounts.Any(e => e.Id == id);
+            return _context.Pairings.Any(e => e.Id == id);
         }
     }
 }

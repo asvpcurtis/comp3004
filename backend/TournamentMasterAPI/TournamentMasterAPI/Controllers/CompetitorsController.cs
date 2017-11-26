@@ -7,34 +7,40 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TournamentMasterAPI.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TournamentMasterAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/Competitors")]
+    [Authorize]
     public class CompetitorsController : Controller
     {
         private readonly TournamentMasterDBContext _context;
-        private Accounts userAccount;
         public CompetitorsController(TournamentMasterDBContext context)
         {
             _context = context;
         }
 
-        // GET: api/Competitors
-        [Route("api/Organization/{oid:int}/Competitors")]
-        [HttpGet]
-        public IEnumerable<Competitors> GetOrganizationCompetitors([FromRoute] int oid)
+        // GET: api/Competitors?organization=5
+        [Route("api/Competitors")]
+        [HttpGet("{organization?}")]
+        public IEnumerable<Competitor> GetOrganizationCompetitors([FromQuery] int? oid = null)
         {
-            Accounts userAccount = Shared.GetUserAccount(User, _context);
-            return Shared.UserCompetitors(userAccount, _context).Where(c => c.OrganizationId == oid);
+            Account userAccount = Shared.GetUserAccount(User, _context);
+            IEnumerable<Competitor> userCompetitors  = Shared.UserCompetitors(userAccount, _context);
+            if (oid == null)
+            {
+                return userCompetitors;
+            }
+            return userCompetitors.Where(c => c.OrganizationId == oid);
         }
 
         // GET: api/Competitors/5
-        [HttpGet("{cid}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetCompetitors([FromRoute] int id)
         {
-            Accounts userAccount = Shared.GetUserAccount(User, _context);
+            Account userAccount = Shared.GetUserAccount(User, _context);
             if (!Shared.UserCompetitors(userAccount, _context).Any(c => c.Id == id))
             {
                 return Unauthorized();
@@ -57,9 +63,9 @@ namespace TournamentMasterAPI.Controllers
 
         // PUT: api/Competitors/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompetitors([FromRoute] int id, [FromBody] Competitors competitors)
+        public async Task<IActionResult> PutCompetitors([FromRoute] int id, [FromBody] Competitor competitors)
         {
-            Accounts userAccount = Shared.GetUserAccount(User, _context);
+            Account userAccount = Shared.GetUserAccount(User, _context);
             if (!Shared.UserCompetitors(userAccount, _context).Any(c => c.Id == id))
             {
                 return Unauthorized();
@@ -82,7 +88,7 @@ namespace TournamentMasterAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CompetitorsExists(id))
+                if (!CompetitorExists(id))
                 {
                     return NotFound();
                 }
@@ -98,9 +104,9 @@ namespace TournamentMasterAPI.Controllers
         // POST: api/Organization/5/Competitors
         [Route("api/Organization/{oid:int}/Competitors")]
         [HttpPost]
-        public async Task<IActionResult> PostCompetitors([FromRoute] int oid, [FromBody] Competitors competitors)
+        public async Task<IActionResult> PostCompetitors([FromRoute] int oid, [FromBody] Competitor competitors)
         {
-            Accounts userAccount = Shared.GetUserAccount(User, _context);
+            Account userAccount = Shared.GetUserAccount(User, _context);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -108,7 +114,7 @@ namespace TournamentMasterAPI.Controllers
             var organizations = Shared.UserOrganizations(userAccount, _context).SingleOrDefault(o => o.Id == oid);
             if (organizations != null)
             {
-                organizations.Competitors.Add(competitors);
+                //organizations.Competitors.Add(competitors);
             }
             await _context.SaveChangesAsync();
 
@@ -119,7 +125,7 @@ namespace TournamentMasterAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCompetitors([FromRoute] int id)
         {
-            Accounts userAccount = Shared.GetUserAccount(User, _context);
+            Account userAccount = Shared.GetUserAccount(User, _context);
             if (!Shared.UserCompetitors(userAccount, _context).Any(c => c.Id == id))
             {
                 return Unauthorized();
@@ -141,7 +147,7 @@ namespace TournamentMasterAPI.Controllers
             return Ok(competitors);
         }
 
-        private bool CompetitorsExists(int id)
+        private bool CompetitorExists(int id)
         {
             return _context.Competitors.Any(e => e.Id == id);
         }

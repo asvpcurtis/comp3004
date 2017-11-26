@@ -7,13 +7,13 @@ namespace TournamentMasterAPI.Models
     public partial class TournamentMasterDBContext : DbContext
     {
         public virtual DbSet<AccountOrganization> AccountOrganization { get; set; }
-        public virtual DbSet<Accounts> Accounts { get; set; }
-        public virtual DbSet<Competitors> Competitors { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<Competitor> Competitors { get; set; }
         public virtual DbSet<CompetitorTournament> CompetitorTournament { get; set; }
-        public virtual DbSet<Organizations> Organizations { get; set; }
-        public virtual DbSet<Pairings> Pairings { get; set; }
-        public virtual DbSet<Rounds> Rounds { get; set; }
-        public virtual DbSet<Tournaments> Tournaments { get; set; }
+        public virtual DbSet<Organization> Organizations { get; set; }
+        public virtual DbSet<Pairing> Pairings { get; set; }
+        public virtual DbSet<Round> Rounds { get; set; }
+        public virtual DbSet<Tournament> Tournaments { get; set; }
 
         public TournamentMasterDBContext(DbContextOptions<TournamentMasterDBContext> options) : base(options) { }
 
@@ -21,29 +21,29 @@ namespace TournamentMasterAPI.Models
         {
             modelBuilder.Entity<AccountOrganization>(entity =>
             {
-                entity.HasKey(e => new { e.AccountsId, e.OrganizationsId });
+                entity.HasKey(e => new { e.AccountId, e.OrganizationId });
 
-                entity.HasIndex(e => e.OrganizationsId)
+                entity.HasIndex(e => e.OrganizationId)
                     .HasName("IX_FK_AccountOrganization_Organization");
 
-                entity.Property(e => e.AccountsId).HasColumnName("Accounts_Id");
+                entity.Property(e => e.AccountId).HasColumnName("Account_Id");
 
-                entity.Property(e => e.OrganizationsId).HasColumnName("Organizations_Id");
+                entity.Property(e => e.OrganizationId).HasColumnName("Organization_Id");
 
-                entity.HasOne(d => d.Accounts)
+                entity.HasOne(d => d.Account)
                     .WithMany(p => p.AccountOrganization)
-                    .HasForeignKey(d => d.AccountsId)
+                    .HasForeignKey(d => d.AccountId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AccountOrganization_Account");
 
-                entity.HasOne(d => d.Organizations)
+                entity.HasOne(d => d.Organization)
                     .WithMany(p => p.AccountOrganization)
-                    .HasForeignKey(d => d.OrganizationsId)
+                    .HasForeignKey(d => d.OrganizationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AccountOrganization_Organization");
             });
 
-            modelBuilder.Entity<Competitors>(entity =>
+            modelBuilder.Entity<Competitor>(entity =>
             {
                 entity.HasIndex(e => e.OrganizationId)
                     .HasName("IX_FK_OrganizationCompetitor");
@@ -71,36 +71,36 @@ namespace TournamentMasterAPI.Models
 
             modelBuilder.Entity<CompetitorTournament>(entity =>
             {
-                entity.HasKey(e => new { e.CompetitorsId, e.TournamentsId });
+                entity.HasKey(e => new { e.CompetitorId, e.TournamentId });
 
-                entity.HasIndex(e => e.TournamentsId)
+                entity.HasIndex(e => e.TournamentId)
                     .HasName("IX_FK_CompetitorTournament_Tournament");
 
-                entity.Property(e => e.CompetitorsId).HasColumnName("Competitors_Id");
+                entity.Property(e => e.CompetitorId).HasColumnName("Competitor_Id");
 
-                entity.Property(e => e.TournamentsId).HasColumnName("Tournaments_Id");
+                entity.Property(e => e.TournamentId).HasColumnName("Tournament_Id");
 
-                entity.HasOne(d => d.Competitors)
+                entity.HasOne(d => d.Competitor)
                     .WithMany(p => p.CompetitorTournament)
-                    .HasForeignKey(d => d.CompetitorsId)
+                    .HasForeignKey(d => d.CompetitorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CompetitorTournament_Competitor");
 
-                entity.HasOne(d => d.Tournaments)
+                entity.HasOne(d => d.Tournament)
                     .WithMany(p => p.CompetitorTournament)
-                    .HasForeignKey(d => d.TournamentsId)
+                    .HasForeignKey(d => d.TournamentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CompetitorTournament_Tournament");
             });
 
-            modelBuilder.Entity<Organizations>(entity =>
+            modelBuilder.Entity<Organization>(entity =>
             {
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
             });
 
-            modelBuilder.Entity<Pairings>(entity =>
+            modelBuilder.Entity<Pairing>(entity =>
             {
                 entity.HasIndex(e => e.CompetitorId1)
                     .HasName("IX_FK_PairingCompetitor");
@@ -130,7 +130,7 @@ namespace TournamentMasterAPI.Models
                     .HasConstraintName("FK_RoundPairing");
             });
 
-            modelBuilder.Entity<Rounds>(entity =>
+            modelBuilder.Entity<Round>(entity =>
             {
                 entity.HasIndex(e => e.TournamentId)
                     .HasName("IX_FK_TournamentRound");
@@ -142,10 +142,14 @@ namespace TournamentMasterAPI.Models
                     .HasConstraintName("FK_TournamentRound");
             });
 
-            modelBuilder.Entity<Tournaments>(entity =>
+            modelBuilder.Entity<Tournament>(entity =>
             {
                 entity.HasIndex(e => e.OrganizationId)
                     .HasName("IX_FK_OrganizationTournament");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnType("nchar(50)");
 
                 entity.Property(e => e.StartDate).HasColumnType("datetime");
 

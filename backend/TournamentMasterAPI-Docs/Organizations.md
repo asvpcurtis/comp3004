@@ -1,7 +1,9 @@
 # Organizations Endpoint
 
 ## [Home](./Home.md)
+
 ---
+
 ## `GET /organizations`
 
 ###### Get a list of all organizations the user is a  part of.

@@ -22,7 +22,7 @@ namespace TournamentMasterAPI.Controllers
 
         // GET: api/Tournaments
         [HttpGet]
-        public IEnumerable<Tournaments> GetTournaments()
+        public IEnumerable<Tournament> GetTournaments()
         {
             return _context.Tournaments;
         }
@@ -48,7 +48,7 @@ namespace TournamentMasterAPI.Controllers
 
         // PUT: api/Tournaments/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTournaments([FromRoute] int id, [FromBody] Tournaments tournaments)
+        public async Task<IActionResult> PutTournaments([FromRoute] int id, [FromBody] Tournament tournaments)
         {
             if (!ModelState.IsValid)
             {
@@ -68,7 +68,7 @@ namespace TournamentMasterAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TournamentsExists(id))
+                if (!TournamentExists(id))
                 {
                     return NotFound();
                 }
@@ -83,7 +83,7 @@ namespace TournamentMasterAPI.Controllers
 
         // POST: api/Tournaments
         [HttpPost]
-        public async Task<IActionResult> PostTournaments([FromBody] Tournaments tournaments)
+        public async Task<IActionResult> PostTournaments([FromBody] Tournament tournaments)
         {
             if (!ModelState.IsValid)
             {
@@ -117,7 +117,7 @@ namespace TournamentMasterAPI.Controllers
             return Ok(tournaments);
         }
 
-        private bool TournamentsExists(int id)
+        private bool TournamentExists(int id)
         {
             return _context.Tournaments.Any(e => e.Id == id);
         }

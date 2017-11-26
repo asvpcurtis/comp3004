@@ -4,20 +4,19 @@ using System.Collections.Generic;
 
 namespace TournamentMasterAPI.Models
 {
-    public partial class Rounds
+    public partial class Round
     {
-        public Rounds()
+        public Round()
         {
-            Pairings = new HashSet<Pairings>();
+            Pairings = new HashSet<Pairing>();
         }
 
         public int Id { get; set; }
         public int TournamentId { get; set; }
         public int RoundNumber { get; set; }
-
         [JsonIgnore]
-        public Tournaments Tournament { get; set; }
+        public Tournament Tournament { get; set; }
         [JsonIgnore]
-        public ICollection<Pairings> Pairings { get; set; }
+        public ICollection<Pairing> Pairings { get; set; }
     }
 }
