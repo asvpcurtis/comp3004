@@ -1,0 +1,14 @@
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPITests\bin\Debug\netcoreapp2.0\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPITests\bin\Debug\netcoreapp2.0\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPITests\bin\Debug\netcoreapp2.0\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPITests\bin\Debug\netcoreapp2.0\TournamentMasterAPITests.deps.json
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPITests\bin\Debug\netcoreapp2.0\TournamentMasterAPITests.runtimeconfig.json
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPITests\bin\Debug\netcoreapp2.0\TournamentMasterAPITests.runtimeconfig.dev.json
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPITests\bin\Debug\netcoreapp2.0\TournamentMasterAPITests.dll
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPITests\bin\Debug\netcoreapp2.0\TournamentMasterAPITests.pdb
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPITests\obj\Debug\netcoreapp2.0\TournamentMasterAPITests.csprojResolveAssemblyReference.cache
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPITests\obj\Debug\netcoreapp2.0\TournamentMasterAPITests.csproj.CoreCompileInputs.cache
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPITests\obj\Debug\netcoreapp2.0\TournamentMasterAPITests.AssemblyInfoInputs.cache
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPITests\obj\Debug\netcoreapp2.0\TournamentMasterAPITests.AssemblyInfo.cs
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPITests\obj\Debug\netcoreapp2.0\TournamentMasterAPITests.dll
+C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPITests\obj\Debug\netcoreapp2.0\TournamentMasterAPITests.pdb

@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace TournamentMasterAPI.Models
 {
-    public partial class Tournaments
+    public partial class Tournament
     {
-        public Tournaments()
+        public Tournament()
         {
             CompetitorTournament = new HashSet<CompetitorTournament>();
-            Rounds = new HashSet<Rounds>();
+            Rounds = new HashSet<Round>();
         }
 
         public int Id { get; set; }
@@ -16,9 +17,12 @@ namespace TournamentMasterAPI.Models
         public DateTime StartDate { get; set; }
         public int Format { get; set; }
         public bool OnGoing { get; set; }
-
-        public Organizations Organization { get; set; }
+        public string Name { get; set; }
+        [JsonIgnore]
+        public Organization Organization { get; set; }
+        [JsonIgnore]
         public ICollection<CompetitorTournament> CompetitorTournament { get; set; }
-        public ICollection<Rounds> Rounds { get; set; }
+        [JsonIgnore]
+        public ICollection<Round> Rounds { get; set; }
     }
 }

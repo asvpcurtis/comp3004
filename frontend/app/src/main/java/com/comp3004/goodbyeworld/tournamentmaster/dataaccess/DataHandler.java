@@ -58,6 +58,11 @@ public class DataHandler {
                     info.addAll(FieldTranslate.convert((JSONArray) result, "Organization"));
                     updateActivity(info);
                 }
+
+                @Override
+                public void onFailure(Object result) {
+                    updateActivity(null);
+                }
             });
         } else {
             String urlAdd = FieldTranslate.convertType(type, iD);
@@ -167,6 +172,10 @@ public class DataHandler {
                             break;
                     }
                 }
+
+                @Override
+                public void onFailure(Object result)
+                {}
             });
         }
     }
@@ -233,6 +242,10 @@ public class DataHandler {
             public void onSuccess(Object result) {
                updateActivity(null);
            }
+
+            @Override
+            public void onFailure(Object result)
+            {}
         });
     }
 
@@ -264,6 +277,10 @@ public class DataHandler {
                 }
                 updateActivity(info);
             }
+
+            @Override
+            public void onFailure(Object result)
+            {}
         });
     }
 
@@ -279,6 +296,10 @@ public class DataHandler {
             public void onSuccess(Object result) {
                 updateActivity(null);
             }
+
+            @Override
+            public void onFailure(Object result)
+            {}
         });
     }
 
@@ -290,6 +311,10 @@ public class DataHandler {
             public void onSuccess(Object result) {
                 updateActivity(null);
             }
+
+            @Override
+            public void onFailure(Object result)
+            {}
         });
     }
 }

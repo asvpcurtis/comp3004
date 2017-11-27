@@ -1,0 +1,7 @@
+MONDAY, NOVEMBER 6TH, 2017
+
+DEV LOG 7
+
+-More UI design
+-Working on implementing a side menu for ease of access (better navigation)
+-UX design: created mocks for tournament display and menu design

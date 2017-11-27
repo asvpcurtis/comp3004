@@ -1,15 +1,16 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace TournamentMasterAPI.Models
 {
-    public partial class Competitors
+    public partial class Competitor
     {
-        public Competitors()
+        public Competitor()
         {
             CompetitorTournament = new HashSet<CompetitorTournament>();
-            PairingsCompetitorId1Navigation = new HashSet<Pairings>();
-            PairingsCompetitorId2Navigation = new HashSet<Pairings>();
+            PairingsCompetitorId1Navigation = new HashSet<Pairing>();
+            PairingsCompetitorId2Navigation = new HashSet<Pairing>();
         }
 
         public int Id { get; set; }
@@ -19,10 +20,13 @@ namespace TournamentMasterAPI.Models
         public int Rating { get; set; }
         public int OrganizationId { get; set; }
         public string Gender { get; set; }
-
-        public Organizations Organization { get; set; }
+        [JsonIgnore]
+        public Organization Organization { get; set; }
+        [JsonIgnore]
         public ICollection<CompetitorTournament> CompetitorTournament { get; set; }
-        public ICollection<Pairings> PairingsCompetitorId1Navigation { get; set; }
-        public ICollection<Pairings> PairingsCompetitorId2Navigation { get; set; }
+        [JsonIgnore]
+        public ICollection<Pairing> PairingsCompetitorId1Navigation { get; set; }
+        [JsonIgnore]
+        public ICollection<Pairing> PairingsCompetitorId2Navigation { get; set; }
     }
 }

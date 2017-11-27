@@ -65,10 +65,13 @@ namespace TournamentMasterAPI
                 app.UseDeveloperExceptionPage();
             }
             app.UseAuthentication();
+            /*
             app.UseMvc(routes => 
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+            */
+            app.UseMvc();
         }
         
     }

@@ -1,6 +1,7 @@
 package com.comp3004.goodbyeworld.tournamentmaster.dataaccess;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -44,6 +45,7 @@ class DataRetriever {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
+                callback.onFailure(error);
             }
         }) {
             @Override

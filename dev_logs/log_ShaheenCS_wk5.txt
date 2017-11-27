@@ -1,0 +1,16 @@
+MONDAY, OCTOBER 23RD, 2017
+
+DEV LOG 5
+
+-Did testing with implemented JWT token
+-Met with Mike and Curtis to discuss future directions for the application
+ as well as work on merging front-end and back-end code
+-Did some testing to see if front-end properly communicated with backend
+-Designed mocks for the App's basic UI
+-Worked on implementing the UI
+
+-- PROBLEMS --
+
+-Discovered a bug where the token would not display on all computers
+-Must ensure that tokens will display on all devices
+-Fixed so mobile phones will display unique information per user

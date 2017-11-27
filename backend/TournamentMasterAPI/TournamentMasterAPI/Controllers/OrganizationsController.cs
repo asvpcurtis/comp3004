@@ -6,50 +6,66 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TournamentMasterAPI.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TournamentMasterAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/Organizations")]
+    [Authorize]
     public class OrganizationsController : Controller
     {
         private readonly TournamentMasterDBContext _context;
-
         public OrganizationsController(TournamentMasterDBContext context)
         {
             _context = context;
-        }
+        }   
 
         // GET: api/Organizations
         [HttpGet]
-        public IEnumerable<Organizations> GetOrganizations()
+        public IEnumerable<Organization> GetOrganizations()
         {
-            return _context.Organizations;
+            Account userAccount = Shared.GetUserAccount(User, _context);
+            return Shared.UserOrganizations(userAccount, _context);
         }
 
         // GET: api/Organizations/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetOrganizations([FromRoute] int id)
         {
+            // check if user has permission for this organization
+            Account userAccount = Shared.GetUserAccount(User, _context);
+            if (!Shared.UserOrganizations(userAccount, _context).Any(o => o.Id == id))
+            {
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
             var organizations = await _context.Organizations.SingleOrDefaultAsync(m => m.Id == id);
 
             if (organizations == null)
             {
                 return NotFound();
             }
-
+            
             return Ok(organizations);
         }
 
         // PUT: api/Organizations/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrganizations([FromRoute] int id, [FromBody] Organizations organizations)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> PutOrganizations([FromRoute] int id, [FromBody] Organization organizations)
         {
+            // check if user has permission for this organization
+            Account userAccount = Shared.GetUserAccount(User, _context);
+            if (!Shared.UserOrganizations(userAccount, _context).Any(o => o.Id == id))
+            {
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -68,7 +84,7 @@ namespace TournamentMasterAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!OrganizationsExists(id))
+                if (!OrganizationExists(id))
                 {
                     return NotFound();
                 }
@@ -83,23 +99,33 @@ namespace TournamentMasterAPI.Controllers
 
         // POST: api/Organizations
         [HttpPost]
-        public async Task<IActionResult> PostOrganizations([FromBody] Organizations organizations)
+        public async Task<IActionResult> PostOrganizations([FromBody] Organization organizations)
         {
+            Account userAccount = Shared.GetUserAccount(User, _context);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Organizations.Add(organizations);
-            await _context.SaveChangesAsync();
+            userAccount.AccountOrganization.Add(new AccountOrganization {
+                Organization = organizations
+            });
 
+            await _context.SaveChangesAsync();
             return CreatedAtAction("GetOrganizations", new { id = organizations.Id }, organizations);
         }
 
         // DELETE: api/Organizations/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteOrganizations([FromRoute] int id)
         {
+            // check if user has permission for this organization
+            Account userAccount = Shared.GetUserAccount(User, _context);
+            if (!Shared.UserOrganizations(userAccount, _context).Any(o => o.Id == id))
+            {
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -111,13 +137,15 @@ namespace TournamentMasterAPI.Controllers
                 return NotFound();
             }
 
+            _context.AccountOrganization.RemoveRange(_context.AccountOrganization
+                .Where(ao => ao.OrganizationId == organizations.Id));
             _context.Organizations.Remove(organizations);
             await _context.SaveChangesAsync();
 
             return Ok(organizations);
         }
 
-        private bool OrganizationsExists(int id)
+        private bool OrganizationExists(int id)
         {
             return _context.Organizations.Any(e => e.Id == id);
         }
