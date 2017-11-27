@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TournamentMasterAPI.Models;
 using TournamentMasterAPI.Builders;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TournamentMasterAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/Pairings")]
+    [Authorize]
     public class PairingsController : Controller
     {
         private readonly TournamentMasterDBContext _context;
@@ -111,6 +113,9 @@ namespace TournamentMasterAPI.Controllers
                     throw;
                 }
             }
+
+            // update ratings
+            RatingCalculator.UpdateRatings(_context, pairing);
 
             // Get the tournament that the pairing belongs to
             Round round = _context.Rounds.Find(pairing.RoundId);

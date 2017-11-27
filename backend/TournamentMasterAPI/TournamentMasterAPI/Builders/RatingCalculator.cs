@@ -8,12 +8,12 @@ namespace TournamentMasterAPI.Builders
     public static class RatingCalculator
     {
         private const double K_FACTOR = 32;
-        public const int INIITIAL_RATING = 1000;
+        public const int INIITIAL_RATING = 1200;
         public static void UpdateRatings(TournamentMasterDBContext context, Pairing game)
         {
             if (game.Result == null || (game.Result != game.CompetitorId1 && game.Result != game.CompetitorId2))
             {
-                throw new ArgumentException("");
+                throw new ArgumentException();
             }
 
             double comp1RealScore;
@@ -29,8 +29,8 @@ namespace TournamentMasterAPI.Builders
                 comp2RealScore = 1;
             }
 
-            Competitor comp1 = context.Competitors.Where(c => c.Id == game.CompetitorId1).First();
-            Competitor comp2 = context.Competitors.Where(c => c.Id == game.CompetitorId2).First();
+            Competitor comp1 = context.Competitors.Find(game.CompetitorId1);
+            Competitor comp2 = context.Competitors.Find(game.CompetitorId2);
             double comp1Rating = comp1.Rating;
             double comp2Rating = comp2.Rating;
 
@@ -41,6 +41,10 @@ namespace TournamentMasterAPI.Builders
             double comp2NewRating = comp2Rating + (K_FACTOR * (comp2RealScore - comp2ExpectedScore));
             comp1.Rating = (int)comp1NewRating;
             comp2.Rating = (int)comp2NewRating;
+
+            context.Entry(comp1).CurrentValues.SetValues(comp1);
+            context.Entry(comp2).CurrentValues.SetValues(comp2);
+
             context.SaveChanges();
         }
     }

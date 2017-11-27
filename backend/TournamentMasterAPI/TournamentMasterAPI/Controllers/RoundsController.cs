@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TournamentMasterAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TournamentMasterAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/Rounds")]
+    [Authorize]
     public class RoundsController : Controller
     {
         private readonly TournamentMasterDBContext _context;

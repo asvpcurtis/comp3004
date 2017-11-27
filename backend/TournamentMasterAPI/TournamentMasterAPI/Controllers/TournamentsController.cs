@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TournamentMasterAPI.Models;
 using TournamentMasterAPI.Builders;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TournamentMasterAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/Tournaments")]
+    [Authorize]
     public class TournamentsController : Controller
     {
         private readonly TournamentMasterDBContext _context;
@@ -44,7 +46,7 @@ namespace TournamentMasterAPI.Controllers
         public async Task<IActionResult> GetTournaments([FromRoute] int id)
         {
             Account userAccount = Shared.GetUserAccount(User, _context);
-            if (Shared.UserTournaments(userAccount, _context).Any(t => t.Id == id))
+            if (!Shared.UserTournaments(userAccount, _context).Any(t => t.Id == id))
             {
                 return Unauthorized();
             }

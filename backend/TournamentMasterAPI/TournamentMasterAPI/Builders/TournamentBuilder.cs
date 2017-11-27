@@ -93,6 +93,14 @@ namespace TournamentMasterAPI.Builders
             }
         }
 
+        private static void CreateSwissRound(TournamentMasterDBContext context, Tournament tournament)
+        {
+            // Get latest round if there is one else null
+            Round currentRound = context.Rounds.Where(r => r.TournamentId == tournament.Id)
+                .OrderByDescending(r => r.RoundNumber)
+                .FirstOrDefault();
+        }
+
         private static void CreateEliminationRound(TournamentMasterDBContext context, Tournament tournament)
         {
             // Get latest round if there is one else null
@@ -188,23 +196,90 @@ namespace TournamentMasterAPI.Builders
         private static void CreateDoubleEliminationRound(TournamentMasterDBContext context, Tournament tournament)
         {
             // Get latest round if there is one else null
-            Round currentRound = context.Rounds.Where(r => r.TournamentId == tournament.Id)
+            Round lastRound = context.Rounds.Where(r => r.TournamentId == tournament.Id)
                 .OrderByDescending(r => r.RoundNumber)
                 .FirstOrDefault();
         }
         private static void CreateRoundRobinRound(TournamentMasterDBContext context, Tournament tournament)
         {
             // Get latest round if there is one else null
-            Round currentRound = context.Rounds.Where(r => r.TournamentId == tournament.Id)
+            Round lastRound = context.Rounds.Where(r => r.TournamentId == tournament.Id)
                 .OrderByDescending(r => r.RoundNumber)
                 .FirstOrDefault();
-        }
-        private static void CreateSwissRound(TournamentMasterDBContext context, Tournament tournament)
-        {
-            // Get latest round if there is one else null
-            Round currentRound = context.Rounds.Where(r => r.TournamentId == tournament.Id)
-                .OrderByDescending(r => r.RoundNumber)
-                .FirstOrDefault();
+
+
+            // Get all Competitors ordered by seed
+            List<Competitor> competitors = context.CompetitorTournament
+                .Where(ct => ct.TournamentId == tournament.Id)
+                .OrderByDescending(ct => ct.Seed)
+                .Select(ct => ct.Competitor)
+                .ToList();
+
+            // add a bye into tournament if odd number of players
+            if (competitors.Count % 2 == 1)
+            {
+                competitors.Add(null);
+            }
+
+            // determine round number
+            int roundnum;
+            if (lastRound == null)
+            {
+                roundnum = 1;
+            }
+            else
+            {
+                roundnum = lastRound.RoundNumber + 1;
+            }
+
+            // competitors only play each other once so tournament is over
+            if (roundnum >= competitors.Count)
+            {
+                tournament.OnGoing = false;
+                context.SaveChanges();
+                return;
+            }
+
+            // put competitors into initial position
+            List<Competitor> left = competitors.GetRange(0, competitors.Count / 2);
+            List<Competitor> right = competitors.GetRange(competitors.Count / 2, competitors.Count / 2);
+            right.Reverse();
+            left.AddRange(right);
+            competitors = left;
+
+            // each round the competitors rotate 1 towards beginning of list while index 0 stays in position
+            Competitor topseed = competitors.First();
+            competitors.RemoveAt(0);
+            for (int i = 1; i < roundnum; i++)
+            {
+                Competitor moveToEnd = competitors.First();
+                competitors.RemoveAt(0);
+                competitors.Add(moveToEnd);
+            }
+            competitors.Insert(0, topseed);
+
+            Round newRound = new Round
+            {
+                RoundNumber = roundnum,
+                Tournament = tournament
+            };
+            while (competitors.Count() != 0)
+            {
+                Competitor comp1 = competitors.First();
+                Competitor comp2 = competitors.Last();
+                competitors.RemoveAt(0);
+                competitors.RemoveAt(competitors.Count() - 1);
+                Pairing newPairing = new Pairing
+                {
+                    CompetitorId1 = comp1.Id,
+                    CompetitorId2 = comp2.Id,
+                    Round = newRound,
+                    Result = null,
+                };
+                context.Pairings.Add(newPairing);
+            }
+            context.Rounds.Add(newRound);
+            context.SaveChanges();
         }
     }
 }
