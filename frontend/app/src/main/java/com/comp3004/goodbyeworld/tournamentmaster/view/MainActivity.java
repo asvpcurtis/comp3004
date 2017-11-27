@@ -302,14 +302,14 @@ public class MainActivity extends AppCompatActivity {
             password = inPassword.getText().toString();
             if(password == null) {
                 TextView label = (TextView) findViewById(R.id.textViewUserPasswordMessage);
-                label.setText(inPassword.getHint()+" enter password");
+                //label.setText(inPassword.getHint()+" enter password");
                 //inPassword.setBackground(getDrawable(R.drawable.text_border_error));
                 return;
             }
 
             if(password.length() < 1) {
                 TextView label = (TextView) findViewById(R.id.textViewUserPasswordMessage);
-                label.setText(inPassword.getHint()+" enter password");
+                //label.setText(inPassword.getHint()+" enter password");
                 //inPassword.setBackground(getDrawable(R.drawable.text_border_error));
                 return;
             }

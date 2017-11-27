@@ -1,6 +1,7 @@
 package com.comp3004.goodbyeworld.tournamentmaster.dataaccess;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -27,7 +28,11 @@ import static com.android.volley.VolleyLog.TAG;
  */
 
 class DataRetriever {
-    private static String url = "http://10.0.2.2/api";
+    // Local from emulator
+    //private static String url = "http://10.0.2.2/api";
+    // Local from device on network (Mike)
+    private static String url = "http://192.168.0.101/api";
+    // Amazon EC2
     //private static String url = "http://ec2-35-182-254-130.ca-central-1.compute.amazonaws.com/api";
 
     static void getDataArray(Context c, String urlAdd, final VolleyCallback callback) {
@@ -40,12 +45,13 @@ class DataRetriever {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
+                callback.onFailure(error);
             }
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<>();
-                headers.put("Authorization", Tokens.getIDToken());
+                headers.put("Authorization", "Bearer " +Tokens.getIDToken());
                 return headers;
             }
         };
@@ -68,7 +74,7 @@ class DataRetriever {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<>();
-                headers.put("Authorization", Tokens.getIDToken());
+                headers.put("Authorization", "Bearer " +Tokens.getIDToken());
                 return headers;
             }
         };
@@ -92,7 +98,7 @@ class DataRetriever {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<>();
-                headers.put("Authorization", Tokens.getIDToken());
+                headers.put("Authorization", "Bearer " +Tokens.getIDToken());
                 return headers;
             }
         };
@@ -118,7 +124,7 @@ class DataRetriever {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<>();
-                headers.put("Authorization", Tokens.getIDToken());
+                headers.put("Authorization", "Bearer " +Tokens.getIDToken());
                 return headers;
             }
         };
@@ -142,7 +148,7 @@ class DataRetriever {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<>();
-                headers.put("Authorization", Tokens.getIDToken());
+                headers.put("Authorization", "Bearer " +Tokens.getIDToken());
                 return headers;
             }
         };

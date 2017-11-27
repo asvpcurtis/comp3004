@@ -15,8 +15,24 @@ import java.util.ArrayList;
 public class TMTemplates {
     public static ArrayList<TMDataSet> get(String type) {
         ArrayList<TMDataSet> template = new ArrayList<>();
-        template.add(new TMDataSet("{}", null, null));
-        template.add(new TMDataSet("","name", null));
+        switch (type) {
+            case "Organization":
+                template.add(new TMDataSet("{}", null, null));
+                template.add(new TMDataSet("", "name", null));
+                break;
+            case "Competitor":
+                template.add(new TMDataSet("{}", null, null));
+                template.add(new TMDataSet("", "firstName", null));
+                template.add(new TMDataSet("", "lastName", null));
+                template.add(new TMDataSet("", "email", null));
+                template.add(new TMDataSet("", "gender", null));
+                break;
+            case "Tournament":
+                template.add(new TMDataSet("{}", null, null));
+                template.add(new TMDataSet("", "name", null));
+                break;
+        }
+
         return template;
     }
 
@@ -24,7 +40,13 @@ public class TMTemplates {
         ArrayList<TMDataSet> template = new ArrayList<>();
         template.add(new TMDataSet(data.toString(), null, null));
         try {
-            template.add(new TMDataSet(data.getString("name"), "name", null));
+            switch (type) {
+                case "Organization":
+                    template.add(new TMDataSet(data.getString("name"), "name", null));
+                    break;
+                case "Pairing":
+                    template.add(new TMDataSet("Select Winner", "result", null));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

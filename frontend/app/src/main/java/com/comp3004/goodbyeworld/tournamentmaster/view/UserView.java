@@ -1,22 +1,30 @@
 package com.comp3004.goodbyeworld.tournamentmaster.view;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.view.View.OnClickListener;
 
 
 import com.comp3004.goodbyeworld.tournamentmaster.R;
 import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.DataHandler;
 import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.TMDataSet;
 import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.UpdateCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -52,6 +60,20 @@ public class UserView extends AppCompatActivity {
         // Kill the wheel!
         findViewById(R.id.progressBarLoading).setVisibility(View.GONE);
 
+        // check if data is null -- i.e. an access error
+        if (data == null) {
+            View view = findViewById(android.R.id.content);
+            Snackbar snackbar = Snackbar.make(view, R.string.access_error, Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction(R.string.back, new OnClickListener() {
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            snackbar.show();
+
+            return;
+        }
+
         // First Element of data is the main subject
         ((TextView) findViewById(R.id.textViewTitle)).setText(data.get(0).getData());
         ((TextView) findViewById(R.id.textViewID)).setText(data.get(0).getID());
@@ -73,9 +95,9 @@ public class UserView extends AppCompatActivity {
                 ((Button) findViewById(R.id.buttonCreate)).setText(orgLabel);
                 findViewById(R.id.buttonCreate).setEnabled(true);
                 findViewById(R.id.buttonCreate).setVisibility(View.VISIBLE);
+                ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.user);
                 break;
             case "Organization":
-                /**
                 String tournLabel = "Create Tournament";
                 String competitorLabel = "Add Competitor";
                 ((Button) findViewById(R.id.buttonCreate)).setText(tournLabel);
@@ -84,19 +106,25 @@ public class UserView extends AppCompatActivity {
                 findViewById(R.id.buttonCreate).setVisibility(View.VISIBLE);
                 findViewById(R.id.buttonCreateCompetitor).setEnabled(true);
                 findViewById(R.id.buttonCreateCompetitor).setVisibility(View.VISIBLE);
-                 */
+                ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.org);
                 break;
             case "Tournament":
-
+                findViewById(R.id.buttonEdit).setEnabled(false);
+                findViewById(R.id.buttonEdit).setVisibility(View.INVISIBLE);
+                ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.tourn);
                 break;
             case "Round":
-
+                findViewById(R.id.buttonEdit).setEnabled(false);
+                findViewById(R.id.buttonEdit).setVisibility(View.INVISIBLE);
+                ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.tourn);
                 break;
             case "Pairing":
-
+                ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.tourn);
                 break;
             case "Competitor":
-
+                findViewById(R.id.buttonEdit).setEnabled(false);
+                findViewById(R.id.buttonEdit).setVisibility(View.INVISIBLE);
+                ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.competitor);
                 break;
         }
 
@@ -127,7 +155,7 @@ public class UserView extends AppCompatActivity {
                     if (pairLayout.getChildCount() == 0) {
                         pairLayout.addView(makeHeader("Pairings"));
                     }
-                    pairLayout.addView(makeClickable(i.getData(), i.getDataType(), i.getID()));
+                    pairLayout.addView(makeClickablePairing(i.getData(), i.getDataType(), i.getID()));
                     break;
                 case "Competitor":
                     if (compLayout.getChildCount() == 0) {
@@ -140,7 +168,7 @@ public class UserView extends AppCompatActivity {
                         infoLayout.addView(makeHeader("Information"));
                     }
                     TextView toAdd = new TextView(this);
-                    toAdd.setText(i.getData());
+                    toAdd.setText(String.format("%s%s", i.getDataType(), i.getData()));
                     toAdd.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
                     infoLayout.addView(toAdd);
                     break;
@@ -167,12 +195,47 @@ public class UserView extends AppCompatActivity {
         return clickText;
     }
 
+    private View makeClickablePairing(String text, String type, String iD) {
+        View pairLayout = LayoutInflater.from(this).inflate(R.layout.pairlayout, null, false);
+        String c1 = null;
+        String c2 = null;
+        String r = null;
+        try {
+            JSONObject obj = new JSONObject(text);
+            c1 = obj.getString("competitorOne");
+            c2 = obj.getString("competitorTwo");
+            r = obj.getString("result");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ((TextView)pairLayout.findViewById(R.id.textViewCompetitorOne)).setText(c1);
+        ((TextView)pairLayout.findViewById(R.id.textViewCompetitorTwo)).setText(c2);
+        ((TextView)pairLayout.findViewById(R.id.textViewStatus)).setText(r);
+        pairLayout.setOnClickListener(new OnClickWithTypes(this, type, iD));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(8,8,8,8);
+        pairLayout.setLayoutParams(params);
+        return pairLayout;
+    }
+
     public void createClick(View view) {
         Intent intent = new Intent(this, CreateView.class);
         Bundle bundle = new Bundle();
         if (viewType.equals("Account")) {
             bundle.putString("type", "Organization");
+        } else if (viewType.equals("Organization")) {
+            bundle.putString("type", "Tournament");
         }
+        bundle.putString("id", viewID);
+        intent.putExtras(bundle);
+        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        startActivityForResult(intent, 1);
+    }
+
+    public void createCompetitorClick(View view) {
+        Intent intent = new Intent(this, CreateView.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("type", "Competitor");
         bundle.putString("id", viewID);
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);

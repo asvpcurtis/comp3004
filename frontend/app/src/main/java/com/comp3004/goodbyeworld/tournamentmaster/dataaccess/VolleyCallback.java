@@ -7,4 +7,5 @@ package com.comp3004.goodbyeworld.tournamentmaster.dataaccess;
 
 public interface VolleyCallback {
     void onSuccess(Object result);
+    void onFailure(Object result);
 }

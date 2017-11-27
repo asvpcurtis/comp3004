@@ -36,6 +36,7 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Tournament Master");
         setSupportActionBar(toolbar);
 
         init();
@@ -47,7 +48,7 @@ public class WelcomeActivity extends AppCompatActivity {
         AppHelper.getPool().getUser(username).getDetailsInBackground(detailsHandler);
         AppHelper.getPool().getUser(username).getSessionInBackground(authenticationHandler);
         TextView welcomeText = findViewById(R.id.textView2);
-        welcomeText.setText("Welcome " + username);
+        welcomeText.setText(username + " is now successfully logged in!");
 
     }
 
@@ -67,8 +68,6 @@ public class WelcomeActivity extends AppCompatActivity {
     AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
         @Override
         public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
-            TextView token = findViewById(R.id.textViewIdToken);
-            token.setText(userSession.getIdToken().getJWTToken());
             Log.i("ID TOKEN", userSession.getIdToken().getJWTToken());
         }
 
