@@ -86,7 +86,17 @@ public class DataHandler {
                                             competitorsStore.addAll(FieldTranslate.convert((JSONArray) result, "Competitor"));
                                             updateActivity(info);
                                         }
+
+                                        @Override
+                                        public void onFailure(Object result) {
+
+                                        }
                                     });
+                                }
+
+                                @Override
+                                public void onFailure(Object result) {
+
                                 }
                             });
                             break;
@@ -96,6 +106,11 @@ public class DataHandler {
                                 public void onSuccess(Object result) {
                                     info.addAll(FieldTranslate.convert((JSONArray) result, "Round"));
                                     updateActivity(info);
+                                }
+
+                                @Override
+                                public void onFailure(Object result) {
+
                                 }
                             });
                             break;
@@ -141,6 +156,11 @@ public class DataHandler {
 
                                     updateActivity(info);
                                 }
+
+                                @Override
+                                public void onFailure(Object result) {
+
+                                }
                             });
                             break;
                         case "Pairing":
@@ -157,10 +177,20 @@ public class DataHandler {
                                                     info.addAll(FieldTranslate.convert((JSONObject) result, "Competitor"));
                                                     updateActivity(info);
                                                 }
+
+                                                @Override
+                                                public void onFailure(Object result) {
+
+                                                }
                                             });
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Object result) {
+
                                     }
                                 });
                             } catch (JSONException e) {
@@ -193,6 +223,11 @@ public class DataHandler {
             public void onSuccess(Object result) {
                 info.addAll(FieldTranslate.convertCompetitors((JSONArray) result));
                 updateActivity(info);
+            }
+
+            @Override
+            public void onFailure(Object result) {
+
             }
         });
     }
