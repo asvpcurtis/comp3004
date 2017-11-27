@@ -62,6 +62,7 @@ namespace TournamentMasterAPI.Builders
             // There is a Round to check
             if (currentRound != null)
             {
+
                 // Get all pairings that belong to this round
                 IEnumerable<Pairing> currentRoundPairings = context.Pairings.Where(p => p.RoundId == currentRound.Id);
 
@@ -156,8 +157,12 @@ namespace TournamentMasterAPI.Builders
             else
             {
                 // Winners from the previous round get to advance
+                List<Competitor> competitors = context.CompetitorTournament
+                    .Where(ct => ct.TournamentId == tournament.Id)
+                    .Select(ct => ct.Competitor)
+                    .ToList();
                 List<Competitor> winners = lastRound.Pairings
-                    .Select(p => p.Result == p.CompetitorId1 ? p.CompetitorId1Navigation : p.CompetitorId2Navigation)
+                    .Select(p => competitors.Where(c => c.Id == p.Result).First())
                     .ToList();
 
                 // if there is only 1 person left the tournament over
