@@ -3,6 +3,7 @@
 ### Tournament Master
 
 Our goal is to provide organizations with a powerful mobile tool to:
+
  * Create tournaments of different formats.
  * Save tournament history.
  * Track player ratings.

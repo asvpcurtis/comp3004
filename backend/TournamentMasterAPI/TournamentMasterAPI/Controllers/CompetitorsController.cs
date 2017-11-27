@@ -33,15 +33,6 @@ namespace TournamentMasterAPI.Controllers
             {
                 userCompetitors = userCompetitors.Where(c => c.OrganizationId == organization);
             }
-            /*
-            using (StreamWriter file = System.IO.File.AppendText(@"C:\Users\Curtis Barlow-Wilkes\Desktop\0log.txt"))
-            {
-                foreach (Competitor c in userCompetitors)
-                {
-                    file.WriteLine($"{c.Id}, {c.FirstName}");
-                }
-            }
-            */
             return userCompetitors;
         }
 

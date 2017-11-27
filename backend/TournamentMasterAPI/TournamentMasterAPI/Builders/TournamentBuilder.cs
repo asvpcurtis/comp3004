@@ -8,10 +8,10 @@ namespace TournamentMasterAPI.Builders
 {
     public enum TournamentFormat
     {
+        Swiss,
         Elimination,
         DoubleElimination,
-        RoundRobin,
-        Swiss,
+        RoundRobin
     }
     public static class TournamentBuilder
     {
@@ -40,14 +40,14 @@ namespace TournamentMasterAPI.Builders
                 CompetitorTournament relationship = new CompetitorTournament
                 {
                     CompetitorId = c.Id,
-                    TournamentId = tournament.Id,
-                    Competitor = c,
                     Tournament = tournament,
                     Seed = seed
                 };
                 context.CompetitorTournament.Add(relationship);
                 seed++;
             }
+            context.SaveChanges();
+            UpdateTournament(context, tournament);
         }
 
         public static void UpdateTournament(TournamentMasterDBContext context, Tournament tournament)
@@ -73,11 +73,13 @@ namespace TournamentMasterAPI.Builders
             {
                 currentRoundComplete = true;
             }
-
             if (currentRoundComplete)
             {
                 switch (tournament.Format)
                 {
+                    case (int)TournamentFormat.Swiss:
+                        CreateSwissRound(context, tournament);
+                        break;
                     case (int)TournamentFormat.Elimination:
                         CreateEliminationRound(context, tournament);
                         break;
@@ -86,9 +88,6 @@ namespace TournamentMasterAPI.Builders
                         break;
                     case (int)TournamentFormat.RoundRobin:
                         CreateRoundRobinRound(context, tournament);
-                        break;
-                    case (int)TournamentFormat.Swiss:
-                        CreateSwissRound(context, tournament);
                         break;
                 }
             }
@@ -127,28 +126,62 @@ namespace TournamentMasterAPI.Builders
                     RoundNumber = 1,
                     Tournament = tournament
                 };
+                
                 // create the pairings for the first round we know this list has even size
                 while (competitors.Count() != 0)
                 {
-                    Competitor comp1 = competitors.Take(1).First();
-                    Competitor comp2 = competitors.TakeLast(1).First();
+                    Competitor comp1 = competitors.First();
+                    Competitor comp2 = competitors.Last();
+                    competitors.RemoveAt(0);
+                    competitors.RemoveAt(competitors.Count() - 1);
                     Pairing newPairing = new Pairing
                     {
-                        CompetitorId1Navigation = comp1,
-                        CompetitorId2Navigation = comp2,
+                        CompetitorId1 = comp1.Id,
+                        CompetitorId2 = comp2.Id,
                         Round = newRound,
                         Result = null,
                     };
+                    context.Pairings.Add(newPairing);
                 }
                 context.Rounds.Add(newRound);
             }
             else
             {
                 // Winners from the previous round get to advance
-                IEnumerable<Competitor> winners = lastRound.Pairings
-                    .Select(p => p.Result == p.CompetitorId1 ? p.CompetitorId1Navigation : p.CompetitorId2Navigation);
+                List<Competitor> winners = lastRound.Pairings
+                    .Select(p => p.Result == p.CompetitorId1 ? p.CompetitorId1Navigation : p.CompetitorId2Navigation)
+                    .ToList();
 
-                // We also want to order players
+                // if there is only 1 person left the tournament over
+                if (winners.Count() == 1)
+                {
+                    tournament.OnGoing = false;
+                    context.SaveChanges();
+                    return;
+                }
+
+                // TODO: create pairings as per rules rather than making things up
+                Round newRound = new Round
+                {
+                    RoundNumber = lastRound.RoundNumber + 1,
+                    Tournament = tournament
+                };
+                while (winners.Count() != 0)
+                {
+                    Competitor comp1 = winners.First();
+                    Competitor comp2 = winners.Last();
+                    winners.RemoveAt(0);
+                    winners.RemoveAt(winners.Count() - 1);
+                    Pairing newPairing = new Pairing
+                    {
+                        CompetitorId1 = comp1.Id,
+                        CompetitorId2 = comp2.Id,
+                        Round = newRound,
+                        Result = null,
+                    };
+                    context.Pairings.Add(newPairing);
+                }
+                context.Rounds.Add(newRound);
             }
             context.SaveChanges();
         }
