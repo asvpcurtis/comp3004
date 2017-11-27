@@ -1,0 +1,12 @@
+Dev Log - Michael Souter 100679087
+Week of 10/29 to 11/04
+
+Team Meetings (4 hours)
+- Met to coordinate on functionalities
+- Met to discuss D2 presentation
+
+Personal Work (12 hours)
+- Created operations to perform activities
+- Activities should be cross compatable with local JSON or backend
+- Testing and polish to ensure readiness for D2
+
