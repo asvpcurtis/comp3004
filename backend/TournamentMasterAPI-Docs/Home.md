@@ -12,13 +12,13 @@
 #### This endpoint allows for organizers to a manage their competitors for their tournaments
 ---
 # [Tournaments Endpoint](./Tournaments.md) `/tournaments`
-#### This endpoint allows for organizers to a manage their competitors for their tournaments
+#### This endpoint allows for organizers to create and view tournaments
 ---
 # [Rounds Endpoint](./Rounds.md) `/rounds`
-#### This endpoint allows for organizers to a manage their competitors for their tournaments
+#### This endpoint allows for organizers to view rounds of tournaments
 ---
 # [Pairings Endpoint](./Pairings.md) `/pairings`
-#### This endpoint allows for organizers to a manage their competitors for their tournaments
+#### This endpoint allows for organizers to view pairings and update their results
 ---
 
 

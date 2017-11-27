@@ -31,6 +31,11 @@ namespace TournamentMasterAPI.Controllers
             {
                 userTournaments = userTournaments.Where(t => t.OrganizationId == organization);
             }
+            List<Tournament> trimmedUserTournaments = userTournaments.ToList();
+            foreach (Tournament t in trimmedUserTournaments)
+            {
+                t.Name = t.Name.TrimEnd(' ');
+            }
             return userTournaments;
         }
 
@@ -54,7 +59,7 @@ namespace TournamentMasterAPI.Controllers
             {
                 return NotFound();
             }
-
+            tournaments.Name = tournaments.Name.TrimEnd(' ');
             return Ok(tournaments);
         }
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TournamentMasterAPI.Models;
+using TournamentMasterAPI.Builders;
 
 namespace TournamentMasterAPI.Controllers
 {
@@ -21,16 +22,27 @@ namespace TournamentMasterAPI.Controllers
         }
 
         // GET: api/Pairings
-        [HttpGet]
-        public IEnumerable<Pairing> GetPairings()
+        [HttpGet("{round?}")]
+        public IEnumerable<Pairing> GetPairings([FromQuery] int? round = null)
         {
-            return _context.Pairings;
+            Account userAccount = Shared.GetUserAccount(User, _context);
+            IEnumerable<Pairing> userPairings = Shared.UserPairings(userAccount, _context);
+            if (round != null)
+            {
+                userPairings = userPairings.Where(p => p.RoundId == round);
+            }
+            return userPairings;
         }
 
         // GET: api/Pairings/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPairing([FromRoute] int id)
         {
+            Account userAccount = Shared.GetUserAccount(User, _context);
+            if (!Shared.UserPairings(userAccount, _context).Any(p => p.Id == id))
+            {
+                return Unauthorized();
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -50,6 +62,12 @@ namespace TournamentMasterAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPairing([FromRoute] int id, [FromBody] Pairing pairing)
         {
+            Account userAccount = Shared.GetUserAccount(User, _context);
+            if (!Shared.UserPairings(userAccount, _context).Any(p => p.Id == id))
+            {
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -60,8 +78,24 @@ namespace TournamentMasterAPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(pairing).State = EntityState.Modified;
 
+            Pairing entity = _context.Pairings.Find(pairing.Id);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            // making sure only the result can be updated 
+            pairing.CompetitorId1 = entity.CompetitorId1;
+            pairing.CompetitorId2 = entity.CompetitorId2;
+            pairing.RoundId = entity.RoundId;
+
+            if (pairing.Result != pairing.CompetitorId1 || pairing.Result != pairing.CompetitorId2)
+            {
+                BadRequest();
+            }
+                
+            _context.Entry(entity).CurrentValues.SetValues(pairing);
             try
             {
                 await _context.SaveChangesAsync();
@@ -78,43 +112,12 @@ namespace TournamentMasterAPI.Controllers
                 }
             }
 
+            // Get the tournament that the pairing belongs to
+            Round round = _context.Rounds.Find(pairing.RoundId);
+            Tournament tournament = _context.Tournaments.Find(round.TournamentId);
+            TournamentBuilder.UpdateTournament(_context, tournament);
+
             return NoContent();
-        }
-
-        // POST: api/Pairings
-        [HttpPost]
-        public async Task<IActionResult> PostPairing([FromBody] Pairing pairing)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _context.Pairings.Add(pairing);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetPairing", new { id = pairing.Id }, pairing);
-        }
-
-        // DELETE: api/Pairings/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePairing([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var pairing = await _context.Pairings.SingleOrDefaultAsync(m => m.Id == id);
-            if (pairing == null)
-            {
-                return NotFound();
-            }
-
-            _context.Pairings.Remove(pairing);
-            await _context.SaveChangesAsync();
-
-            return Ok(pairing);
         }
 
         private bool PairingExists(int id)
