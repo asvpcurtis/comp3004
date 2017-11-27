@@ -9,6 +9,7 @@ using TournamentMasterAPI.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
+using TournamentMasterAPI.Builders;
 
 namespace TournamentMasterAPI.Controllers
 {
@@ -80,7 +81,15 @@ namespace TournamentMasterAPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(competitors).State = EntityState.Modified;
+            Competitor entity = _context.Competitors.Find(competitors.Id);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            competitors.Rating = entity.Rating;
+            
+            _context.Entry(entity).CurrentValues.SetValues(competitors);
 
             try
             {
@@ -105,6 +114,7 @@ namespace TournamentMasterAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> PostCompetitors([FromBody] Competitor competitor)
         {
+            competitor.Rating = RatingCalculator.INIITIAL_RATING;
             Account userAccount = Shared.GetUserAccount(User, _context);
             if (!ModelState.IsValid)
             {
@@ -119,32 +129,6 @@ namespace TournamentMasterAPI.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCompetitors", new { id = competitor.Id }, competitor);
-        }
-
-        // DELETE: api/Competitors/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCompetitors([FromRoute] int id)
-        {
-            Account userAccount = Shared.GetUserAccount(User, _context);
-            if (!Shared.UserCompetitors(userAccount, _context).Any(c => c.Id == id))
-            {
-                return Unauthorized();
-            }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var competitors = await _context.Competitors.SingleOrDefaultAsync(m => m.Id == id);
-            if (competitors == null)
-            {
-                return NotFound();
-            }
-
-            _context.Competitors.Remove(competitors);
-            await _context.SaveChangesAsync();
-
-            return Ok(competitors);
         }
 
         private bool CompetitorExists(int id)
