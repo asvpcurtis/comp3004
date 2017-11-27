@@ -52,5 +52,23 @@ namespace TournamentMasterAPI.Controllers
             return tournaments.ToList();
         }
 
+        public static IEnumerable<Round> UserRounds(Account userAccount, TournamentMasterDBContext context)
+        {
+            IEnumerable <Tournament> tournaments = UserTournaments(userAccount, context);
+            IEnumerable<Round> rounds = context.Rounds
+                .Where(r => tournaments
+                .Any(t => t.Id == r.TournamentId));
+            return rounds.ToList();
+        }
+
+        public static IEnumerable<Pairing> UserPairings(Account userAccount, TournamentMasterDBContext context)
+        {
+            IEnumerable<Round> rounds = UserRounds(userAccount, context);
+            IEnumerable<Pairing> pairings = context.Pairings
+                .Where(p => rounds
+                .Any(r => r.Id == p.RoundId));
+            return pairings.ToList();
+        }
+
     }
 }
