@@ -88,6 +88,7 @@ public class CreateView extends AppCompatActivity {
         }
 
         Button addButton = findViewById(R.id.buttonAddPairing);
+        addButton.setText("Add A New Pairing...");
         addButton.setVisibility(View.VISIBLE);
         addButton.setEnabled(true);
     }
