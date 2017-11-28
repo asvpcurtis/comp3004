@@ -1,2 +1,15 @@
-- Brainstorming new project and features
-- Helped with develiverable 1
+# Curtis Barlow-Wilkes 100981449
+# Week: September 17 2017
+
+# Estimated time spent: 5h
+
+# Accomplished
+- Brainstorming new projects
+    - We decided on one of my ideas Tournament Master
+    - Worked with Mike and fleshed out all the features we thought would
+- Helped with deliverable 1
+- Setup Bitbucket for team
+
+# Difficulties
+- Initially we went with developing an emulator thankfully we were allowed to switch projects
+- This meant wasted effort went into deliverable 1 but team was not up to the task

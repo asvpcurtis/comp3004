@@ -20,6 +20,29 @@
 # [Pairings Endpoint](./Pairings.md) `/pairings`
 #### This endpoint allows for organizers to view pairings and update their results
 ---
+# [OrganizationAccounts Endpoint](./OrganizationAccounts.md) `/organizationaccounts`
+#### This endpoint allows for organizers add other accounts to an organization
+---
 
+## `GET /`
+
+##### NOTE :
+
+* The url should look like `http://localhost/api`
+
+###### Allows the current user's Id.
+
+#### Request
+
+|Headers||
+|-|-|
+|`Authorization`|`Bearer <JWT token>`|
+
+#### Response
+
+``` json
+7
+```
+---
 
 

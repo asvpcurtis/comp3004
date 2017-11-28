@@ -1,7 +1,16 @@
- - Researched Frameworks for developing backend
-   - Decided on using ASP.NET Web API Core 2.0 for The API framework
-   - Decided on using Entity Framework middleware (an O/RM) to speed up development
- - Familiarized myself with AWS
-   - Provisioned AWS EC2 instance
-   - Provisioned RDS with SQL Server Express
+# Curtis Barlow-Wilkes 100981449
+# Week: September 24 2017
+
+# Estimated time spent: 12h
+
+# Accomplished
+- Researched Frameworks for developing backend
+    - Decided on using ASP.NET Web API Core 2.0 for The API framework
+    - Decided on using Entity Framework middleware (an O/RM) to speed up development
+- Familiarized myself with AWS
+    - Provisioned AWS EC2 instance
+    - Provisioned RDS with SQL Server Express
+
+# Difficulties
+- picking the right web framework for the backend was tough there was about 6 different versions of Web API making it hard to research the version you are interested in
    

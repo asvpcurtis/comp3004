@@ -141,8 +141,8 @@ namespace TournamentMasterAPI.Controllers
             }
 
             _context.AccountOrganization.RemoveRange(_context.AccountOrganization
-                .Where(ao => ao.OrganizationId == organizations.Id));
-            _context.Organizations.Remove(organizations);
+                .Where(ao => ao.OrganizationId == organizations.Id && ao.AccountId == userAccount.Id));
+            
             await _context.SaveChangesAsync();
 
             return Ok(organizations);
