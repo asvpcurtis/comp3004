@@ -37,6 +37,26 @@ public class DataHandler {
     }
 
     /**
+     * getMyID() returns the ID of a logged in user as a string
+     */
+    public static void getMyID(Context c, UpdateCallback u) {
+        updateCallback = u;
+        DataRetriever.getID(c, new VolleyCallback() {
+            @Override
+            public void onSuccess(Object result) {
+                ArrayList<TMDataSet> info = new ArrayList<>();
+                info.add(new TMDataSet((String)result, "Account", (String)result));
+                updateActivity(info);
+            }
+
+            @Override
+            public void onFailure(Object result) {
+
+            }
+        });
+    }
+
+    /**
      * getData retrieves an ArrayList of TMDataSets
      * The first element of the array will always be the item itself
      * which was used to make the request. The following items will be
@@ -54,7 +74,7 @@ public class DataHandler {
                 @Override
                 public void onSuccess(Object result) {
                     ArrayList<TMDataSet> info = new ArrayList<>();
-                    info.add(new TMDataSet(AppHelper.getCurrUser(), "Account", "1"));
+                    info.add(new TMDataSet(AppHelper.getCurrUser(), "Account", myID));
                     info.addAll(FieldTranslate.convert((JSONArray) result, "Organization"));
                     updateActivity(info);
                 }
@@ -277,6 +297,32 @@ public class DataHandler {
             public void onSuccess(Object result) {
                updateActivity(null);
            }
+
+            @Override
+            public void onFailure(Object result)
+            {}
+        });
+    }
+
+    /**
+     * setAddAccount accepts data to be posted to backend
+     */
+    public static void addAccount(Context c, TMDataSet d, UpdateCallback u) {
+        updateCallback = u;
+        String urlAdd = "/organizationaccounts";
+        JSONObject newData = new JSONObject();
+        try {
+            newData.put("accountId", d.getData());
+            newData.put("organizationId", d.getID());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        DataRetriever.postData(c, urlAdd, newData, new VolleyCallback() {
+            @Override
+            public void onSuccess(Object result) {
+                updateActivity(null);
+            }
 
             @Override
             public void onFailure(Object result)

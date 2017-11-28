@@ -44,12 +44,20 @@ public class EditView extends AppCompatActivity {
         viewID = contextBundle.getString("id");
         contentLayout = findViewById(R.id.layoutContent);
 
-        DataHandler.getEdit(this, viewType, viewID, new UpdateCallback() {
-            @Override
-            public void updateData(ArrayList<TMDataSet> data) {
-                populateView(data);
-            }
-        });
+        if (viewType.equals("addAccount")) {
+            EditText editText = new EditText(this);
+            editText.setLayoutParams(new LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
+            editText.setText("");
+            editText.setHint("Enter AccountID of User to add...");
+            contentLayout.addView(editText);
+        } else {
+            DataHandler.getEdit(this, viewType, viewID, new UpdateCallback() {
+                @Override
+                public void updateData(ArrayList<TMDataSet> data) {
+                    populateView(data);
+                }
+            });
+        }
     }
 
     private void populateView(ArrayList<TMDataSet> data) {
@@ -78,7 +86,7 @@ public class EditView extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (position != 0) {
-                            selectedCompetitor = competitors.get(position-1).getID();
+                            selectedCompetitor = competitors.get(position - 1).getID();
                         }
                     }
 
@@ -102,25 +110,44 @@ public class EditView extends AppCompatActivity {
 
 
     public void saveEdit(View v) {
-        ArrayList<TMDataSet> newData = new ArrayList<>();
-        newData.add(baseData);
-        for (int i = 0; i < contentLayout.getChildCount(); i++) {
-            View editBox = contentLayout.getChildAt(i);
-            if (editBox instanceof EditText) {
-                newData.add(new TMDataSet(((EditText) editBox).getText().toString(), ((EditText) editBox).getHint().toString(), null));
+        if (viewType.equals("addAccount")) {
+            TMDataSet newData = null;
+            for (int i = 0; i < contentLayout.getChildCount(); i++) {
+                View editBox = contentLayout.getChildAt(i);
+                if (editBox instanceof EditText) {
+                    newData = new TMDataSet(((EditText) editBox).getText().toString(), "accoutAdd", viewID);
+                }
             }
-            if (editBox instanceof Spinner) {
-                newData.add(new TMDataSet(selectedCompetitor, "result", null));
+
+            DataHandler.addAccount(this, newData, new UpdateCallback() {
+                @Override
+                public void updateData(ArrayList<TMDataSet> data) {
+                    Toast.makeText(getApplicationContext(), "Account added!", Toast.LENGTH_LONG).show();
+                    setResult(RESULT_OK, null);
+                    finish();
+                }
+            });
+        } else {
+            ArrayList<TMDataSet> newData = new ArrayList<>();
+            newData.add(baseData);
+            for (int i = 0; i < contentLayout.getChildCount(); i++) {
+                View editBox = contentLayout.getChildAt(i);
+                if (editBox instanceof EditText) {
+                    newData.add(new TMDataSet(((EditText) editBox).getText().toString(), ((EditText) editBox).getHint().toString(), null));
+                }
+                if (editBox instanceof Spinner) {
+                    newData.add(new TMDataSet(selectedCompetitor, "result", null));
+                }
             }
+            DataHandler.setEdit(this, viewType, viewID, newData, new UpdateCallback() {
+                @Override
+                public void updateData(ArrayList<TMDataSet> data) {
+                    Toast.makeText(getApplicationContext(), viewType + " updated!", Toast.LENGTH_LONG).show();
+                    setResult(RESULT_OK, null);
+                    finish();
+                }
+            });
         }
-        DataHandler.setEdit(this, viewType, viewID, newData, new UpdateCallback() {
-            @Override
-            public void updateData(ArrayList<TMDataSet> data) {
-                Toast.makeText(getApplicationContext(), viewType + " updated!", Toast.LENGTH_LONG).show();
-                setResult(RESULT_OK, null);
-                finish();
-            }
-        });
     }
 
     public void cancelEdit(View v) {

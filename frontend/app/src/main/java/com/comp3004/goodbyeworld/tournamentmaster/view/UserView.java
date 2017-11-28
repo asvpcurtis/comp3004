@@ -87,10 +87,12 @@ public class UserView extends AppCompatActivity {
         LinearLayout infoLayout = findViewById(R.id.layoutInformation);
 
         // Set Button Visibility
+        findViewById(R.id.buttonEdit).setEnabled(false);
+        findViewById(R.id.buttonEdit).setVisibility(View.INVISIBLE);
+        findViewById(R.id.buttonAddAccount).setEnabled(false);
+        findViewById(R.id.buttonAddAccount).setVisibility(View.INVISIBLE);
         switch (viewType) {
             case "Account":
-                findViewById(R.id.buttonEdit).setEnabled(false);
-                findViewById(R.id.buttonEdit).setVisibility(View.INVISIBLE);
                 String orgLabel = "Create Organization";
                 ((Button) findViewById(R.id.buttonCreate)).setText(orgLabel);
                 findViewById(R.id.buttonCreate).setEnabled(true);
@@ -106,24 +108,22 @@ public class UserView extends AppCompatActivity {
                 findViewById(R.id.buttonCreate).setVisibility(View.VISIBLE);
                 findViewById(R.id.buttonCreateCompetitor).setEnabled(true);
                 findViewById(R.id.buttonCreateCompetitor).setVisibility(View.VISIBLE);
+                findViewById(R.id.buttonAddAccount).setEnabled(true);
+                findViewById(R.id.buttonAddAccount).setVisibility(View.VISIBLE);
+                findViewById(R.id.buttonEdit).setEnabled(true);
+                findViewById(R.id.buttonEdit).setVisibility(View.VISIBLE);
                 ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.org);
                 break;
             case "Tournament":
-                findViewById(R.id.buttonEdit).setEnabled(false);
-                findViewById(R.id.buttonEdit).setVisibility(View.INVISIBLE);
                 ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.tourn);
                 break;
             case "Round":
-                findViewById(R.id.buttonEdit).setEnabled(false);
-                findViewById(R.id.buttonEdit).setVisibility(View.INVISIBLE);
                 ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.tourn);
                 break;
             case "Pairing":
                 ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.tourn);
                 break;
             case "Competitor":
-                findViewById(R.id.buttonEdit).setEnabled(false);
-                findViewById(R.id.buttonEdit).setVisibility(View.INVISIBLE);
                 ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.competitor);
                 break;
         }
@@ -246,6 +246,16 @@ public class UserView extends AppCompatActivity {
         Intent intent = new Intent(this, EditView.class);
         Bundle bundle = new Bundle();
         bundle.putString("type", viewType);
+        bundle.putString("id", viewID);
+        intent.putExtras(bundle);
+        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        startActivityForResult(intent, 1);
+    }
+
+    public void addClick( View view) {
+        Intent intent = new Intent(this, EditView.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("type", "addAccount");
         bundle.putString("id", viewID);
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
