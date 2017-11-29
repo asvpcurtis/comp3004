@@ -1,0 +1,17 @@
+Dev Log - Shukri Shubair 100982304
+
+
+Week of 11/26 to 12/02
+
+
+Team Meeting(3 hours)
+
+Prepared for deliverable 4 presentation
+
+Work(6 hours)
+
+Augmented the app by adding an error message if data was not found
+
+
+
+
