@@ -1,11 +1,16 @@
 package com.comp3004.goodbyeworld.tournamentmaster.view;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,16 +27,27 @@ import com.comp3004.goodbyeworld.tournamentmaster.R;
 import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.DataHandler;
 import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.TMDataSet;
 import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.UpdateCallback;
+import com.hendrix.pdfmyxml.PdfDocument;
+import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 
 public class UserView extends AppCompatActivity {
     private LinearLayout contentLayout;
     private String viewType = null;
     private String viewID = null;
+    private PdfDocument doc = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +107,8 @@ public class UserView extends AppCompatActivity {
         findViewById(R.id.buttonEdit).setVisibility(View.INVISIBLE);
         findViewById(R.id.buttonAddAccount).setEnabled(false);
         findViewById(R.id.buttonAddAccount).setVisibility(View.INVISIBLE);
+        findViewById(R.id.buttonPrintTourn).setEnabled(false);
+        findViewById(R.id.buttonPrintTourn).setVisibility(View.INVISIBLE);
         switch (viewType) {
             case "Account":
                 String orgLabel = "Create Organization";
@@ -121,6 +139,8 @@ public class UserView extends AppCompatActivity {
                 ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.tourn);
                 break;
             case "Pairing":
+                findViewById(R.id.buttonEdit).setEnabled(true);
+                findViewById(R.id.buttonEdit).setVisibility(View.VISIBLE);
                 ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.tourn);
                 break;
             case "Competitor":
@@ -216,6 +236,47 @@ public class UserView extends AppCompatActivity {
         params.setMargins(8,8,8,8);
         pairLayout.setLayoutParams(params);
         return pairLayout;
+    }
+
+    public void makePrintableTournament(View view) {
+        final Context ctx = this;
+        AbstractViewRenderer page = new AbstractViewRenderer(this, R.layout.printlayout) {
+            private String _text;
+
+            public void setText(String text) {
+                _text = text;
+            }
+
+            @Override
+            protected void initView(View view) {
+
+            }
+        };
+
+        doc = new PdfDocument(this);
+
+        doc.addPage(page);
+
+        doc.setRenderWidth(2115);
+        doc.setRenderHeight(1500);
+        doc.setOrientation(PdfDocument.A4_MODE.LANDSCAPE);
+        doc.setProgressTitle(R.string.gen_please_wait);
+        doc.setProgressMessage(R.string.gen_pdf_file);
+        doc.setFileName("test");
+        doc.setInflateOnMainThread(false);
+        doc.setListener(new PdfDocument.Callback() {
+            @Override
+            public void onComplete(File file) {
+                Log.i(PdfDocument.TAG_PDF_MY_XML, "Complete");
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.i(PdfDocument.TAG_PDF_MY_XML, "Error");
+            }
+        });
+
+        doc.createPdf(this);
     }
 
     public void createClick(View view) {

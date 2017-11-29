@@ -30,9 +30,9 @@ import static com.android.volley.VolleyLog.TAG;
 
 class DataRetriever {
     // Local from emulator
-    private static String url = "http://10.0.2.2/api";
+    //private static String url = "http://10.0.2.2/api";
     // Local from device on network (Mike)
-    //private static String url = "http://172.17.73.80/api";
+    private static String url = "http://172.17.89.253/api";
     // Amazon EC2
     //private static String url = "http://ec2-35-182-254-130.ca-central-1.compute.amazonaws.com/api";
 

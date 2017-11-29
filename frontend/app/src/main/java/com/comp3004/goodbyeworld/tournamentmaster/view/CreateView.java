@@ -34,6 +34,10 @@ public class CreateView extends AppCompatActivity {
     private ArrayList<TMDataSet> competitorList;
     private ArrayList<String> nameList;
     private ArrayList<TMDataSet> seedList;
+    private String[] tTypes = { "Elimination", "Round Robin" };
+    private String[] sTypes = { "Manual", "Random", "Rating" };
+    private int tournamentStyle = 1;
+    private int seedStyle = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,44 @@ public class CreateView extends AppCompatActivity {
             contentLayout.addView(editText);
         }
         if (viewType.equals("Tournament")) {
+            Spinner tTypeSpinner = new Spinner(this);
+            ArrayAdapter<String> spinAA = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, tTypes);
+            tTypeSpinner.setAdapter(spinAA);
+            tTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    switch (position) {
+                        case 0:
+                            tournamentStyle = 1;
+                            break;
+                        case 1:
+                            tournamentStyle = 3;
+                            break;
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+            contentLayout.addView(tTypeSpinner);
+            Spinner sTypeSpinner = new Spinner(this);
+            ArrayAdapter<String> spinAAseed = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, sTypes);
+            sTypeSpinner.setAdapter(spinAAseed);
+            sTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    seedStyle = position;
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+            contentLayout.addView(sTypeSpinner);
+
             competitorList = null;
             DataHandler.getCompetitors(this, viewID, new UpdateCallback() {
                 @Override
@@ -88,7 +130,7 @@ public class CreateView extends AppCompatActivity {
         }
 
         Button addButton = findViewById(R.id.buttonAddPairing);
-        addButton.setText("Add A New Pairing...");
+        addButton.setText("Add Competitors...");
         addButton.setVisibility(View.VISIBLE);
         addButton.setEnabled(true);
     }
@@ -116,15 +158,6 @@ public class CreateView extends AppCompatActivity {
                     playerOne.setText(name);
                     playerOne.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
                     contentLayout.addView(playerOne);
-                    // Create VS
-                    TextView vs = new TextView(parent.getContext());
-                    vs.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    vs.setGravity(Gravity.CENTER_HORIZONTAL);
-                    vs.setTextColor(Color.DKGRAY);
-                    vs.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-                    String vsText = "--Versus--";
-                    vs.setText(vsText);
-                    contentLayout.addView(vs);
 
                     parent.setVisibility(View.GONE);
                     pairBuildSecond();
@@ -174,6 +207,7 @@ public class CreateView extends AppCompatActivity {
 
 
     public void saveEdit(View v) {
+        String extra = null;
         ArrayList<TMDataSet> newData = new ArrayList<>();
         newData.add(baseData);
         for (int i=0; i<contentLayout.getChildCount(); i++) {
@@ -186,13 +220,14 @@ public class CreateView extends AppCompatActivity {
             newData.add(new TMDataSet("1200", "rating", null));
             newData.add(new TMDataSet(viewID, "organizationId", null));
         } else if (viewType.equals("Tournament")) {
+            extra = sTypes[seedStyle];
             newData.add(new TMDataSet("2009-02-15T00:00:00", "startDate", null));
-            newData.add(new TMDataSet("1", "format", null));
+            newData.add(new TMDataSet(Integer.toString(tournamentStyle), "format", null));
             newData.add(new TMDataSet("true", "onGoing", null));
             newData.add(new TMDataSet(viewID, "organizationId", null));
             newData.add(new TMDataSet(DataHandler.makeCompetitorList(seedList), "competitors", null));
         }
-        DataHandler.setCreate(this, viewType, newData, new UpdateCallback() {
+        DataHandler.setCreate(this, viewType, extra, newData, new UpdateCallback() {
             @Override
             public void updateData(ArrayList<TMDataSet> data) {
                 Toast.makeText(getApplicationContext(), viewType + " created!", Toast.LENGTH_LONG).show();

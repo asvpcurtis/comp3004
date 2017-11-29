@@ -20,3 +20,13 @@ C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\Tou
 C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\obj\Debug\netcoreapp2.0\TournamentMasterAPI.AssemblyInfo.cs
 C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\obj\Debug\netcoreapp2.0\TournamentMasterAPI.dll
 C:\Users\Curtis Barlow-Wilkes\Documents\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\obj\Debug\netcoreapp2.0\TournamentMasterAPI.pdb
+C:\Users\Michael\desktop\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\bin\Debug\netcoreapp2.0\TournamentMasterAPI.deps.json
+C:\Users\Michael\desktop\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\bin\Debug\netcoreapp2.0\TournamentMasterAPI.runtimeconfig.json
+C:\Users\Michael\desktop\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\bin\Debug\netcoreapp2.0\TournamentMasterAPI.runtimeconfig.dev.json
+C:\Users\Michael\desktop\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\bin\Debug\netcoreapp2.0\TournamentMasterAPI.dll
+C:\Users\Michael\desktop\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\bin\Debug\netcoreapp2.0\TournamentMasterAPI.pdb
+C:\Users\Michael\desktop\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\obj\Debug\netcoreapp2.0\TournamentMasterAPI.csproj.CoreCompileInputs.cache
+C:\Users\Michael\desktop\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\obj\Debug\netcoreapp2.0\TournamentMasterAPI.AssemblyInfoInputs.cache
+C:\Users\Michael\desktop\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\obj\Debug\netcoreapp2.0\TournamentMasterAPI.AssemblyInfo.cs
+C:\Users\Michael\desktop\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\obj\Debug\netcoreapp2.0\TournamentMasterAPI.dll
+C:\Users\Michael\desktop\comp3004\backend\TournamentMasterAPI\TournamentMasterAPI\obj\Debug\netcoreapp2.0\TournamentMasterAPI.pdb

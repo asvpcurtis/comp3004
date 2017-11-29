@@ -282,12 +282,12 @@ public class DataHandler {
     /**
      * setCreate accepts data to be posted to backend
      */
-    public static void setCreate(Context c, String type, ArrayList<TMDataSet> data, UpdateCallback u) {
+    public static void setCreate(Context c, String type, String extra, ArrayList<TMDataSet> data, UpdateCallback u) {
         updateCallback = u;
         String urlAdd = FieldTranslate.convertType(type);
         JSONObject newData;
         if (type.equals("Tournament")) {
-            urlAdd += "?seed=manual";
+            urlAdd += "?seed=" + extra;
             newData = FieldTranslate.convertTournament(data);
         } else {
             newData = FieldTranslate.convert(data);
