@@ -3,9 +3,11 @@ package com.comp3004.goodbyeworld.tournamentmaster.view;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -16,14 +18,21 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 
 import com.comp3004.goodbyeworld.tournamentmaster.R;
+import com.comp3004.goodbyeworld.tournamentmaster.auth.AppHelper;
 import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.DataHandler;
 import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.TMDataSet;
 import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.UpdateCallback;
@@ -48,11 +57,15 @@ public class UserView extends AppCompatActivity {
     private String viewType = null;
     private String viewID = null;
     private PdfDocument doc = null;
+    private ArrayList<TMDataSet> pairingCompetitors = null;
+    private String selectedCompetitor = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_view);
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
         init();
     }
 
@@ -66,7 +79,7 @@ public class UserView extends AppCompatActivity {
 
         DataHandler.getData(this, viewType, viewID, new UpdateCallback() {
             @Override
-            public void updateData(ArrayList<TMDataSet> data){
+            public void updateData(ArrayList<TMDataSet> data) {
                 populateView(data);
             }
         });
@@ -133,14 +146,14 @@ public class UserView extends AppCompatActivity {
                 ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.org);
                 break;
             case "Tournament":
+                findViewById(R.id.buttonPrintTourn).setEnabled(true);
+                findViewById(R.id.buttonPrintTourn).setVisibility(View.VISIBLE);
                 ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.tourn);
                 break;
             case "Round":
                 ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.tourn);
                 break;
             case "Pairing":
-                findViewById(R.id.buttonEdit).setEnabled(true);
-                findViewById(R.id.buttonEdit).setVisibility(View.VISIBLE);
                 ((ImageView) findViewById(R.id.imageViewUserIcon)).setImageResource(R.drawable.tourn);
                 break;
             case "Competitor":
@@ -149,6 +162,7 @@ public class UserView extends AppCompatActivity {
         }
 
         data.remove(0);
+
 
         // Populate Information
         for (TMDataSet i : data) {
@@ -194,6 +208,68 @@ public class UserView extends AppCompatActivity {
                     break;
             }
         }
+
+        if (viewType.equals("Pairing")) {
+            pairingCompetitors = new ArrayList<>();
+            final Context myCtx = this;
+            DataHandler.getEdit(this, viewType, viewID, new UpdateCallback() {
+                @Override
+                public void updateData(ArrayList<TMDataSet> data) {
+                    final TMDataSet baseData = data.get(0);
+                    if (data.get(4).getData().equals("null")) {
+                        ArrayList<String> spinList = new ArrayList<>();
+                        spinList.add(data.get(1).getData());
+                        pairingCompetitors.add(data.get(2));
+                        spinList.add(data.get(2).getData());
+                        pairingCompetitors.add(data.get(3));
+                        spinList.add(data.get(3).getData());
+                        Spinner spinner = new Spinner(myCtx);
+                        ArrayAdapter<String> spinAA = new ArrayAdapter<>(myCtx, android.R.layout.simple_spinner_dropdown_item, spinList);
+                        spinner.setAdapter(spinAA);
+                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                if (position != 0) {
+                                    selectedCompetitor = pairingCompetitors.get(position - 1).getID();
+                                }
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+                        contentLayout.addView(spinner);
+                        Button saveResult = new Button(myCtx);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT);
+                        saveResult.setText("Update Results");
+                        saveResult.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (selectedCompetitor != null) {
+                                    ArrayList<TMDataSet> newData = new ArrayList<>();
+                                    newData.add(baseData);
+                                    newData.add(new TMDataSet(selectedCompetitor, "result", null));
+                                    DataHandler.setEdit(myCtx, viewType, viewID, newData, new UpdateCallback() {
+                                        @Override
+                                        public void updateData(ArrayList<TMDataSet> data) {
+                                            Toast.makeText(getApplicationContext(), viewType + " updated!", Toast.LENGTH_LONG).show();
+                                            setResult(RESULT_OK, null);
+                                            finish();
+                                        }
+                                    });
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Winner Not Selected", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                        contentLayout.addView(saveResult, params);
+                    }
+                }
+            });
+        }
     }
 
     private TextView makeHeader(String text) {
@@ -228,19 +304,74 @@ public class UserView extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ((TextView)pairLayout.findViewById(R.id.textViewCompetitorOne)).setText(c1);
-        ((TextView)pairLayout.findViewById(R.id.textViewCompetitorTwo)).setText(c2);
-        ((TextView)pairLayout.findViewById(R.id.textViewStatus)).setText(r);
+        ((TextView) pairLayout.findViewById(R.id.textViewCompetitorOne)).setText(c1);
+        ((TextView) pairLayout.findViewById(R.id.textViewCompetitorTwo)).setText(c2);
+        ((TextView) pairLayout.findViewById(R.id.textViewStatus)).setText(r);
         pairLayout.setOnClickListener(new OnClickWithTypes(this, type, iD));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(8,8,8,8);
+        params.setMargins(8, 8, 8, 8);
         pairLayout.setLayoutParams(params);
         return pairLayout;
     }
 
-    public void makePrintableTournament(View view) {
-        final Context ctx = this;
-        AbstractViewRenderer page = new AbstractViewRenderer(this, R.layout.printlayout) {
+    public void buttonPrint(View view) {
+        DataHandler.getTournamentData(this, viewID, new UpdateCallback() {
+            @Override
+            public void updateData(ArrayList<TMDataSet> data) {
+                makePrintableTournament(data);
+            }
+        });
+
+    }
+
+    public void makePrintableTournament(final ArrayList<TMDataSet> data) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        final View printLayout = inflater.inflate(R.layout.printlayout, null, false);
+
+        int count = 2;
+
+        GridLayout pairGrid = null;
+        while (count < data.size()) {
+            if (data.get(count).getDataType().equals("Round")) {
+                TextView header = new TextView(this);
+                header.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                header.setGravity(Gravity.CENTER_HORIZONTAL);
+                header.setBackgroundResource(R.color.colorListTop);
+                header.setTextColor(Color.WHITE);
+                header.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+                header.setText(data.get(count).getData());
+                LinearLayout layout = printLayout.findViewById(R.id.linearPrintContent);
+                LinearLayout breaker = new LinearLayout(this);
+                breaker.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                breaker.setMinimumHeight(20);
+                layout.addView(breaker);
+                layout.addView(header);
+                pairGrid = new GridLayout(this);
+                pairGrid.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                pairGrid.setColumnCount(9);
+                breaker = new LinearLayout(this);
+                breaker.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                breaker.setMinimumHeight(20);
+                layout.addView(breaker);
+                layout.addView(pairGrid);
+            } else {
+                View pair = makeClickablePairing(data.get(count).getData(), data.get(count).getDataType(), data.get(count).getID());
+                LinearLayout breaker = new LinearLayout(this);
+                breaker.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                breaker.setMinimumWidth(20);
+                pairGrid.addView(breaker);
+                pair.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                pair.setMinimumWidth(460);
+                pairGrid.addView(pair);
+                breaker = new LinearLayout(this);
+                breaker.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                breaker.setMinimumWidth(20);
+                pairGrid.addView(breaker);
+            }
+            count++;
+        }
+
+        AbstractViewRenderer page = new AbstractViewRenderer(this, printLayout) {
             private String _text;
 
             public void setText(String text) {
@@ -249,14 +380,34 @@ public class UserView extends AppCompatActivity {
 
             @Override
             protected void initView(View view) {
+                JSONObject tournament = null;
+                String organization = null;
+                try {
+                    tournament = new JSONObject(data.get(0).getData());
+                    ((TextView)view.findViewById(R.id.textViewTournamentName)).setText(tournament.getString("name"));
+                    ((TextView)view.findViewById(R.id.textViewStartDate)).setText(tournament.getString("startDate"));
+                    if (tournament.getInt("format") == 1) {
+                        ((TextView)view.findViewById(R.id.textViewFormat)).setText("Elimination");
+                    } else {
+                        ((TextView)view.findViewById(R.id.textViewFormat)).setText("Round Robin");
+                    }
 
+                    organization = data.get(1).getData();
+                    ((TextView)view.findViewById(R.id.textViewOrgName)).setText(organization);
+
+                    ((TextView)view.findViewById(R.id.textViewUsername)).setText(AppHelper.getCurrUser());
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         };
 
         doc = new PdfDocument(this);
 
         doc.addPage(page);
-
         doc.setRenderWidth(2115);
         doc.setRenderHeight(1500);
         doc.setOrientation(PdfDocument.A4_MODE.LANDSCAPE);
@@ -268,6 +419,30 @@ public class UserView extends AppCompatActivity {
             @Override
             public void onComplete(File file) {
                 Log.i(PdfDocument.TAG_PDF_MY_XML, "Complete");
+                File newfilepath = new File(Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_DOWNLOADS), "Tournaments");
+                File newfile = new File(newfilepath, viewID + ".pdf");
+
+                try {
+                    FileInputStream in = new FileInputStream(file);
+                    FileOutputStream fos = new FileOutputStream(newfile);
+                    byte[] b = new byte[8];
+                    int i;
+                    while ((i = in.read(b)) != -1) {
+                        fos.write(b, 0, i);
+                    }
+                    fos.flush();
+                    fos.close();
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Uri path = Uri.fromFile(newfile);
+                Intent objIntent = new Intent(Intent.ACTION_VIEW);
+                objIntent.setDataAndType(path, "application/pdf");
+                objIntent.setFlags(Intent. FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(objIntent);//Staring the pdf viewer
             }
 
             @Override
@@ -313,7 +488,7 @@ public class UserView extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
-    public void addClick( View view) {
+    public void addClick(View view) {
         Intent intent = new Intent(this, EditView.class);
         Bundle bundle = new Bundle();
         bundle.putString("type", "addAccount");
@@ -327,7 +502,7 @@ public class UserView extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            for (int i=0; i<contentLayout.getChildCount(); i++) {
+            for (int i = 0; i < contentLayout.getChildCount(); i++) {
                 View layout = contentLayout.getChildAt(i);
                 if (layout instanceof LinearLayout) {
                     ((LinearLayout) layout).removeAllViewsInLayout();

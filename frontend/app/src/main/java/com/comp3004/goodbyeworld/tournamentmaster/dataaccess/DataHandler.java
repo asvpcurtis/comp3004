@@ -22,6 +22,8 @@ import java.util.ArrayList;
  */
 
 public class DataHandler {
+    private static JSONObject tournamentInfo = null;
+    private static ArrayList<TMDataSet> tournInfoSet = null;
     // Function to be called when data is updated
     private static UpdateCallback updateCallback = null;
 
@@ -94,6 +96,12 @@ public class DataHandler {
                     // Switch case to get supplementary data (IE: an organizations tournament list)
                     switch (fieldType) {
                         case "Organization":
+                            tournamentInfo = new JSONObject();
+                            try {
+                                tournamentInfo.put("Organization", ((JSONObject)result).getString("name"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             DataRetriever.getDataArray(myCtx, "/tournaments?organization=" + myID, new VolleyCallback() {
                                 @Override
                                 public void onSuccess(Object result) {
@@ -121,6 +129,11 @@ public class DataHandler {
                             });
                             break;
                         case "Tournament":
+                            try {
+                                tournamentInfo.put("Tournament", result.toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             DataRetriever.getDataArray(myCtx, "/rounds?tournament=" + myID, new VolleyCallback() {
                                 @Override
                                 public void onSuccess(Object result) {
@@ -250,6 +263,57 @@ public class DataHandler {
 
             }
         });
+    }
+
+    public static void getTournamentData(Context c, String iD, final UpdateCallback u) {
+        final UpdateCallback up = u;
+        final String myID = iD;
+        final Context myCtx = c;
+        tournInfoSet = new ArrayList<>();
+        try {
+            tournInfoSet.add(new TMDataSet(tournamentInfo.get("Tournament").toString(), "Tournament", null));
+            tournInfoSet.add(new TMDataSet(tournamentInfo.get("Organization").toString(), "Organization", null));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        getRounds(myCtx, myID, new VolleyCallback() {
+            @Override
+            public void onSuccess(Object result) {
+                getRoundInfo(myCtx, 0, result, u);
+            }
+
+            @Override
+            public void onFailure(Object result) {
+
+            }
+        });
+    }
+
+
+    private static void getRounds(Context c, String iD, VolleyCallback volleyCallback) {
+        DataRetriever.getDataArray(c, "/rounds?tournament=" + iD, volleyCallback);
+    }
+
+    private static void getRoundInfo(Context c, int n, Object o, final UpdateCallback u) {
+        final Context myCtx = c;
+        final int count = n;
+        final Object obj = o;
+        if (count>=((JSONArray) o).length()) {
+            u.updateData(tournInfoSet);
+        } else {
+            try {
+                DataHandler.getData(c, "Round", ((JSONObject) ((JSONArray) o).get(count)).getString("id"), new UpdateCallback() {
+                    @Override
+                    public void updateData(ArrayList<TMDataSet> data) {
+                        tournInfoSet.addAll(data);
+                        getRoundInfo(myCtx, count + 1, obj, u);
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

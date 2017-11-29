@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- android:layout_width="2115px" -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="2115px"
-    android:layout_height="1500px"
+    android:id="@+id/linearPrintContent"
+    android:layout_width="1500px"
+    android:layout_height="2115px"
     android:background="@android:color/white"
     android:orientation="vertical">
 
@@ -40,9 +41,10 @@
         android:textStyle="bold" />
 
     <RelativeLayout
-        android:background="@android:color/black"
+        android:id="@+id/lineBreak"
         android:layout_width="match_parent"
-        android:layout_height="4px">
+        android:layout_height="4px"
+        android:background="@android:color/black">
 
     </RelativeLayout>
 
@@ -69,13 +71,20 @@
         android:textStyle="bold" />
 
     <RelativeLayout
-        android:background="@android:color/black"
         android:layout_width="match_parent"
-        android:layout_height="4px">
+        android:layout_height="4px"
+        android:background="@android:color/black">
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/lineBreakWhite"
+        android:layout_width="match_parent"
+        android:layout_height="20px"
+        android:background="@android:color/white">
 
+    </LinearLayout>
 
 
 </LinearLayout>
