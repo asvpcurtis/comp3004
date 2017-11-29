@@ -195,7 +195,11 @@ public class FieldTranslate {
                 result = new TMDataSet(v.toString(),"Start Date : ", null);
                 break;
             case "format":
-                result = new TMDataSet( "Elimination", "Format : ", null);
+                if ((int)v == 1) {
+                    result = new TMDataSet("Elimination", "Format : ", null);
+                } else if ((int)v == 3) {
+                    result = new TMDataSet( "Round Robin", "Format : ", null);
+                }
                 break;
             case "email":
                 result = new TMDataSet(v.toString(), "E-Mail : ", null);

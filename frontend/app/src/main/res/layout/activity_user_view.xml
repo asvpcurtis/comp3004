@@ -98,12 +98,36 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:background="@android:drawable/ic_menu_edit"
             android:onClick="editClick"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonAddAccount"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:drawable/ic_menu_add"
+            android:onClick="addClick"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonEdit" />
+
+        <Button
+            android:id="@+id/buttonPrintTourn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:drawable/ic_menu_save"
+            android:onClick="buttonPrint"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonAddAccount" />
 
         <LinearLayout
             android:id="@+id/layoutContent"
@@ -185,4 +209,5 @@
             app:layout_constraintTop_toBottomOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
+
 </ScrollView>

@@ -23,19 +23,19 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetail
 import com.comp3004.goodbyeworld.tournamentmaster.auth.AppHelper;
 import com.comp3004.goodbyeworld.tournamentmaster.R;
 import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.DataHandler;
+import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.TMDataSet;
+import com.comp3004.goodbyeworld.tournamentmaster.dataaccess.UpdateCallback;
+
+import java.util.ArrayList;
 
 public class WelcomeActivity extends AppCompatActivity {
-    // Cognito user objects
-    private String username;
     private CognitoUser user;
-    private CognitoUserSession session;
-    private CognitoUserDetails details;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Tournament Master");
         setSupportActionBar(toolbar);
 
@@ -43,12 +43,13 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     protected void init() {
-        username = AppHelper.getCurrUser();
+        String username = AppHelper.getCurrUser();
         user = AppHelper.getPool().getUser(username);
         AppHelper.getPool().getUser(username).getDetailsInBackground(detailsHandler);
         AppHelper.getPool().getUser(username).getSessionInBackground(authenticationHandler);
         TextView welcomeText = findViewById(R.id.textView2);
-        welcomeText.setText(username + " is now successfully logged in!");
+        String welcomeMessage = username + " is now successfully logged in!";
+        welcomeText.setText(welcomeMessage);
 
     }
 
@@ -97,12 +98,21 @@ public class WelcomeActivity extends AppCompatActivity {
         NavUtils.navigateUpFromSameTask(this);
     }
 
-    public void continueActivity (View view) {
+    public void proceedToMain(String iD) {
         Intent intent = new Intent(this, UserView.class);
         Bundle bundle = new Bundle();
         bundle.putString("type", "Account");
-        bundle.putString("id", "1");
+        bundle.putString("id", iD);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    public void continueActivity (View view) {
+        DataHandler.getMyID(this, new UpdateCallback() {
+            @Override
+            public void updateData(ArrayList<TMDataSet> data) {
+                proceedToMain(data.get(0).getData());
+            }
+        });
     }
 }

@@ -6,4 +6,7 @@
     <string name="cancel">Cancel</string>
     <string name="back">Back</string>
     <string name="access_error">Could not access data.</string>
+    <string name="gen_please_wait">Generating! Please wait...</string>
+    <string name="gen_pdf_file">Generating PDF</string>
+
 </resources>

@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.comp3004.goodbyeworld.tournamentmaster.auth.Tokens;
 
@@ -29,11 +30,35 @@ import static com.android.volley.VolleyLog.TAG;
 
 class DataRetriever {
     // Local from emulator
-    private static String url = "http://10.0.2.2/api";
+    //private static String url = "http://10.0.2.2/api";
     // Local from device on network (Mike)
-    //private static String url = "http://172.17.73.80/api";
+    private static String url = "http://192.168.0.101/api";
     // Amazon EC2
     //private static String url = "http://ec2-35-182-254-130.ca-central-1.compute.amazonaws.com/api";
+
+    static void getID(Context c, final VolleyCallback callback) {
+        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                callback.onSuccess(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " +Tokens.getIDToken());
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(c);
+        queue.add(stringRequest);
+    }
 
     static void getDataArray(Context c, String urlAdd, final VolleyCallback callback) {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url + urlAdd, new Response.Listener<JSONArray>() {

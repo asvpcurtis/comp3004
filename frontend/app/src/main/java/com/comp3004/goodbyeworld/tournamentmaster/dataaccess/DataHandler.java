@@ -22,6 +22,8 @@ import java.util.ArrayList;
  */
 
 public class DataHandler {
+    private static JSONObject tournamentInfo = null;
+    private static ArrayList<TMDataSet> tournInfoSet = null;
     // Function to be called when data is updated
     private static UpdateCallback updateCallback = null;
 
@@ -34,6 +36,26 @@ public class DataHandler {
      */
     private static void updateActivity(ArrayList<TMDataSet> data) {
         updateCallback.updateData(data);
+    }
+
+    /**
+     * getMyID() returns the ID of a logged in user as a string
+     */
+    public static void getMyID(Context c, UpdateCallback u) {
+        updateCallback = u;
+        DataRetriever.getID(c, new VolleyCallback() {
+            @Override
+            public void onSuccess(Object result) {
+                ArrayList<TMDataSet> info = new ArrayList<>();
+                info.add(new TMDataSet((String)result, "Account", (String)result));
+                updateActivity(info);
+            }
+
+            @Override
+            public void onFailure(Object result) {
+
+            }
+        });
     }
 
     /**
@@ -54,7 +76,7 @@ public class DataHandler {
                 @Override
                 public void onSuccess(Object result) {
                     ArrayList<TMDataSet> info = new ArrayList<>();
-                    info.add(new TMDataSet(AppHelper.getCurrUser(), "Account", "1"));
+                    info.add(new TMDataSet(AppHelper.getCurrUser(), "Account", myID));
                     info.addAll(FieldTranslate.convert((JSONArray) result, "Organization"));
                     updateActivity(info);
                 }
@@ -74,6 +96,12 @@ public class DataHandler {
                     // Switch case to get supplementary data (IE: an organizations tournament list)
                     switch (fieldType) {
                         case "Organization":
+                            tournamentInfo = new JSONObject();
+                            try {
+                                tournamentInfo.put("Organization", ((JSONObject)result).getString("name"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             DataRetriever.getDataArray(myCtx, "/tournaments?organization=" + myID, new VolleyCallback() {
                                 @Override
                                 public void onSuccess(Object result) {
@@ -101,6 +129,11 @@ public class DataHandler {
                             });
                             break;
                         case "Tournament":
+                            try {
+                                tournamentInfo.put("Tournament", result.toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             DataRetriever.getDataArray(myCtx, "/rounds?tournament=" + myID, new VolleyCallback() {
                                 @Override
                                 public void onSuccess(Object result) {
@@ -232,6 +265,57 @@ public class DataHandler {
         });
     }
 
+    public static void getTournamentData(Context c, String iD, final UpdateCallback u) {
+        final UpdateCallback up = u;
+        final String myID = iD;
+        final Context myCtx = c;
+        tournInfoSet = new ArrayList<>();
+        try {
+            tournInfoSet.add(new TMDataSet(tournamentInfo.get("Tournament").toString(), "Tournament", null));
+            tournInfoSet.add(new TMDataSet(tournamentInfo.get("Organization").toString(), "Organization", null));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        getRounds(myCtx, myID, new VolleyCallback() {
+            @Override
+            public void onSuccess(Object result) {
+                getRoundInfo(myCtx, 0, result, u);
+            }
+
+            @Override
+            public void onFailure(Object result) {
+
+            }
+        });
+    }
+
+
+    private static void getRounds(Context c, String iD, VolleyCallback volleyCallback) {
+        DataRetriever.getDataArray(c, "/rounds?tournament=" + iD, volleyCallback);
+    }
+
+    private static void getRoundInfo(Context c, int n, Object o, final UpdateCallback u) {
+        final Context myCtx = c;
+        final int count = n;
+        final Object obj = o;
+        if (count>=((JSONArray) o).length()) {
+            u.updateData(tournInfoSet);
+        } else {
+            try {
+                DataHandler.getData(c, "Round", ((JSONObject) ((JSONArray) o).get(count)).getString("id"), new UpdateCallback() {
+                    @Override
+                    public void updateData(ArrayList<TMDataSet> data) {
+                        tournInfoSet.addAll(data);
+                        getRoundInfo(myCtx, count + 1, obj, u);
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /**
      * makeCompetitorList makes a JSONArray String from a competitor
      * list to seed tournaments
@@ -262,12 +346,12 @@ public class DataHandler {
     /**
      * setCreate accepts data to be posted to backend
      */
-    public static void setCreate(Context c, String type, ArrayList<TMDataSet> data, UpdateCallback u) {
+    public static void setCreate(Context c, String type, String extra, ArrayList<TMDataSet> data, UpdateCallback u) {
         updateCallback = u;
         String urlAdd = FieldTranslate.convertType(type);
         JSONObject newData;
         if (type.equals("Tournament")) {
-            urlAdd += "?seed=manual";
+            urlAdd += "?seed=" + extra;
             newData = FieldTranslate.convertTournament(data);
         } else {
             newData = FieldTranslate.convert(data);
@@ -277,6 +361,32 @@ public class DataHandler {
             public void onSuccess(Object result) {
                updateActivity(null);
            }
+
+            @Override
+            public void onFailure(Object result)
+            {}
+        });
+    }
+
+    /**
+     * setAddAccount accepts data to be posted to backend
+     */
+    public static void addAccount(Context c, TMDataSet d, UpdateCallback u) {
+        updateCallback = u;
+        String urlAdd = "/organizationaccounts";
+        JSONObject newData = new JSONObject();
+        try {
+            newData.put("accountId", d.getData());
+            newData.put("organizationId", d.getID());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        DataRetriever.postData(c, urlAdd, newData, new VolleyCallback() {
+            @Override
+            public void onSuccess(Object result) {
+                updateActivity(null);
+            }
 
             @Override
             public void onFailure(Object result)
