@@ -8,10 +8,10 @@ namespace TournamentMasterAPI.Builders
 {
     public enum TournamentFormat
     {
+        Swiss,
         Elimination,
         DoubleElimination,
-        RoundRobin,
-        Swiss,
+        RoundRobin
     }
     public static class TournamentBuilder
     {
@@ -40,14 +40,14 @@ namespace TournamentMasterAPI.Builders
                 CompetitorTournament relationship = new CompetitorTournament
                 {
                     CompetitorId = c.Id,
-                    TournamentId = tournament.Id,
-                    Competitor = c,
                     Tournament = tournament,
                     Seed = seed
                 };
                 context.CompetitorTournament.Add(relationship);
                 seed++;
             }
+            context.SaveChanges();
+            UpdateTournament(context, tournament);
         }
 
         public static void UpdateTournament(TournamentMasterDBContext context, Tournament tournament)
@@ -62,6 +62,7 @@ namespace TournamentMasterAPI.Builders
             // There is a Round to check
             if (currentRound != null)
             {
+
                 // Get all pairings that belong to this round
                 IEnumerable<Pairing> currentRoundPairings = context.Pairings.Where(p => p.RoundId == currentRound.Id);
 
@@ -73,11 +74,13 @@ namespace TournamentMasterAPI.Builders
             {
                 currentRoundComplete = true;
             }
-
             if (currentRoundComplete)
             {
                 switch (tournament.Format)
                 {
+                    case (int)TournamentFormat.Swiss:
+                        CreateSwissRound(context, tournament);
+                        break;
                     case (int)TournamentFormat.Elimination:
                         CreateEliminationRound(context, tournament);
                         break;
@@ -87,11 +90,16 @@ namespace TournamentMasterAPI.Builders
                     case (int)TournamentFormat.RoundRobin:
                         CreateRoundRobinRound(context, tournament);
                         break;
-                    case (int)TournamentFormat.Swiss:
-                        CreateSwissRound(context, tournament);
-                        break;
                 }
             }
+        }
+
+        private static void CreateSwissRound(TournamentMasterDBContext context, Tournament tournament)
+        {
+            // Get latest round if there is one else null
+            Round currentRound = context.Rounds.Where(r => r.TournamentId == tournament.Id)
+                .OrderByDescending(r => r.RoundNumber)
+                .FirstOrDefault();
         }
 
         private static void CreateEliminationRound(TournamentMasterDBContext context, Tournament tournament)
@@ -127,51 +135,156 @@ namespace TournamentMasterAPI.Builders
                     RoundNumber = 1,
                     Tournament = tournament
                 };
+                
                 // create the pairings for the first round we know this list has even size
                 while (competitors.Count() != 0)
                 {
-                    Competitor comp1 = competitors.Take(1).First();
-                    Competitor comp2 = competitors.TakeLast(1).First();
+                    Competitor comp1 = competitors.First();
+                    Competitor comp2 = competitors.Last();
+                    competitors.RemoveAt(0);
+                    competitors.RemoveAt(competitors.Count() - 1);
                     Pairing newPairing = new Pairing
                     {
-                        CompetitorId1Navigation = comp1,
-                        CompetitorId2Navigation = comp2,
+                        CompetitorId1 = comp1.Id,
+                        CompetitorId2 = comp2.Id,
                         Round = newRound,
                         Result = null,
                     };
+                    context.Pairings.Add(newPairing);
                 }
                 context.Rounds.Add(newRound);
             }
             else
             {
                 // Winners from the previous round get to advance
-                IEnumerable<Competitor> winners = lastRound.Pairings
-                    .Select(p => p.Result == p.CompetitorId1 ? p.CompetitorId1Navigation : p.CompetitorId2Navigation);
+                List<Competitor> competitors = context.CompetitorTournament
+                    .Where(ct => ct.TournamentId == tournament.Id)
+                    .Select(ct => ct.Competitor)
+                    .ToList();
+                List<Competitor> winners = lastRound.Pairings
+                    .Select(p => competitors.Where(c => c.Id == p.Result).First())
+                    .ToList();
 
-                // We also want to order players
+                // if there is only 1 person left the tournament over
+                if (winners.Count() == 1)
+                {
+                    tournament.OnGoing = false;
+                    context.SaveChanges();
+                    return;
+                }
+
+                // TODO: create pairings as per rules rather than making things up
+                Round newRound = new Round
+                {
+                    RoundNumber = lastRound.RoundNumber + 1,
+                    Tournament = tournament
+                };
+                while (winners.Count() != 0)
+                {
+                    Competitor comp1 = winners.First();
+                    Competitor comp2 = winners.Last();
+                    winners.RemoveAt(0);
+                    winners.RemoveAt(winners.Count() - 1);
+                    Pairing newPairing = new Pairing
+                    {
+                        CompetitorId1 = comp1.Id,
+                        CompetitorId2 = comp2.Id,
+                        Round = newRound,
+                        Result = null,
+                    };
+                    context.Pairings.Add(newPairing);
+                }
+                context.Rounds.Add(newRound);
             }
             context.SaveChanges();
         }
         private static void CreateDoubleEliminationRound(TournamentMasterDBContext context, Tournament tournament)
         {
             // Get latest round if there is one else null
-            Round currentRound = context.Rounds.Where(r => r.TournamentId == tournament.Id)
+            Round lastRound = context.Rounds.Where(r => r.TournamentId == tournament.Id)
                 .OrderByDescending(r => r.RoundNumber)
                 .FirstOrDefault();
         }
         private static void CreateRoundRobinRound(TournamentMasterDBContext context, Tournament tournament)
         {
             // Get latest round if there is one else null
-            Round currentRound = context.Rounds.Where(r => r.TournamentId == tournament.Id)
+            Round lastRound = context.Rounds.Where(r => r.TournamentId == tournament.Id)
                 .OrderByDescending(r => r.RoundNumber)
                 .FirstOrDefault();
-        }
-        private static void CreateSwissRound(TournamentMasterDBContext context, Tournament tournament)
-        {
-            // Get latest round if there is one else null
-            Round currentRound = context.Rounds.Where(r => r.TournamentId == tournament.Id)
-                .OrderByDescending(r => r.RoundNumber)
-                .FirstOrDefault();
+
+
+            // Get all Competitors ordered by seed
+            List<Competitor> competitors = context.CompetitorTournament
+                .Where(ct => ct.TournamentId == tournament.Id)
+                .OrderByDescending(ct => ct.Seed)
+                .Select(ct => ct.Competitor)
+                .ToList();
+
+            // add a bye into tournament if odd number of players
+            if (competitors.Count % 2 == 1)
+            {
+                competitors.Add(null);
+            }
+
+            // determine round number
+            int roundnum;
+            if (lastRound == null)
+            {
+                roundnum = 1;
+            }
+            else
+            {
+                roundnum = lastRound.RoundNumber + 1;
+            }
+
+            // competitors only play each other once so tournament is over
+            if (roundnum >= competitors.Count)
+            {
+                tournament.OnGoing = false;
+                context.SaveChanges();
+                return;
+            }
+
+            // put competitors into initial position
+            List<Competitor> left = competitors.GetRange(0, competitors.Count / 2);
+            List<Competitor> right = competitors.GetRange(competitors.Count / 2, competitors.Count / 2);
+            right.Reverse();
+            left.AddRange(right);
+            competitors = left;
+
+            // each round the competitors rotate 1 towards beginning of list while index 0 stays in position
+            Competitor topseed = competitors.First();
+            competitors.RemoveAt(0);
+            for (int i = 1; i < roundnum; i++)
+            {
+                Competitor moveToEnd = competitors.First();
+                competitors.RemoveAt(0);
+                competitors.Add(moveToEnd);
+            }
+            competitors.Insert(0, topseed);
+
+            Round newRound = new Round
+            {
+                RoundNumber = roundnum,
+                Tournament = tournament
+            };
+            while (competitors.Count() != 0)
+            {
+                Competitor comp1 = competitors.First();
+                Competitor comp2 = competitors.Last();
+                competitors.RemoveAt(0);
+                competitors.RemoveAt(competitors.Count() - 1);
+                Pairing newPairing = new Pairing
+                {
+                    CompetitorId1 = comp1.Id,
+                    CompetitorId2 = comp2.Id,
+                    Round = newRound,
+                    Result = null,
+                };
+                context.Pairings.Add(newPairing);
+            }
+            context.Rounds.Add(newRound);
+            context.SaveChanges();
         }
     }
 }

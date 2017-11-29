@@ -75,9 +75,12 @@ namespace TournamentMasterAPI.Controllers
             {
                 return BadRequest();
             }
-
-            _context.Entry(organizations).State = EntityState.Modified;
-
+            Organization entity = _context.Organizations.Find(organizations.Id);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            _context.Entry(entity).CurrentValues.SetValues(organizations);
             try
             {
                 await _context.SaveChangesAsync();
@@ -138,8 +141,8 @@ namespace TournamentMasterAPI.Controllers
             }
 
             _context.AccountOrganization.RemoveRange(_context.AccountOrganization
-                .Where(ao => ao.OrganizationId == organizations.Id));
-            _context.Organizations.Remove(organizations);
+                .Where(ao => ao.OrganizationId == organizations.Id && ao.AccountId == userAccount.Id));
+            
             await _context.SaveChangesAsync();
 
             return Ok(organizations);

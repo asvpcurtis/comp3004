@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TournamentMasterAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TournamentMasterAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/Rounds")]
+    [Authorize]
     public class RoundsController : Controller
     {
         private readonly TournamentMasterDBContext _context;
@@ -21,16 +23,27 @@ namespace TournamentMasterAPI.Controllers
         }
 
         // GET: api/Rounds
-        [HttpGet]
-        public IEnumerable<Round> GetRounds()
+        [HttpGet("{tournament?}")]
+        public IEnumerable<Round> GetRounds([FromQuery] int? tournament = null)
         {
-            return _context.Rounds;
+            Account userAccount = Shared.GetUserAccount(User, _context);
+            IEnumerable<Round> userRounds = Shared.UserRounds(userAccount, _context);
+            if (tournament != null)
+            {
+                userRounds = userRounds.Where(r => r.TournamentId == tournament);
+            }
+            return userRounds;
         }
 
         // GET: api/Rounds/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRound([FromRoute] int id)
         {
+            Account userAccount = Shared.GetUserAccount(User, _context);
+            if (!Shared.UserRounds(userAccount, _context).Any(r => r.Id == id))
+            {
+                return Unauthorized();
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

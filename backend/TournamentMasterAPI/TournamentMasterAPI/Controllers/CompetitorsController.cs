@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using TournamentMasterAPI.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
+using TournamentMasterAPI.Builders;
 
 namespace TournamentMasterAPI.Controllers
 {
@@ -23,17 +25,16 @@ namespace TournamentMasterAPI.Controllers
         }
 
         // GET: api/Competitors?organization=5
-        [Route("api/Competitors")]
         [HttpGet("{organization?}")]
-        public IEnumerable<Competitor> GetOrganizationCompetitors([FromQuery] int? oid = null)
+        public IEnumerable<Competitor> GetOrganizationCompetitors([FromQuery] int? organization = null)
         {
             Account userAccount = Shared.GetUserAccount(User, _context);
-            IEnumerable<Competitor> userCompetitors  = Shared.UserCompetitors(userAccount, _context);
-            if (oid == null)
+            IEnumerable<Competitor> userCompetitors = Shared.UserCompetitors(userAccount, _context);
+            if (organization != null)
             {
-                return userCompetitors;
+                userCompetitors = userCompetitors.Where(c => c.OrganizationId == organization);
             }
-            return userCompetitors.Where(c => c.OrganizationId == oid);
+            return userCompetitors;
         }
 
         // GET: api/Competitors/5
@@ -80,7 +81,15 @@ namespace TournamentMasterAPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(competitors).State = EntityState.Modified;
+            Competitor entity = _context.Competitors.Find(competitors.Id);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            competitors.Rating = entity.Rating;
+            
+            _context.Entry(entity).CurrentValues.SetValues(competitors);
 
             try
             {
@@ -101,50 +110,25 @@ namespace TournamentMasterAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Organization/5/Competitors
-        [Route("api/Organization/{oid:int}/Competitors")]
+        // POST: api/Competitors
         [HttpPost]
-        public async Task<IActionResult> PostCompetitors([FromRoute] int oid, [FromBody] Competitor competitors)
+        public async Task<IActionResult> PostCompetitors([FromBody] Competitor competitor)
         {
+            competitor.Rating = RatingCalculator.INIITIAL_RATING;
             Account userAccount = Shared.GetUserAccount(User, _context);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var organizations = Shared.UserOrganizations(userAccount, _context).SingleOrDefault(o => o.Id == oid);
+            var organizations = Shared.UserOrganizations(userAccount, _context)
+                .SingleOrDefault(o => o.Id == competitor.OrganizationId);
             if (organizations != null)
             {
-                //organizations.Competitors.Add(competitors);
+                organizations.Competitors.Add(competitor);
             }
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCompetitors", new { id = competitors.Id }, competitors);
-        }
-
-        // DELETE: api/Competitors/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCompetitors([FromRoute] int id)
-        {
-            Account userAccount = Shared.GetUserAccount(User, _context);
-            if (!Shared.UserCompetitors(userAccount, _context).Any(c => c.Id == id))
-            {
-                return Unauthorized();
-            }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var competitors = await _context.Competitors.SingleOrDefaultAsync(m => m.Id == id);
-            if (competitors == null)
-            {
-                return NotFound();
-            }
-
-            _context.Competitors.Remove(competitors);
-            await _context.SaveChangesAsync();
-
-            return Ok(competitors);
+            return CreatedAtAction("GetCompetitors", new { id = competitor.Id }, competitor);
         }
 
         private bool CompetitorExists(int id)

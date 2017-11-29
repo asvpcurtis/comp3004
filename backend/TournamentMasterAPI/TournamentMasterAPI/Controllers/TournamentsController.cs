@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TournamentMasterAPI.Models;
+using TournamentMasterAPI.Builders;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TournamentMasterAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/Tournaments")]
+    [Authorize]
     public class TournamentsController : Controller
     {
         private readonly TournamentMasterDBContext _context;
@@ -20,17 +23,33 @@ namespace TournamentMasterAPI.Controllers
             _context = context;
         }
 
-        // GET: api/Tournaments
-        [HttpGet]
-        public IEnumerable<Tournament> GetTournaments()
+        // GET: api/Tournaments?organization=5
+        [HttpGet("{organization?}")]
+        public IEnumerable<Tournament> GetTournaments([FromQuery] int? organization = null)
         {
-            return _context.Tournaments;
+            Account userAccount = Shared.GetUserAccount(User, _context);
+            IEnumerable<Tournament> userTournaments = Shared.UserTournaments(userAccount, _context);
+            if (organization != null)
+            {
+                userTournaments = userTournaments.Where(t => t.OrganizationId == organization);
+            }
+            List<Tournament> trimmedUserTournaments = userTournaments.ToList();
+            foreach (Tournament t in trimmedUserTournaments)
+            {
+                t.Name = t.Name.TrimEnd(' ');
+            }
+            return userTournaments;
         }
 
         // GET: api/Tournaments/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTournaments([FromRoute] int id)
         {
+            Account userAccount = Shared.GetUserAccount(User, _context);
+            if (!Shared.UserTournaments(userAccount, _context).Any(t => t.Id == id))
+            {
+                return Unauthorized();
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -42,58 +61,40 @@ namespace TournamentMasterAPI.Controllers
             {
                 return NotFound();
             }
-
+            tournaments.Name = tournaments.Name.TrimEnd(' ');
             return Ok(tournaments);
         }
 
-        // PUT: api/Tournaments/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTournaments([FromRoute] int id, [FromBody] Tournament tournaments)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != tournaments.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(tournaments).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TournamentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/Tournaments
+        //[HttpPost("{seed}")]
         [HttpPost]
-        public async Task<IActionResult> PostTournaments([FromBody] Tournament tournaments)
+        public async Task<IActionResult> PostTournaments([FromBody] TournamentParameters tparams, [FromQuery] string seed = "manual")
         {
+            // this will disable warning
+            // await Task.Run(() => { });
+            Account userAccount = Shared.GetUserAccount(User, _context);
+            if (!Shared.UserOrganizations(userAccount,_context).Any(o => o.Id == tparams.Tournament.OrganizationId))
+            {
+                return Unauthorized();
+            }
+            foreach(Competitor comp in tparams.Competitors)
+            {
+                if (comp.OrganizationId != tparams.Tournament.OrganizationId)
+                {
+                    return BadRequest();
+                }
+                if (!_context.Competitors.Any(c => c.Id == comp.Id))
+                {
+                    return BadRequest();
+                }
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            _context.Tournaments.Add(tournaments);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetTournaments", new { id = tournaments.Id }, tournaments);
+            TournamentBuilder.InititializeTournament(_context, tparams.Competitors, tparams.Tournament, seed);
+            _context.SaveChanges();
+            return CreatedAtAction("GetTournaments", new { id = tparams.Tournament.Id }, tparams.Tournament);
         }
 
         // DELETE: api/Tournaments/5

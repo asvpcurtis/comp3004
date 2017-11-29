@@ -1,0 +1,13 @@
+# Curtis Barlow-Wilkes 100981449
+# Week: October 29 2017
+
+# Estimated time spent: 10h
+
+# Accomplished
+- Studied rules for how pairings are generated for knockout tournaments based off of seed how are remaining competitors paired
+- Created functionality to support this nothing exposed to the front end yet
+- Assisted with deliverable 2
+
+# Difficulties
+- Had to really flesh out how tournaments work in our application such that all tournament types would work
+- Had to make the trade off not allowing user to know about who plays who until the round comes there would be a lot more work if exceptions have to be made for didferent tournament styles

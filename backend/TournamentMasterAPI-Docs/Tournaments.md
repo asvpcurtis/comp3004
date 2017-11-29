@@ -30,11 +30,13 @@
 ```
 
 ##### NOTE:
+
 `format` is just an integer enum
-1 = Elimination
-2 = DoubleElimination
-3 = RoundRobin
-4 = Swiss
+
+* 0 = Swiss
+* 1 = Elimination
+* 2 = DoubleElimination
+* 3 = RoundRobin
 
 ---
 
@@ -62,7 +64,14 @@
 ```
 ---
 
-## `POST /tournaments?organization=30&format=1&seed=1`
+## `POST /tournaments?seed=manual`
+
+##### NOTE:
+
+* options for your query parameters are
+* ?seed=manual
+* ?seed=rating
+* ?seed=random
 
 ###### Add a new tournament
 
@@ -76,17 +85,26 @@
 ##### NOTE:
 This is an array of competitors
 ``` json
-[
-    {
-        "id": 1,
-        "firstName": "Bob",
-        "lastName": "Saget",
-        "email": "user@domain.com",
-        "rating": 1200,
+{
+    "tournament": {
         "organizationId": 30,
-        "gender": "male"
-    }
-]
+        "startDate": "2009-02-15T00:00:00",
+        "format": 1,
+        "onGoing": true,
+        "name": "Chicago Open"
+    },
+    "competitors": [
+        {
+            "id": 1,
+            "firstName": "Bob",
+            "lastName": "Saget",
+            "email": "user@domain.com",
+            "rating": 1200,
+            "organizationId": 30,
+            "gender": "male"
+        }
+    ]
+}
 ```
 
 #### Response

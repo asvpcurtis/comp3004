@@ -1,0 +1,11 @@
+Dev Log - Michael Souter 100679087
+Week of 11/12 to 11/18
+
+Team Meetings (3 hours)
+- D3 work
+
+Personal Work (14 hours)
+- Diagrams and documentation of front end systems
+- Modified frontend systems and interactions to bring it
+  more closely in line with intentions elicited from D3
+

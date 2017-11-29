@@ -1,0 +1,13 @@
+Dev Log - Michael Souter 100679087
+Week of 11/26 to 12/02
+
+Team Meetings (6 hours)
+- D4 Discussions
+- D4 video and document creation
+
+Personal Work (14 hours)
+- Major overhaul of operations in DataHandler
+- Aesthetic changes to front end
+- Coordinate with Curtis on increasing functionalities from backend
+  updates
+

@@ -1,0 +1,12 @@
+# Curtis Barlow-Wilkes 100981449
+# Week: November 19 2017
+
+# Estimated time spent: 7h
+
+# Accomplished
+- Prepared our slideshow and notes for oral presentation
+- Familiarizing members of the team with the backend code
+- Refactoring the backend to support multiple admins
+
+# Difficulties
+- None

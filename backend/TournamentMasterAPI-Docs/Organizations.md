@@ -101,7 +101,7 @@
 ---
 ## `DELETE /organizations/<id>`
 
-###### Delete an organization a user is part of by its id if it exists.
+###### Delete the current user from the organization
 
 #### Request
 

@@ -13,6 +13,9 @@ import java.util.Iterator;
 
 /**
  * Created by Michael Souter on 2017-11-12.
+ * Provides methods for converting between the JSONObject
+ * and JSONArrays of the backend to TMDataSets for the
+ * frontend.
  */
 
 public class FieldTranslate {
@@ -31,20 +34,72 @@ public class FieldTranslate {
 
     public static ArrayList<TMDataSet> convert(JSONObject o, String type) {
         ArrayList<TMDataSet> result = new ArrayList<>();
-        type = "/" + type;
         try {
-            result.add(new TMDataSet(o.getString("name"), convertType(type), o.getString("id")));
+            switch (type) {
+                case "Organization":
+                case "Tournament":
+                    result.add(new TMDataSet(o.getString("name"), type, o.getString("id")));
+                    break;
+                case "Competitor":
+                    result.add(new TMDataSet(o.getString("firstName") + " " + o.getString("lastName"), type, o.getString("id")));
+                    break;
+                case "Round":
+                    result.add(new TMDataSet("Round " + o.get("roundNumber").toString(), type, o.getString("id")));
+                    break;
+                case "Pairing":
+                    result.add(new TMDataSet("Pairing", type, o.getString("id")));
+                    break;
+            }
+        } catch (JSONException e) {
+            Log.e("ERROR:", "JSON not readable");
+        }
+
+        return result;
+    }
+
+    public static ArrayList<TMDataSet> convertFull(JSONObject o, String type) {
+        ArrayList<TMDataSet> result = new ArrayList<>();
+        try {
+            switch (type) {
+                case "Organization":
+                case "Tournament":
+                    result.add(new TMDataSet(o.getString("name"), type, o.getString("id")));
+                    break;
+                case "Competitor":
+                    result.add(new TMDataSet(o.getString("firstName") + " " + o.getString("lastName"), type, o.getString("id")));
+                    break;
+                case "Round":
+                    result.add(new TMDataSet("Round " + o.get("roundNumber").toString(), type, o.getString("id")));
+                    break;
+                case "Pairing":
+                    result.add(new TMDataSet("Pairing", type, o.getString("id")));
+                    break;
+            }
             Iterator<?> keys = o.keys();
             while (keys.hasNext()) {
                 String key = (String)keys.next();
-                if (convertType(key)!=null) {
-                    result.addAll(convert(o.getJSONArray(key), "/"+key));
+                TMDataSet toAdd = infoKey(key, o.get(key));
+                if (toAdd != null) {
+                    result.add(toAdd);
                 }
             }
         } catch (JSONException e) {
             Log.e("ERROR:", "JSON not readable");
         }
 
+        return result;
+    }
+
+    public static ArrayList<TMDataSet> convertCompetitors(JSONArray a) {
+        ArrayList<TMDataSet> result = new ArrayList<>();
+        for (int i=0; i<a.length(); i++) {
+            try {
+                JSONObject obj = a.getJSONObject(i);
+                result.add(new TMDataSet(obj.getString("firstName") + " " + obj.getString("lastName"), obj.toString(), obj.getString("id")));
+            } catch (JSONException e) {
+                Log.e("ERROR:", "JSON not readable");
+            }
+        }
         return result;
     }
 
@@ -56,6 +111,28 @@ public class FieldTranslate {
             for (TMDataSet i : a) {
                 newData.put(i.getDataType(), i.getData());
             }
+        } catch (JSONException e) {
+            Log.e("ERROR:", "JSON not created");
+        }
+        return newData;
+    }
+
+    public static JSONObject convertTournament(ArrayList<TMDataSet> a) {
+        JSONObject newData = null;
+        JSONObject tournamentData;
+        try {
+            newData = new JSONObject(a.get(0).getData());
+            tournamentData = new JSONObject(a.get(0).getData());
+            a.remove(0);
+            for (TMDataSet i : a) {
+                if (i.getDataType().equals("competitors")) {
+                    JSONArray arr = new JSONArray(i.getData());
+                    newData.put(i.getDataType(), arr);
+                } else {
+                    tournamentData.put(i.getDataType(), i.getData());
+                }
+            }
+            newData.put("tournament", tournamentData);
         } catch (JSONException e) {
             Log.e("ERROR:", "JSON not created");
         }
@@ -102,5 +179,38 @@ public class FieldTranslate {
 
     public static String convertType(String t, String i) {
         return convertType(t) + "/" + i;
+    }
+
+    private static TMDataSet infoKey(String k, Object v) {
+        TMDataSet result = null;
+        switch (k) {
+            case "onGoing":
+                if ((boolean)v) {
+                    result = new TMDataSet("Yes" , "On Going : ", null);
+                } else {
+                    result = new TMDataSet("No", "On Going : ", null);
+                }
+                break;
+            case "startDate":
+                result = new TMDataSet(v.toString(),"Start Date : ", null);
+                break;
+            case "format":
+                if ((int)v == 1) {
+                    result = new TMDataSet("Elimination", "Format : ", null);
+                } else if ((int)v == 3) {
+                    result = new TMDataSet( "Round Robin", "Format : ", null);
+                }
+                break;
+            case "email":
+                result = new TMDataSet(v.toString(), "E-Mail : ", null);
+                break;
+            case "rating":
+                result = new TMDataSet(v.toString(), "Rating : ", null);
+                break;
+            case "gender":
+                result = new TMDataSet(v.toString(), "Gender : ", null);
+                break;
+        }
+        return result;
     }
 }
