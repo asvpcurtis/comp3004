@@ -1,0 +1,12 @@
+# Curtis Barlow-Wilkes 100981449
+# Week: November 26 2017
+
+# Estimated time spent 
+
+# Accomplished
+- Exposed an endpoint to add and remove accounts from organizations 
+- as well as get your own account id which you would tell people so they ca add you
+- Assisted With Deliverable 4
+
+# Difficulties
+- None

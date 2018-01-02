@@ -1,0 +1,13 @@
+# Curtis Barlow-Wilkes 100981449
+# Week: October 1 2017
+
+# Estimated time spent: 6h
+
+# Accomplished
+- Created SQL Server Database for TournamentMasterAPI
+- Created model classes using EntityFramework to handle SQL logic
+- Researched Ways to Implement Authentication and Authorization for API
+    - Decided on using AWS Cognito to provide JWT Tokens for our API
+
+# Difficulties
+- None

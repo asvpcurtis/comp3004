@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- android:layout_width="2115px" -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearPrintContent"
+    android:layout_width="1500px"
+    android:layout_height="2115px"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textViewTournamentName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6px"
+        android:text="Tournament Name"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewOrgName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6px"
+        android:text="Hosted by Organization Name"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6px"
+        android:text="Prepared by Username"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/lineBreak"
+        android:layout_width="match_parent"
+        android:layout_height="4px"
+        android:background="@android:color/black">
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textViewStartDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6px"
+        android:text="Date and Time: 01/01/01@16:00:00"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewFormat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6px"
+        android:text="Format: Elimination"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="4px"
+        android:background="@android:color/black">
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/lineBreakWhite"
+        android:layout_width="match_parent"
+        android:layout_height="20px"
+        android:background="@android:color/white">
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,12 @@
+# Curtis Barlow-Wilkes 100981449
+# Week: November 5 2017
+
+# Estimated time spent: 7h
+
+# Accomplished
+- Added the Ability to create RoundRobins
+- Exposed Tournament Endpoint
+- Updated Documentation for Tournaments
+
+# Difficulties
+- Gaps in my knowledge about using web api had to figure out how to get it to handle non-conventional JSON objects

@@ -1,0 +1,11 @@
+Dev Log - Michael Souter 100679087
+Week of 11/05 to 11/11
+
+Team Meetings (4 hours)
+- Planning for D3
+
+Personal Work (10 hours)
+- Began refactoring and planning to improve compatabilities with backend
+- Wrote create and edit templates for frontend
+- Ux improvements
+

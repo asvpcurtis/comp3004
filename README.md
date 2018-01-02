@@ -1,29 +1,42 @@
-# README #
+# README 
 
-This README would normally document whatever steps are necessary to get your application up and running.
+### Tournament Master
 
-### What is this repository for? ###
+Our goal is to provide organizations with a powerful mobile tool to:
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+ * Create tournaments of different formats.
+ * Save tournament history.
+ * Track player ratings.
+ * Reach their players for updates on future tournaments.
+ * Provide printouts and email notifications on of pairings.
 
-### How do I get set up? ###
+### Developers
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+* Curtis Barlow-Wilkes
+* Mike Souter
+* Michelle Shaheen
+* Shukri Shubair
 
-### Contribution guidelines ###
 
-* Writing tests
-* Code review
-* Other guidelines
+### How to start backend for frontend development
 
-### Who do I talk to? ###
+* Install [.NET Core SDK version 2.0.0](https://www.microsoft.com/net/core) for your platform
+* Get latest backend from `develop` branch
+* Open cmd or terminal depending on your platform
+* Go to directory `comp3004\backend\TournamentMasterAPI\TournamentMasterAPI`
+* `dotnet run`
+* Check out the [API Docs](./backend/TournamentMasterAPI-Docs/Home.md)
 
-* Repo owner or admin
-* Other community or team contact
+### How to contribute to backend
+
+* Install [Visual Studio 2017](https://www.visualstudio.com/) for API development.
+* Install [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) for database development.
+
+### How to contibute to frontend
+
+ * Install [Android Studio](https://developer.android.com/studio/index.html)
+
+### Contribution guidelines 
+
+* All changes to `master`  must be done by pull request from `develop`
+* All changes to `develop` must be done by pull request from a personally created feature branch

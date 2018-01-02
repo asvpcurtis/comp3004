@@ -1,0 +1,10 @@
+Dev Log - Michael Souter 100679087
+Week of 11/19 to 11/25
+
+Team Meetings (4 hours)
+- D3 preparation for oral exam
+- Discussion of remaining tasks and responsibilities
+
+Personal Work (4 hours)
+- Minor modifications to front end to improve aesthetics
+

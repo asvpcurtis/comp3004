@@ -1,0 +1,13 @@
+# Curtis Barlow-Wilkes 100981449
+# Week: October 8 2017
+
+# Estimated time spent: 8h
+
+# Accomplished
+- Provisioned AWS Cognito 
+- Got together with Mike to assist with getting a test app working with AWS Cognito to request a JWT Token
+- Researched ways to authenticate JWT Token in Backend 
+
+# Difficulties
+- Research took way too long everyone was using this JWT Authorization middleware it slighly differntly than me
+- Eventually Mike came through with a way to expose the Token in the frontend so I could use it to help test

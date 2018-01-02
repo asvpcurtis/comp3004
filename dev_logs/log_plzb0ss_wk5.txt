@@ -1,0 +1,13 @@
+# Curtis Barlow-Wilkes 100981449
+# Week: October 15 2017
+
+# Estimated time spent: 10h
+
+# Accomplished
+- Got Authenication (JWT Token validation) working in the backend
+- Got EntityFramework working
+- Exposed REST endpoint /api/organizations to allow users to perform crud operations on their organizations
+
+# Difficulties
+- Took a very long time to figure out how to get my webserver to handle requests from everywhere
+- probably any gap in my 2406 knowledge about ports and http protocols have been closed by now

@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Tournament Master</string>
+    <string name="title_activity_welcome">WelcomeActivity</string>
+    <string name="create">Create</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="back">Back</string>
+    <string name="access_error">Could not access data.</string>
+    <string name="gen_please_wait">Generating! Please wait...</string>
+    <string name="gen_pdf_file">Generating PDF</string>
+
+</resources>

@@ -1,0 +1,7 @@
+MONDAY, NOVEMBER 27TH, 2017
+
+DEV LOG 10
+
+-Some code refactoring to be done
+-Working on D4 video
+-Final testing and polishing to be done
